@@ -15,7 +15,7 @@ class CreateBlockedDriversTable extends Migration
     {
         Schema::create('blocked_drivers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('company_id');
+            $table->integer('shipper_id');
             $table->integer('driver_id');
             $table->text('reason')->nullable();
             $table->timestamps();

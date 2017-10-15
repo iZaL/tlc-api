@@ -23,9 +23,9 @@ class CreateShippersTable extends Migration
             $table->text('address_ar')->nullable();
             $table->text('address_hi')->nullable();
             $table->boolean('direct_order')->default(0); //can book directly without TLC
-            $table->boolean('use_own_truck')->default(0); //can book directly without TLC
-            $table->decimal('available_credit')->nullable(); //can book directly without TLC
-            $table->decimal('cancellation_fee')->nullable(); //can book directly without TLC
+            $table->boolean('use_own_truck')->default(0); //show only companies truck
+            $table->decimal('available_credit')->nullable(); //credits available
+            $table->decimal('cancellation_fee')->nullable(); //fee for cancelling the booked load
             $table->timestamps();
             $table->softDeletes();
         });

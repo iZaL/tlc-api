@@ -18,6 +18,7 @@ class CreateTrucksTable extends Migration
             $table->integer('make_id');
             $table->integer('model_id');
             $table->integer('trailer_id');
+            $table->integer('shipper_id')->nullable();
             $table->integer('driver_id')->nullable();
             $table->integer('country_id')->nullable();
             $table->string('plate_number')->nullable();

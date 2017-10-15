@@ -16,7 +16,7 @@ class CreateBlockedTrucksTable extends Migration
         Schema::create('blocked_trucks', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('truck_id');
-            $table->integer('company_id');
+            $table->integer('shipper_id');
             $table->text('reason')->nullable();
             $table->timestamps();
         });

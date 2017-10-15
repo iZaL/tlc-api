@@ -15,10 +15,11 @@ class CreateLoadsTable extends Migration
     {
         Schema::create('loads', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('company_id');
+            $table->integer('shipper_id');
             $table->integer('origin_location_id');
             $table->integer('destination_location_id');
-            $table->decimal('total');
+            $table->decimal('price');
+            $table->string('distance')->nullable()->notes('in kms');
             $table->string('invoice_id')->nullable();
             $table->boolean('request_documents')->default(0)->notes('request drivers for copies of documents');
             $table->boolean('request_pictures')->default(0)->notes('request drivers for pictures of load');
