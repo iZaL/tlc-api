@@ -19,7 +19,7 @@ class CreateDriversTable extends Migration
             $table->integer('nationality')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('residence_country')->nullable();
+            $table->integer('residence_country_id')->nullable();
             $table->string('licence_number')->nullable();
             $table->date('licence_expiry_date')->nullable();
             $table->string('status')->nullable();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDriverGatepassesTable extends Migration
+class CreateCommunicationProvidersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateDriverGatepassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('driver_gatepasses', function (Blueprint $table) {
+        Schema::create('communication_providers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('driver_id');
-            $table->integer('gatepass_id');
-            $table->timestamps();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->string('name_hi')->nullable();
+            $table->string('image_path')->nullable();
         });
     }
 
@@ -28,6 +29,6 @@ class CreateDriverGatepassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('driver_gatepasses');
+        Schema::dropIfExists('communication_providers');
     }
 }

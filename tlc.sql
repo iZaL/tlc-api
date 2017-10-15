@@ -101,13 +101,13 @@ LOCK TABLES `blocked_trucks` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `communication_medias`
+-- Table structure for table `communication_providers`
 --
 
-DROP TABLE IF EXISTS `communication_medias`;
+DROP TABLE IF EXISTS `communication_providers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `communication_medias` (
+CREATE TABLE `communication_providers` (
   `name_en` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_ar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_hi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -116,12 +116,12 @@ CREATE TABLE `communication_medias` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `communication_medias`
+-- Dumping data for table `communication_providers`
 --
 
-LOCK TABLES `communication_medias` WRITE;
-/*!40000 ALTER TABLE `communication_medias` DISABLE KEYS */;
-/*!40000 ALTER TABLE `communication_medias` ENABLE KEYS */;
+LOCK TABLES `communication_providers` WRITE;
+/*!40000 ALTER TABLE `communication_providers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `communication_providers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -420,12 +420,14 @@ DROP TABLE IF EXISTS `languages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `languages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name_en` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_ar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_hi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -489,7 +491,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2017_10_02_110846_create_companies_table',1),(4,'2017_10_02_110859_create_drivers_table',1),(5,'2017_10_02_110914_create_countries_table',1),(6,'2017_10_02_111251_create_orders_table',1),(7,'2017_10_02_111309_create_order_trucks_table',1),(8,'2017_10_02_111358_create_locations_table',1),(9,'2017_10_02_111434_create_trucks_table',1),(10,'2017_10_02_111615_create_truck_makes_table',1),(11,'2017_10_02_111629_create_truck_models_table',1),(12,'2017_10_02_111643_create_trailers_table',1),(13,'2017_10_02_111734_create_transactions_table',1),(14,'2017_10_02_111846_create_languages_table',1),(15,'2017_10_02_111934_create_blocked_trucks_table',1),(16,'2017_10_02_111946_create_blocked_drivers_table',1),(17,'2017_10_02_112012_create_gatepasses_table',1),(18,'2017_10_02_112031_create_driver_gatepasses_table',1),(19,'2017_10_02_112044_create_driver_visas_table',1),(20,'2017_10_02_113136_create_bank_accounts_table',1),(21,'2017_10_02_140640_create_employees_table',1),(22,'2017_10_02_150625_create_order_documents_table',1),(23,'2017_10_02_152430_create_trailer_makes_table',1),(24,'2017_10_02_155626_create_employee_languages_table',1),(25,'2017_10_02_155747_create_employee_communications_table',1),(26,'2017_10_02_155849_create_communication_medias_table',1),(27,'2017_10_02_164047_create_company_payments_table',1),(28,'2017_10_02_164419_create_order_pictures_table',1);
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2017_10_02_110846_create_companies_table',1),(4,'2017_10_02_110859_create_drivers_table',1),(5,'2017_10_02_110914_create_countries_table',1),(6,'2017_10_02_111251_create_orders_table',1),(7,'2017_10_02_111309_create_order_trucks_table',1),(8,'2017_10_02_111358_create_locations_table',1),(9,'2017_10_02_111434_create_trucks_table',1),(10,'2017_10_02_111615_create_truck_makes_table',1),(11,'2017_10_02_111629_create_truck_models_table',1),(12,'2017_10_02_111643_create_trailers_table',1),(13,'2017_10_02_111734_create_transactions_table',1),(14,'2017_10_02_111846_create_languages_table',1),(15,'2017_10_02_111934_create_blocked_trucks_table',1),(16,'2017_10_02_111946_create_blocked_drivers_table',1),(17,'2017_10_02_112012_create_gatepasses_table',1),(18,'2017_10_02_112031_create_driver_gatepasses_table',1),(19,'2017_10_02_112044_create_driver_visas_table',1),(20,'2017_10_02_113136_create_bank_accounts_table',1),(21,'2017_10_02_140640_create_employees_table',1),(22,'2017_10_02_150625_create_order_documents_table',1),(23,'2017_10_02_152430_create_trailer_makes_table',1),(24,'2017_10_02_155626_create_employee_languages_table',1),(25,'2017_10_02_155747_create_employee_communications_table',1),(26,'2017_10_02_155849_create_communication_providers_table',1),(27,'2017_10_02_164047_create_company_payments_table',1),(28,'2017_10_02_164419_create_order_pictures_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -871,4 +873,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-02 22:32:20
+-- Dump completed on 2017-10-02 23:13:22

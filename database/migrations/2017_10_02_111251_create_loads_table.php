@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersTable extends Migration
+class CreateLoadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('loads', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id');
-            $table->integer('pick_location_id');
-            $table->integer('drop_location_id');
+            $table->integer('origin_location_id');
+            $table->integer('destination_location_id');
             $table->decimal('total');
             $table->string('invoice_id')->nullable();
             $table->boolean('request_documents')->default(0)->notes('request drivers for copies of documents');
@@ -37,6 +37,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('loads');
     }
 }

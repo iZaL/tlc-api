@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionsTable extends Migration
+class CreateLoadDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('load_documents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('load_id');
+            $table->integer('truck_id');
             $table->decimal('amount');
+            $table->decimal('type'); // border_charges, pod
+            $table->string('file_path')->nullable(); // proof
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('load_documents');
     }
 }

@@ -15,7 +15,6 @@ class CreateTrailersTable extends Migration
     {
         Schema::create('trailers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('truck_id');
             $table->integer('make_id');
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();

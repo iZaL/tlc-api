@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGatepassesTable extends Migration
+class CreateShipperPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateGatepassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('gatepasses', function (Blueprint $table) {
+        Schema::create('shipper_payments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('country_id');
-            $table->string('name_en')->nullable();
-            $table->string('name_ar')->nullable();
-            $table->string('name_hi')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +26,7 @@ class CreateGatepassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gatepasses');
+        Schema::dropIfExists('shipper_payments');
     }
+
 }

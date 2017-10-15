@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrderDocumentsTable extends Migration
+class CreateDriverLanguagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateOrderDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_documents', function (Blueprint $table) {
+        Schema::create('driver_languages', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_id');
-            $table->integer('truck_id');
-            $table->decimal('amount');
-            $table->decimal('type'); // border_charges
-            $table->string('file_path')->nullable(); // proof
+            $table->integer('driver_id');
+            $table->integer('language_id');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateOrderDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_documents');
+        Schema::dropIfExists('driver_languages');
     }
 }
