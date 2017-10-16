@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('admin')->default(0);
             $table->string('api_token')->default(str_random(12));
             $table->string('image')->nullable();
+            $table->boolean('active')->default(1)->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

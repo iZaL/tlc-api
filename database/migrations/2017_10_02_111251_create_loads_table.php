@@ -26,6 +26,7 @@ class CreateLoadsTable extends Migration
             $table->boolean('fixed_rate')->default(0)->notes('fixed or variable rates. If fixed to be entered by TLC as agreed with customer');
             $table->string('status')->nullable();
             $table->timestamp('scheduled_at')->nullable();
+            $table->boolean('active')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

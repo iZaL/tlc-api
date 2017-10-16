@@ -16,21 +16,21 @@ $factory->define(\App\Models\Driver::class, function (Faker $faker) {
 
 $factory->define(\App\Models\DriverVisas::class, function (Faker $faker) {
     return [
-        'driver_id'            => \App\Models\Driver::all()->random()->first()->id,
-        'country_id' => \App\Models\Country::all()->random()->first()->id,
-    ];
-});
-
-$factory->define(\App\Models\DriverVisas::class, function (Faker $faker) {
-    return [
-        'driver_id'            => \App\Models\Driver::all()->random()->first()->id,
+        'driver_id'  => \App\Models\Driver::all()->random()->first()->id,
         'country_id' => \App\Models\Country::all()->random()->first()->id,
     ];
 });
 
 $factory->define(\App\Models\DriverPass::class, function (Faker $faker) {
     return [
-        'driver_id'            => \App\Models\Driver::all()->random()->first()->id,
-        'pass_id' => \App\Models\Pass::all()->random()->first()->id,
+        'driver_id' => \App\Models\Driver::all()->random()->first()->id,
+        'pass_id'   => \App\Models\Pass::all()->random()->first()->id,
+    ];
+});
+
+$factory->define(\App\Models\DriverLanguage::class, function (Faker $faker) {
+    return [
+        'driver_id' => \App\Models\Driver::all()->random()->first()->id,
+        'language_id'  => \App\Models\Language::all()->random()->first()->id,
     ];
 });

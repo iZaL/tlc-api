@@ -17,11 +17,8 @@ class CreateLoadTrucksTable extends Migration
             $table->increments('id');
             $table->integer('load_id');
             $table->integer('truck_id');
-            $table->decimal('price')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
-            $table->string('status')->nullable();
-            $table->timestamp('finished_at')->nullable();
+            $table->decimal('amount')->nullable();
+            $table->timestamp('reached_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
