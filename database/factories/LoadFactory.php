@@ -36,3 +36,5 @@ $factory->define(\App\Models\LoadTruck::class, function (Faker $faker) {
         'reached_at' => \Carbon\Carbon::now()->addDays(rand(1,10))->toDateTimeString()
     ];
 });
+
+
