@@ -111,7 +111,7 @@ CREATE TABLE `communication_providers` (
   `name_en` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_ar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_hi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -691,7 +691,7 @@ CREATE TABLE `trailers` (
   `width` int(11) DEFAULT NULL,
   `height` int(11) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -747,7 +747,7 @@ CREATE TABLE `truck_makes` (
   `name_en` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_ar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_hi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -776,7 +776,7 @@ CREATE TABLE `truck_models` (
   `name_en` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_ar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_hi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -812,7 +812,7 @@ CREATE TABLE `trucks` (
   `registration_expiry` date DEFAULT NULL,
   `max_weight` int(11) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -844,7 +844,7 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT 0,
   `api_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
