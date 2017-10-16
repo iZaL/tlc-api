@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile')->unique();
             $table->string('password');
             $table->boolean('admin')->default(0);
-            $table->string('api_token')->nullable();
+            $table->string('api_token')->default(str_random(12));
             $table->string('image_path')->nullable();
             $table->rememberToken();
             $table->timestamps();

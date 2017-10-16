@@ -15,10 +15,12 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\User::class, function (Faker $faker) {
     static $password;
-
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
+        'mobile' => $faker->phoneNumber,
+        'admin' => $faker->boolean(50),
+        'image_path' => $faker->imageUrl(500,500),
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
     ];
