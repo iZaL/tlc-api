@@ -11,6 +11,6 @@ class GatespassesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(\App\Models\Pass::class,5)->create();
     }
 }
