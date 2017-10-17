@@ -20,10 +20,13 @@ class DatabaseSeeder extends Seeder
         $this->call(CountriesTableSeeder::class);
         $this->call(GatespassesTableSeeder::class);
         $this->call(ShippersTableSeeder::class);
+        $this->call(LocationsTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(TrailersTableSeeder::class);
+        $this->call(PassesTableSeeder::class);
         $this->call(DriversTableSeeder::class);
         $this->call(TrucksTableSeeder::class);
+        $this->call(LoadsTableSeeder::class);
     }
 
     public function truncateTables()

@@ -18,6 +18,7 @@ class CreateLanguagesTable extends Migration
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
+            $table->string('code')->nullable();
             $table->boolean('active')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();
