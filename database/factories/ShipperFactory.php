@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(\App\Models\Shipper::class, function (Faker $faker) {
     return [
-        'user_id' => \App\Models\User::all()->random()->first()->id,
+        'user_id' => \App\Models\User::all()->count() > 0 ? \App\Models\User::all()->random()->first()->id : 1,
         'name_en' => $faker->name,
         'name_ar' => $faker->name,
         'name_hi' => $faker->name,
