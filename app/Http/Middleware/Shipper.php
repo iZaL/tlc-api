@@ -9,10 +9,13 @@ class Shipper
 {
     public function handle($request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->shipper && auth()->user()->shipper->active) {
+        if (auth()->user()->shipper && auth()->user()->shipper->active) {
             return $next($request);
         }
 
-        return response()->json(['success'=>false,'message' => trans('general.invalid_request'), 'type' => 'invalid_request']);
+        return response()->json(
+            ['success' => false, 'message' => trans('general.invalid_request'), 'type' => 'invalid_request'],
+            403
+        );
     }
 }

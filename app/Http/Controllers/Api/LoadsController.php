@@ -33,11 +33,6 @@ class LoadsController extends Controller
         $this->loadModel = $loadModel;
     }
 
-    public function test()
-    {
-        return response()->json(['success' => true]);
-    }
-
     public function bookLoad(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -52,7 +47,7 @@ class LoadsController extends Controller
         ]);
 
         if ($validation->fails()) {
-            return response()->json(['success' => false, 'message' => $validation->errors()->first()]);
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()],422);
         }
 
         $user = Auth::guard('api')->user();

@@ -24,24 +24,15 @@ class ShipperMiddleware extends TestCase
     {
         $shipper = $this->_createShipper(['active' => 0]);
         $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $response = $this->json('GET', '/api/load/test', [], $header);
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'success' => false,
-                'type'    => 'invalid_request'
-            ]);
+        $response = $this->json('POST', '/api/load/book', [], $header);
+        $response->assertStatus(403);
     }
 
     public function testShipperMiddlewareReturnsTrueForValidUser()
     {
         $shipper = $this->_createShipper(['active' => 1]);
         $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $response = $this->json('GET', '/api/load/test', [], $header);
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-            ]);
+        $response = $this->json('POST', '/api/load/book', [], $header);
+        $response->assertStatus(200);
     }
 }
