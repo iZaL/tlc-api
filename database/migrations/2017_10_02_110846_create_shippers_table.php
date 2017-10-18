@@ -26,6 +26,7 @@ class CreateShippersTable extends Migration
             $table->boolean('use_own_truck')->default(0); //show only companies truck
             $table->decimal('available_credit')->nullable(); //credits available
             $table->decimal('cancellation_fee')->nullable(); //fee for cancelling the booked load
+            $table->boolean('active')->default(1); //fee for cancelling the booked load
             $table->timestamps();
             $table->softDeletes();
         });

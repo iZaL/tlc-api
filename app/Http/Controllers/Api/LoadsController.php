@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Load;
 use App\Models\Shipper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class LoadsController extends Controller
@@ -27,13 +28,18 @@ class LoadsController extends Controller
      */
     public function __construct(Shipper $shipperModel, Load $loadModel)
     {
+        $this->middleware('shipper');
         $this->shipperModel = $shipperModel;
         $this->loadModel = $loadModel;
     }
 
+    public function test()
+    {
+        return response()->json(['success' => true]);
+    }
+
     public function bookLoad(Request $request)
     {
-
         $validation = Validator::make($request->all(), [
             'shipper_id'              => 'required',
             'origin_location_id'      => 'required',
@@ -49,9 +55,12 @@ class LoadsController extends Controller
             return response()->json(['success' => false, 'message' => $validation->errors()->first()]);
         }
 
+        $user = Auth::guard('api')->user();
+
         $this->loadModel->create($request->all());
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'type' => 'created', 'message' => trans('general.load_created')]);
+
     }
 
 }

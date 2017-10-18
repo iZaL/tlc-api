@@ -16,7 +16,10 @@ use Illuminate\Http\Request;
 Route::group(['namespace' => 'Api'], function () {
 
     Route::middleware(['auth:api'])->group(function () {
-         Route::post('load/book', 'LoadsController@bookLoad');
+
+        Route::get('load/test','LoadsController@test');
+        Route::post('load/book', 'LoadsController@bookLoad');
+
     });
 
 });
