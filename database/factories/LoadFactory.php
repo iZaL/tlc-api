@@ -5,6 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(\App\Models\Load::class, function (Faker $faker) {
     return [
         'shipper_id' => \App\Models\Shipper::all()->random()->first()->id,
+        'trailer_id' => \App\Models\Trailer::all()->random()->first()->id,
         'origin_location_id' => \App\Models\Location::all()->random()->first()->id,
         'destination_location_id' => \App\Models\Location::all()->random()->first()->id,
         'price' => rand(100,1000),

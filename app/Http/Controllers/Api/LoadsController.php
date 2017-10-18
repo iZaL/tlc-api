@@ -37,6 +37,7 @@ class LoadsController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'shipper_id'              => 'required',
+            'trailer_id'              => 'required',
             'origin_location_id'      => 'required',
             'destination_location_id' => 'required',
             'price'                   => 'required',

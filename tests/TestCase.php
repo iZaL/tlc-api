@@ -16,10 +16,11 @@ abstract class TestCase extends BaseTestCase
         return factory(User::class)->create();
     }
 
-    public function _createPostData()
+    public function _createLoadPostData($array = [])
     {
         $postData = [
             'shipper_id'              => 1,
+            'trailer_id'              => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1,
             'price'                   => '200.00',
@@ -30,7 +31,8 @@ abstract class TestCase extends BaseTestCase
             'status'                  => 'busy',
             'scheduled_at'            => '2017-10-19 11:15:25'
         ];
-        return $postData;
+
+        return array_merge($postData,$array);
     }
 
     public function _createHeader($array)

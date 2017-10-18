@@ -7,6 +7,7 @@ class Load extends BaseModel
 
     protected $fillable = [
         'shipper_id',
+        'trailer_id',
         'origin_location_id',
         'destination_location_id',
         'price',

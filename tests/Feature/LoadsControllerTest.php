@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Shipper;
+use App\Models\Trailer;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CreateLoadsTest extends TestCase
+class LoadsControllerTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -27,7 +28,6 @@ class CreateLoadsTest extends TestCase
                 return factory(User::class)->create()->id;
             }
         ]);
-
         $this->assertInstanceOf(User::class, $shipper->user);
     }
 
@@ -35,14 +35,18 @@ class CreateLoadsTest extends TestCase
     {
         $shipper = $this->_createShipper();
         $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $postData = $this->_createPostData();
+        $loadData = $this->_createLoadPostData();
+        $others = [];
+        $postData = array_merge($loadData,$others);
+
         $response = $this->json('POST', '/api/load/book', $postData, $header);
-        $this->assertDatabaseHas('loads', $postData);
         $response
             ->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'type' => 'created'
+                'type'    => 'created'
             ]);
+        $this->assertDatabaseHas('loads', $loadData);
+
     }
 }
