@@ -17,7 +17,8 @@ Route::group(['namespace' => 'Api'], function () {
 
     Route::middleware(['auth:api'])->group(function () {
 
-        Route::post('load/book', 'LoadsController@bookLoad');
+        Route::post('loads', 'LoadsController@bookLoad');
+        Route::get('loads', 'LoadsController@getLoads');
 
     });
 

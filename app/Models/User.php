@@ -30,4 +30,8 @@ class User extends Authenticatable
         return $this->hasOne(Shipper::class);
     }
 
+    public function driver()
+    {
+        return $this->hasOne(Driver::class);
+    }
 }

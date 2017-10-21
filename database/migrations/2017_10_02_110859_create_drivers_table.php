@@ -16,13 +16,19 @@ class CreateDriversTable extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
+            $table->integer('truck_id');
+            $table->integer('shipper_id')->nullable();
             $table->integer('nationality')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
             $table->integer('residence_country_id')->nullable();
             $table->string('licence_number')->nullable();
             $table->date('license_expiry_date')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->boolean('book_direct')->default(0); //can book directly without TLC
             $table->string('status')->nullable();
+            $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

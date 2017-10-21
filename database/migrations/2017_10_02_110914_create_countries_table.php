@@ -18,7 +18,7 @@ class CreateCountriesTable extends Migration
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
-            $table->string('country_code')->nullable();
+            $table->string('abbr')->nullable();
             $table->boolean('active')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();

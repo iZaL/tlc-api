@@ -8,6 +8,6 @@ $factory->define(\App\Models\Country::class, function (Faker $faker) {
         'name_en' => $country,
         'name_ar' => $country,
         'name_hi' => $country,
-        'country_code' => $faker->countryCode
+        'abbr' => $faker->countryCode
     ];
 });

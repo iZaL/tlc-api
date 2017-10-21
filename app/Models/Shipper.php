@@ -10,4 +10,9 @@ class Shipper extends BaseModel
         return $this->belongsTo(User::class);
     }
 
+    public function canBookDirect()
+    {
+        return $this->book_direct;
+    }
+
 }

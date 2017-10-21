@@ -2,6 +2,9 @@
 
 namespace Tests;
 
+use App\Models\Country;
+use App\Models\Driver;
+use App\Models\Load;
 use App\Models\Shipper;
 use App\Models\User;
 use Carbon\Carbon;
@@ -28,7 +31,6 @@ abstract class TestCase extends BaseTestCase
             'request_documents'       => 0,
             'request_pictures'        => 0,
             'fixed_rate'              => 1,
-            'status'                  => 'busy',
             'scheduled_at'            => '2017-10-19 11:15:25'
         ];
 
@@ -41,6 +43,12 @@ abstract class TestCase extends BaseTestCase
         return $headers;
     }
 
+    public function _createCountry($abbr,$array = [])
+    {
+        $country = array_merge($array,['abbr'=>$abbr]);
+        return factory(Country::class)->create($country);
+    }
+
     public function _createShipper($array = [])
     {
         $shipper = factory(Shipper::class)->create(array_merge([
@@ -50,6 +58,29 @@ abstract class TestCase extends BaseTestCase
         ],$array));
 
         return $shipper;
+    }
+
+    public function _createDriver($array = [])
+    {
+        $driver = factory(Driver::class)->create(array_merge([
+            'user_id' => function () {
+                return factory(User::class)->create()->id;
+            },
+        ],$array));
+
+        return $driver;
+    }
+
+    public function _createLoad($array = [])
+    {
+        $load = factory(Load::class)->create(array_merge([
+            'shipper_id' => 1,
+            'trailer_id' => 1,
+            'origin_location_id' => 1,
+            'destination_location_id' => 1
+        ],$array));
+
+        return $load;
     }
 
 }

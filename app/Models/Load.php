@@ -19,4 +19,9 @@ class Load extends BaseModel
         'distance'
     ];
 
+    public function scopeOfStatus($query,$status)
+    {
+        return $query->where('status',$status);
+    }
 }
+
