@@ -51,21 +51,40 @@ class LoadsController extends Controller
 
         $driver = Auth::guard('api')->user()->driver;
         $currentCountry = $this->countryModel->where('abbr', $request->current_country)->first();
+        $trailerID = $request->trailer_id;
 
         $driverValidVisaCountries = $driver->validVisas->pluck('id');
+        $driverValidPasses = $driver->passes->pluck('id');
 
         $loads = DB::table('loads')
             ->join('locations', function ($join) use ($currentCountry) {
                 $join
                     ->on('loads.origin_location_id', '=', 'locations.id')
-                    ->where('locations.country_id', $currentCountry->id)
+                    ->where('locations.country_id', $currentCountry->id);
+            })
+            ->leftJoin('load_passes', function ($join) use ($driverValidPasses) {
+                $join
+                    ->on('loads.id', '=', 'load_passes.load_id')
                 ;
             })
             ->where('loads.status', 'waiting')
-            ->whereIn('loads.destination_location_id',$driverValidVisaCountries)
+            ->whereIn('loads.destination_location_id', $driverValidVisaCountries);
+
+        if ($trailerID) {
+            $loads = $loads->where('trailer_id', $trailerID);
+        }
+
+        $loads = $loads
+            ->where(function ($query) use ($driverValidPasses) {
+                $query
+                    ->whereIn('load_passes.pass_id', $driverValidPasses)
+                    ->orWhere('load_passes.pass_id', null)
+                    ;
+            })
             ->groupBy('loads.id')
             ->select('loads.*')
         ;
+
         $loads = $loads->paginate(20);
 
         return new LoadResourceCollection($loads);

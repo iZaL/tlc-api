@@ -23,5 +23,11 @@ class Load extends BaseModel
     {
         return $query->where('status',$status);
     }
+
+    public function passes()
+    {
+        return $this->belongsToMany(Pass::class,'load_passes');
+    }
+
 }
 

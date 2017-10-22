@@ -17,93 +17,10 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class LoadsControllerTest extends TestCase
+class ShipperTest extends TestCase
 {
 
     use RefreshDatabase;
-
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
-    public function test_driver_can_only_see_loads_for_the_country_his_visa_is_not_expired()
-    {
-        // get loads where origin is country id
-        // get destination where id is in valid_visas
-
-        $kw = $this->_createCountry('KW');
-        $sa = $this->_createCountry('SA');
-        $bh = $this->_createCountry('BH');
-
-        factory(Location::class)->create(['country_id'=>$kw->id]);
-        factory(Location::class)->create(['country_id'=>$sa->id]);
-        factory(Location::class)->create(['country_id'=>$bh->id]);
-
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
-            'origin_location_id'      => $kw->id,
-            'destination_location_id' => $kw->id,
-        ]);
-
-        $loadKWSA1 = factory(Load::class)->states('waiting')->create([
-            'origin_location_id'      => $kw->id,
-            'destination_location_id' => $sa->id,
-        ]);
-
-        $loadKWBH1 = factory(Load::class)->states('waiting')->create([
-            'origin_location_id'      => $kw->id,
-            'destination_location_id' => $bh->id,
-        ]);
-
-        $loadKWBH2 = factory(Load::class)->states('pending')->create([
-            'origin_location_id'      => $kw->id,
-            'destination_location_id' => $bh->id,
-        ]);
-
-        $driver = factory(Driver::class)->create([
-            'user_id' => function () {
-                return factory(User::class)->create()->id;
-            }
-        ]);
-
-        $visaKw = factory(DriverVisas::class)->create(
-            [
-                'driver_id'   => $driver->id,
-                'country_id'  => $kw->id,
-                'expiry_date' => Carbon::now()->addYear(1)->toDateString()
-            ]);
-
-        $visasa = factory(DriverVisas::class)->create(
-            [
-                'driver_id'   => $driver->id,
-                'country_id'  => $sa->id,
-                'expiry_date' => Carbon::now()->subYear(1)->toDateString()
-            ]);
-
-        $visabh = factory(DriverVisas::class)->create(
-            [
-                'driver_id'   => $driver->id,
-                'country_id'  => $bh->id,
-                'expiry_date' => Carbon::now()->addYear(1)->toDateString()
-            ]);
-
-        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-        $response = $this->json('GET', '/api/loads', ['current_country' => 'KW'], $header);
-
-        $response->assertJson([
-            'data' => [['id'=>$loadKWKW1->id],['id'=>$loadKWBH1->id]]
-        ]);
-
-        $response->assertJsonMissing([
-            'data' => [['id'=>$loadKWSA1->id]]
-        ]);
-
-        $response->assertJsonMissing([
-            'data' => [['id'=>$loadKWBH2->id]]
-        ]);
-
-
-    }
 
     public function test_shipper_is_a_user()
     {
@@ -156,7 +73,6 @@ class LoadsControllerTest extends TestCase
         $this->assertDatabaseHas('loads', $postData);
     }
 
-
     /**
      * Status of Loads
      *
@@ -203,7 +119,7 @@ class LoadsControllerTest extends TestCase
 ////
 ////        // 1 - Check the Driver is Active // done
 ////
-////        // 2 - Check The Driver has Valid Trailer
+////        // 2 - Check The Driver has Valid Trailer // done
 ////
 ////        // 3 - Check The Driver has Valid Visa for Destination, Origin // done
 ////

@@ -12,16 +12,18 @@ class Driver extends BaseModel
 
     public function visas()
     {
-        return $this->belongsToMany(Country::class,'driver_visas')
-            ->withPivot('expiry_date')
-//            ->wherePivot('expiry_date','<',date('Y-m-d'))
-            ;
+        return $this->belongsToMany(Country::class,'driver_visas')->withPivot('expiry_date');
     }
 
     public function validVisas()
     {
         return $this->visas()->wherePivot('expiry_date','>',date('Y-m-d'));
 
+    }
+
+    public function passes()
+    {
+        return $this->belongsToMany(Pass::class,'driver_passes');
     }
 
 }
