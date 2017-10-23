@@ -57,14 +57,14 @@ class LoadsController extends Controller
         $driverValidPasses = $driver->passes->pluck('id');
         $driverValidLicenses = $driver->validLicenses->pluck('id');
 
-//        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
+        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
 
         $loads = DB::table('loads')
-            ->join('locations', function ($join) use ($currentCountry,$driverValidVisaCountries) {
+            ->join('locations', function ($join) use ($currentCountry,$validCountries) {
                 $join
                     ->on('loads.origin_location_id', '=', 'locations.id')
                     ->where('loads.origin_location_id', $currentCountry->id)
-                    ->whereIn('loads.destination_location_id', $driverValidVisaCountries);
+                    ->whereIn('loads.destination_location_id', $validCountries);
                 ;
             })
             ->leftJoin('load_passes', function ($join) use ($driverValidPasses) {

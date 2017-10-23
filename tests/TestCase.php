@@ -4,6 +4,8 @@ namespace Tests;
 
 use App\Models\Country;
 use App\Models\Driver;
+use App\Models\DriverLicense;
+use App\Models\DriverVisas;
 use App\Models\Load;
 use App\Models\Shipper;
 use App\Models\User;
@@ -34,7 +36,7 @@ abstract class TestCase extends BaseTestCase
             'scheduled_at'            => '2017-10-19 11:15:25'
         ];
 
-        return array_merge($postData,$array);
+        return array_merge($postData, $array);
     }
 
     public function _createHeader($array)
@@ -43,10 +45,30 @@ abstract class TestCase extends BaseTestCase
         return $headers;
     }
 
-    public function _createCountry($abbr,$array = [])
+    public function _createCountry($abbr, $array = [])
     {
-        $country = array_merge($array,['abbr'=>$abbr]);
+        $country = array_merge($array, ['abbr' => $abbr]);
         return factory(Country::class)->create($country);
+    }
+
+    public function _createVisa($driverID, $countryID, $valid = true)
+    {
+        factory(DriverVisas::class)->create(
+            [
+                'driver_id'   => $driverID,
+                'country_id'  => $countryID,
+                'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()
+            ]);
+    }
+
+    public function _createLicense($driverID, $countryID, $valid = true)
+    {
+        factory(DriverLicense::class)->create(
+            [
+                'driver_id'   => $driverID,
+                'country_id'  => $countryID,
+                'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()
+            ]);
     }
 
     public function _createShipper($array = [])
@@ -55,7 +77,7 @@ abstract class TestCase extends BaseTestCase
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
-        ],$array));
+        ], $array));
 
         return $shipper;
     }
@@ -66,7 +88,7 @@ abstract class TestCase extends BaseTestCase
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
-        ],$array));
+        ], $array));
 
         return $driver;
     }
@@ -74,11 +96,11 @@ abstract class TestCase extends BaseTestCase
     public function _createLoad($array = [])
     {
         $load = factory(Load::class)->create(array_merge([
-            'shipper_id' => 1,
-            'trailer_id' => 1,
-            'origin_location_id' => 1,
+            'shipper_id'              => 1,
+            'trailer_id'              => 1,
+            'origin_location_id'      => 1,
             'destination_location_id' => 1
-        ],$array));
+        ], $array));
 
         return $load;
     }
