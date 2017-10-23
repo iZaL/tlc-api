@@ -25,6 +25,78 @@ class DriverTest extends TestCase
     use RefreshDatabase;
 
 
+    public function test_driver_can_only_see_loads_for_the_shippers_who_hasnt_put_him_on_blocked_list()
+    {
+        // get loads where origin is country id
+        // get destination where id is in valid_visas
+
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $bh = $this->_createCountry('BH');
+        $iq = $this->_createCountry('IQ');
+
+        factory(Location::class)->create(['country_id'=>$kw->id]);
+        factory(Location::class)->create(['country_id'=>$sa->id]);
+        factory(Location::class)->create(['country_id'=>$bh->id]);
+        factory(Location::class)->create(['country_id'=>$iq->id]);
+
+        $driver = factory(Driver::class)->create([
+            'user_id' => function () {
+                return factory(User::class)->create()->id;
+            }
+        ]);
+
+        $shipper1 = $this->_createShipper();
+        $shipper2 = $this->_createShipper();
+        $shipper3 = $this->_createShipper();
+        $shipper4 = $this->_createShipper();
+
+        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper1->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+        ]);
+
+        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper1->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+        ]);
+
+        $loadKWKW3 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper2->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+        ]);
+
+        $loadKWKW4 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper3->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+        ]);
+
+        $loadKWKW5 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper4->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+        ]);
+
+        $driver->blockedList()->attach($shipper1->id);
+        $driver->blockedList()->attach($shipper3->id);
+
+        $this->_createLicense($driver->id,$kw->id);
+        $this->_createVisa($driver->id,$kw->id);
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+        $response = $this->json('GET', '/api/loads', ['current_country' => 'KW'], $header);
+
+        $response->assertJson([
+            'data' => [['id'=>$loadKWKW3->id],['id'=>$loadKWKW5->id]]
+        ]);
+
+    }
+
+
     public function test_driver_can_only_see_loads_for_the_country_his_license_is_not_expired()
     {
         // get loads where origin is country id

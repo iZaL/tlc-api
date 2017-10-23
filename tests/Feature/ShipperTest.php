@@ -125,7 +125,7 @@ class ShipperTest extends TestCase
 ////
 ////        // 4 - Check The Driver has Valid Pass // done
 ////
-////        // 5 - Check Driver has a Valid License and has not Expired
+////        // 5 - Check Driver has a Valid License and has not Expired // done
 ////
 ////        // 6 - Check Whether the Shipper has put the Driver/Truck on Blocked List
 ////

@@ -35,4 +35,9 @@ class Driver extends BaseModel
         return $this->belongsToMany(Pass::class,'driver_passes');
     }
 
+    public function blockedList()
+    {
+        return $this->belongsToMany(Shipper::class,'blocked_drivers');
+    }
+
 }

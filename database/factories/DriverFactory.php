@@ -49,3 +49,13 @@ $factory->define(\App\Models\DriverLicense::class, function (Faker $faker) {
 
     ];
 });
+//
+//$factory->define(\App\Models\DriverLicense::class, function (Faker $faker) {
+//    return [
+//        'driver_id'   => \App\Models\Driver::all()->count() ? \App\Models\Driver::first()->id : 1,
+//        'country_id' =>  \App\Models\Country::all()->count()  ? \App\Models\Country::first()->id : 1,
+//        'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
+//        'number'  => str_random(10)
+//
+//    ];
+//});

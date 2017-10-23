@@ -50,14 +50,15 @@ class LoadsController extends Controller
         ]);
 
         $driver = Auth::guard('api')->user()->driver;
+
         $currentCountry = $this->countryModel->where('abbr', $request->current_country)->first();
         $trailerID = $request->trailer_id;
 
         $driverValidVisaCountries = $driver->validVisas->pluck('id');
-        $driverValidPasses = $driver->passes->pluck('id');
         $driverValidLicenses = $driver->validLicenses->pluck('id');
-
-        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
+        $blockedShippers = $driver->blockedList->pluck('id')->toArray();
+        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses)->toArray();
+        $driverValidPasses = $driver->passes->pluck('id');
 
         $loads = DB::table('loads')
             ->join('locations', function ($join) use ($currentCountry,$validCountries) {
@@ -73,6 +74,7 @@ class LoadsController extends Controller
                 ;
             })
             ->where('loads.status', 'waiting')
+            ->whereNotIn('loads.shipper_id',$blockedShippers)
             ->where(function ($query) use ($driverValidPasses) {
                 $query
                     ->whereIn('load_passes.pass_id', $driverValidPasses)
@@ -86,7 +88,6 @@ class LoadsController extends Controller
         }
 
         $loads = $loads
-
             ->groupBy('loads.id')
             ->select('loads.*')
         ;
