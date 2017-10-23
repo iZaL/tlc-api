@@ -41,6 +41,11 @@ class DriverTest extends TestCase
             'destination_location_id' => $kw->id,
         ]);
 
+        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+        ]);
+
         $loadKWSA1 = factory(Load::class)->states('waiting')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $sa->id,
@@ -53,6 +58,11 @@ class DriverTest extends TestCase
 
         $loadKWBH2 = factory(Load::class)->states('pending')->create([
             'origin_location_id'      => $kw->id,
+            'destination_location_id' => $bh->id,
+        ]);
+
+        $loadSABH1 = factory(Load::class)->states('waiting')->create([
+            'origin_location_id'      => $sa->id,
             'destination_location_id' => $bh->id,
         ]);
 
@@ -87,7 +97,7 @@ class DriverTest extends TestCase
         $response = $this->json('GET', '/api/loads', ['current_country' => 'KW'], $header);
 
         $response->assertJson([
-            'data' => [['id'=>$loadKWKW1->id],['id'=>$loadKWBH1->id]]
+            'data' => [['id'=>$loadKWKW1->id],['id'=>$loadKWKW2->id],['id'=>$loadKWBH1->id]]
         ]);
 
         $response->assertJsonMissing([
@@ -96,6 +106,10 @@ class DriverTest extends TestCase
 
         $response->assertJsonMissing([
             'data' => [['id'=>$loadKWBH2->id]]
+        ]);
+
+        $response->assertJsonMissing([
+            'data' => [['id'=>$loadSABH1->id]]
         ]);
 
     }

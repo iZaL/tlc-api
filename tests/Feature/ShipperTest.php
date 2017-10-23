@@ -123,20 +123,16 @@ class ShipperTest extends TestCase
 ////
 ////        // 3 - Check The Driver has Valid Visa for Destination, Origin // done
 ////
-////        // 4 - Check The Driver has Valid Pass
+////        // 4 - Check The Driver has Valid Pass // done
 ////
 ////        // 5 - Check Driver has a Valid License and has not Expired
 ////
 ////        // 6 - Check Whether the Shipper has put the Driver/Truck on Blocked List
 ////
-////        // 7 - Check the Status of the Driver, only the Driver with Status 'Available' will be allowed to Book the Load
+////        // 7 - Check the Status of the Driver, only the Driver with Status 'Available' will be allowed to Book the Load // done
 ////
 ////        // 8 - Check Whether the Driver belongs to Shipper Company If USE OWN TRUCK option is selected by the Shipper
 ////
-////        // 9 - Show Only Loads That has a Status of Approved
-////        dd($load);
+////        // 9 - Show Only Loads That has a Status of Waiting // done
 ////
-////        $driver = $this->_createDriver();
-////
-//    }
 }
