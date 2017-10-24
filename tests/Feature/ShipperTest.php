@@ -127,7 +127,7 @@ class ShipperTest extends TestCase
 ////
 ////        // 5 - Check Driver has a Valid License and has not Expired // done
 ////
-////        // 6 - Check Whether the Shipper has put the Driver/Truck on Blocked List
+////        // 6 - Check Whether the Shipper has put the Driver/Truck on Blocked List // done
 ////
 ////        // 7 - Check the Status of the Driver, only the Driver with Status 'Available' will be allowed to Book the Load // done
 ////

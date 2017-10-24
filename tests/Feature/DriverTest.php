@@ -24,6 +24,81 @@ class DriverTest extends TestCase
 
     use RefreshDatabase;
 
+    public function test_driver_can_only_see_loads_for_his_shipper_if_use_own_truck_option_selected()
+    {
+        // get loads where origin is country id
+        // get destination where id is in valid_visas
+
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $bh = $this->_createCountry('BH');
+        $iq = $this->_createCountry('IQ');
+
+        factory(Location::class)->create(['country_id'=>$kw->id]);
+        factory(Location::class)->create(['country_id'=>$sa->id]);
+        factory(Location::class)->create(['country_id'=>$bh->id]);
+        factory(Location::class)->create(['country_id'=>$iq->id]);
+
+        $driver = factory(Driver::class)->create([
+            'user_id' => function () {
+                return factory(User::class)->create()->id;
+            }
+        ]);
+
+        $shipper1 = $this->_createShipper();
+        $shipper2 = $this->_createShipper();
+        $shipper3 = $this->_createShipper();
+        $shipper4 = $this->_createShipper();
+
+        $driver->shipper_id = $shipper2->id;
+        $driver->update();
+
+        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper1->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+            'use_own_truck' => 0
+        ]);
+
+        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper1->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+            'use_own_truck' => 1
+        ]);
+
+        $loadKWKW3 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper2->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+            'use_own_truck' => 1
+        ]);
+
+        $loadKWKW4 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper3->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+            'use_own_truck' => 1
+        ]);
+
+        $loadKWKW5 = factory(Load::class)->states('waiting')->create([
+            'shipper_id' => $shipper4->id,
+            'origin_location_id'      => $kw->id,
+            'destination_location_id' => $kw->id,
+            'use_own_truck' => 1
+        ]);
+
+        $this->_createLicense($driver->id,$kw->id);
+        $this->_createVisa($driver->id,$kw->id);
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+        $response = $this->json('GET', '/api/loads', ['current_country' => 'KW'], $header);
+
+        $response->assertJson([
+            'data' => [['id'=>$loadKWKW1->id],['id'=>$loadKWKW3->id]]
+        ]);
+
+    }
 
     public function test_driver_can_only_see_loads_for_the_shippers_who_hasnt_put_him_on_blocked_list()
     {
@@ -112,6 +187,7 @@ class DriverTest extends TestCase
         factory(Location::class)->create(['country_id'=>$bh->id]);
         factory(Location::class)->create(['country_id'=>$iq->id]);
 
+
         $loadKWKW1 = factory(Load::class)->states('waiting')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
@@ -157,6 +233,7 @@ class DriverTest extends TestCase
                 return factory(User::class)->create()->id;
             }
         ]);
+        $shipper1 = $this->_createShipper();
 
         $this->_createLicense($driver->id,$kw->id);
         $this->_createLicense($driver->id,$bh->id,false);
@@ -206,6 +283,7 @@ class DriverTest extends TestCase
         $sa = $this->_createCountry('SA');
         $bh = $this->_createCountry('BH');
 
+
         factory(Location::class)->create(['country_id'=>$kw->id]);
         factory(Location::class)->create(['country_id'=>$sa->id]);
         factory(Location::class)->create(['country_id'=>$bh->id]);
@@ -246,6 +324,8 @@ class DriverTest extends TestCase
             }
         ]);
 
+        $shipper1 = $this->_createShipper();
+
         $this->_createLicense($driver->id,$kw->id);
         $this->_createLicense($driver->id,$bh->id);
         $this->_createLicense($driver->id,$sa->id,false);
@@ -283,6 +363,8 @@ class DriverTest extends TestCase
         $kw = $this->_createCountry('KW');
         factory(Location::class)->create(['country_id'=>$kw->id]);
 
+
+
         $loadKWKW1 = factory(Load::class)->states('waiting')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
@@ -312,6 +394,7 @@ class DriverTest extends TestCase
         $this->_createVisa($driver->id,$kw->id);
         $this->_createLicense($driver->id,$kw->id);
 
+        $shipper1 = $this->_createShipper();
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
         $response = $this->json('GET', '/api/loads', ['current_country' => 'KW','trailer_id' => '1'], $header);
@@ -332,6 +415,9 @@ class DriverTest extends TestCase
 
     public function test_driver_gets_loads_with_valid_pass()
     {
+
+
+        // return loads only which has no pass or pass which matches with driver
 
         $kw = $this->_createCountry('KW');
         factory(Location::class)->create(['country_id'=>$kw->id]);
@@ -369,6 +455,8 @@ class DriverTest extends TestCase
 
         $driver = $this->_createDriver();
         $driver->passes()->attach($pass2->id);
+
+        $shipper1 = $this->_createShipper();
 
         // valid, 2
 

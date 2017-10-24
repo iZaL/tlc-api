@@ -46,7 +46,7 @@ class LoadsController extends Controller
     public function getLoads(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'current_country' => 'required'
+            'current_country' => 'required',
         ]);
 
         $driver = Auth::guard('api')->user()->driver;
@@ -60,39 +60,46 @@ class LoadsController extends Controller
         $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses)->toArray();
         $driverValidPasses = $driver->passes->pluck('id');
 
-        $loads = DB::table('loads')
-            ->join('locations', function ($join) use ($currentCountry,$validCountries) {
-                $join
-                    ->on('loads.origin_location_id', '=', 'locations.id')
-                    ->where('loads.origin_location_id', $currentCountry->id)
-                    ->whereIn('loads.destination_location_id', $validCountries);
-                ;
-            })
-            ->leftJoin('load_passes', function ($join) use ($driverValidPasses) {
-                $join
-                    ->on('loads.id', '=', 'load_passes.load_id')
-                ;
-            })
-            ->where('loads.status', 'waiting')
-            ->whereNotIn('loads.shipper_id',$blockedShippers)
-            ->where(function ($query) use ($driverValidPasses) {
-                $query
-                    ->whereIn('load_passes.pass_id', $driverValidPasses)
-                    ->orWhere('load_passes.pass_id', null)
-                ;
-            })
+        // if use own truck
+        // join drivers
+        // on  loads.shipper_id = driver.shipper_id
+        // where driver.id =
+
+        $loads =
+            DB::table('loads')
+                ->when($trailerID, function ($q) use ($trailerID) {
+                    $q->where('trailer_id', $trailerID);
+                })
+                ->join('locations as l', function ($join) use ($currentCountry, $validCountries) {
+                    $join
+                        ->on('loads.origin_location_id', '=', 'l.id')
+                        ->where('loads.origin_location_id', $currentCountry->id)
+                        ->whereIn('loads.destination_location_id', $validCountries);
+                })
+                ->join('shippers as s', 'loads.shipper_id', '=', 's.id')
+                ->leftJoin('load_passes as lp', 'loads.id', '=', 'lp.load_id')
+                ->leftJoin('drivers as d', function ($join) {
+                    $join
+                        ->on('d.shipper_id', '=', 's.id')
+                    ;
+                })
+                ->where('loads.status', 'waiting')
+                ->where(function ($query) use ($driverValidPasses) {
+                    $query
+                        ->whereIn('lp.pass_id', $driverValidPasses)
+                        ->orWhere('lp.pass_id', null);
+                })
+                ->where(function ($query) use ($driver) {
+                    $query
+                        ->where('loads.use_own_truck', '1')
+                        ->where('d.id', '=', $driver->id)
+                        ->orWhere('loads.use_own_truck', 0);
+                })
+                ->whereNotIn('loads.shipper_id', $blockedShippers)
         ;
 
-        if ($trailerID) {
-            $loads = $loads->where('trailer_id', $trailerID);
-        }
-
-        $loads = $loads
-            ->groupBy('loads.id')
-            ->select('loads.*')
-        ;
-
-        $loads = $loads->paginate(20);
+//        dd($loads->toSql());
+        $loads = $loads->select('loads.*')->paginate(20);
 
         return new LoadResourceCollection($loads);
     }

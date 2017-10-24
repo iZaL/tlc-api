@@ -16,7 +16,8 @@ $factory->define(\App\Models\Load::class, function (Faker $faker) {
         'request_pictures' => $faker->boolean(50),
         'fixed_rate' => $faker->boolean(50),
         'status' => 'busy',
-        'scheduled_at' => \Carbon\Carbon::now()->addDays(1,10)->toDateTimeString()
+        'scheduled_at' => \Carbon\Carbon::now()->addDays(1,10)->toDateTimeString(),
+        'use_own_truck' => 0
     ];
 });
 
