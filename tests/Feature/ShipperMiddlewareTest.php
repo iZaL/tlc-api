@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShipperMiddleware extends TestCase
+class ShipperMiddlewareTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -24,7 +24,7 @@ class ShipperMiddleware extends TestCase
     {
         $shipper = $this->_createShipper(['active' => 0]);
         $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $response = $this->json('POST', '/api/load/book', [], $header);
+        $response = $this->json('POST', '/api/loads', [], $header);
         $response->assertStatus(403);
     }
 
@@ -32,7 +32,7 @@ class ShipperMiddleware extends TestCase
     {
         $shipper = $this->_createShipper(['active' => 1]);
         $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $response = $this->json('POST', '/api/load/book', [], $header);
-        $response->assertStatus(200);
+        $response = $this->json('POST', '/api/loads', [], $header);
+        $response->assertStatus(422);
     }
 }
