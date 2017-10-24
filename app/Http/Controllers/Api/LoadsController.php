@@ -56,32 +56,19 @@ class LoadsController extends Controller
 
         $driverValidVisaCountries = $driver->validVisas->pluck('id');
         $driverValidLicenses = $driver->validLicenses->pluck('id');
-        $blockedShippers = $driver->blockedList->pluck('id')->toArray();
-        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses)->toArray();
+        $blockedShippers = $driver->blockedList->pluck('id');
         $driverValidPasses = $driver->passes->pluck('id');
 
-        // if use own truck
-        // join drivers
-        // on  loads.shipper_id = driver.shipper_id
-        // where driver.id =
+        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
 
         $loads =
             DB::table('loads')
-                ->when($trailerID, function ($q) use ($trailerID) {
-                    $q->where('trailer_id', $trailerID);
-                })
-                ->join('locations as l', function ($join) use ($currentCountry, $validCountries) {
-                    $join
-                        ->on('loads.origin_location_id', '=', 'l.id')
-                        ->where('loads.origin_location_id', $currentCountry->id)
-                        ->whereIn('loads.destination_location_id', $validCountries);
-                })
+                ->join('locations as l', 'loads.origin_location_id', '=', 'l.id')
                 ->join('shippers as s', 'loads.shipper_id', '=', 's.id')
                 ->leftJoin('load_passes as lp', 'loads.id', '=', 'lp.load_id')
-                ->leftJoin('drivers as d', function ($join) {
-                    $join
-                        ->on('d.shipper_id', '=', 's.id')
-                    ;
+                ->leftJoin('drivers as d', 'd.shipper_id', '=', 's.id')
+                ->when($trailerID, function ($q) use ($trailerID) {
+                    $q->where('trailer_id', $trailerID);
                 })
                 ->where('loads.status', 'waiting')
                 ->where(function ($query) use ($driverValidPasses) {
@@ -95,11 +82,11 @@ class LoadsController extends Controller
                         ->where('d.id', '=', $driver->id)
                         ->orWhere('loads.use_own_truck', 0);
                 })
+                ->where('loads.origin_location_id', $currentCountry->id)
+                ->whereIn('loads.destination_location_id', $validCountries)
                 ->whereNotIn('loads.shipper_id', $blockedShippers)
-        ;
-
-//        dd($loads->toSql());
-        $loads = $loads->select('loads.*')->paginate(20);
+                ->select('loads.*')
+                ->paginate(20);
 
         return new LoadResourceCollection($loads);
     }
