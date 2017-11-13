@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBlockedTrucksTable extends Migration
+class CreateLoadDriversTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateBlockedTrucksTable extends Migration
      */
     public function up()
     {
-        Schema::create('blocked_trucks', function (Blueprint $table) {
+        Schema::create('load_drivers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('truck_id');
-            $table->integer('shipper_id');
-            $table->text('reason')->nullable();
+            $table->integer('load_id');
+            $table->integer('driver_id');
+            $table->decimal('amount')->nullable();
+            $table->timestamp('reached_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateBlockedTrucksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blocked_trucks');
+        Schema::dropIfExists('load_drivers');
     }
 }

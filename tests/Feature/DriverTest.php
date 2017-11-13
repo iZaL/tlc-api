@@ -45,12 +45,21 @@ class DriverTest extends TestCase
             }
         ]);
 
+        $driver2 = factory(Driver::class)->create([
+            'user_id' => function () {
+                return factory(User::class)->create()->id;
+            }
+        ]);
+
         $shipper1 = $this->_createShipper();
         $shipper2 = $this->_createShipper();
         $shipper3 = $this->_createShipper();
         $shipper4 = $this->_createShipper();
 
         $driver->shipper_id = $shipper2->id;
+        $driver->update();
+
+        $driver2->shipper_id = $shipper1->id;
         $driver->update();
 
         $loadKWKW1 = factory(Load::class)->states('waiting')->create([
@@ -411,11 +420,12 @@ class DriverTest extends TestCase
             'data' => [['id'=>$loadKWKW4->id]]
         ]);
 
+        //   check lwh
+
     }
 
     public function test_driver_gets_loads_with_valid_pass()
     {
-
 
         // return loads only which has no pass or pass which matches with driver
 

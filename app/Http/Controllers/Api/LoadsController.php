@@ -63,10 +63,10 @@ class LoadsController extends Controller
 
         $loads =
             DB::table('loads')
-                ->join('locations as l', 'loads.origin_location_id', '=', 'l.id')
-                ->join('shippers as s', 'loads.shipper_id', '=', 's.id')
-                ->leftJoin('load_passes as lp', 'loads.id', '=', 'lp.load_id')
-                ->leftJoin('drivers as d', 'd.shipper_id', '=', 's.id')
+                ->join('locations as l', 'loads.origin_location_id', 'l.id')
+                ->join('shippers as s', 'loads.shipper_id', 's.id')
+                ->leftJoin('load_passes as lp', 'loads.id', 'lp.load_id')
+                ->leftJoin('drivers as d', 'd.shipper_id', 's.id')
                 ->when($trailerID, function ($q) use ($trailerID) {
                     $q->where('trailer_id', $trailerID);
                 })
@@ -78,8 +78,7 @@ class LoadsController extends Controller
                 })
                 ->where(function ($query) use ($driver) {
                     $query
-                        ->where('loads.use_own_truck', '1')
-                        ->where('d.id', '=', $driver->id)
+                        ->where('d.id', $driver->id)
                         ->orWhere('loads.use_own_truck', 0);
                 })
                 ->where('loads.origin_location_id', $currentCountry->id)
