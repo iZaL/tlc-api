@@ -21,7 +21,7 @@ class CreateLanguagesTable extends Migration
             $table->string('code')->nullable();
             $table->boolean('active')->default(1)->nullable();
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

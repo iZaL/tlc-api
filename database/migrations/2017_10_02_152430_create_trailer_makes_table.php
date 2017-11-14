@@ -19,7 +19,7 @@ class CreateTrailerMakesTable extends Migration
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

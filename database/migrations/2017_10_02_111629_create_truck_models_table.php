@@ -20,7 +20,7 @@ class CreateTruckModelsTable extends Migration
             $table->string('name_hi')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

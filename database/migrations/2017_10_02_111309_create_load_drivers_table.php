@@ -20,7 +20,6 @@ class CreateLoadDriversTable extends Migration
             $table->decimal('amount')->nullable();
             $table->timestamp('reached_at')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -19,9 +19,8 @@ class CreateLocationsTable extends Migration
             $table->integer('country_id');
             $table->string('latitude');
             $table->string('longitude');
-            $table->string('type'); // pick, drop
+            $table->string('type'); // origin, destination
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

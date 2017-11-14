@@ -20,9 +20,10 @@ class CreateCountriesTable extends Migration
             $table->string('name_hi')->nullable();
             $table->string('abbr')->nullable();
             $table->string('currency')->nullable();
+            $table->string('transit_hours')->nullable();
             $table->boolean('active')->default(1)->nullable();
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

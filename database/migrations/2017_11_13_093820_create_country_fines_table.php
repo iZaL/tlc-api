@@ -18,6 +18,7 @@ class CreateCountryFinesTable extends Migration
             $table->integer('country_id');
             $table->integer('fine_id');
             $table->string('amount');
+            $table->timestamps();
         });
     }
 

@@ -30,7 +30,7 @@ class CreateDriversTable extends Migration
             $table->string('status')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

@@ -30,7 +30,7 @@ class CreateLoadsTable extends Migration
             $table->timestamp('scheduled_at')->nullable();
             $table->string('status')->nullable()->default('pending');
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

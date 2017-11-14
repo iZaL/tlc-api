@@ -18,6 +18,7 @@ class CreateCountryDocumentationsTable extends Migration
             $table->integer('country_id');
             $table->integer('documentation_id');
             $table->string('amount');
+            $table->timestamps();
         });
     }
 

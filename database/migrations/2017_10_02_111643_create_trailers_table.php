@@ -26,7 +26,7 @@ class CreateTrailersTable extends Migration
             $table->integer('year')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

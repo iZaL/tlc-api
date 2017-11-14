@@ -19,6 +19,8 @@ class CreateCommunicationProvidersTable extends Migration
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
             $table->string('image')->nullable();
+            $table->timestamps();
+
         });
     }
 

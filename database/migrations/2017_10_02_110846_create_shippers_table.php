@@ -27,7 +27,7 @@ class CreateShippersTable extends Migration
             $table->decimal('cancellation_fee')->nullable(); //fee for cancelling the booked load
             $table->boolean('active')->default(1); //fee for cancelling the booked load
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 
