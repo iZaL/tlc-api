@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLoadDocumentsTable extends Migration
+class CreateLoadFinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateLoadDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('load_documents', function (Blueprint $table) {
+        Schema::create('load_fines', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('load_id');
-            $table->integer('truck_id');
-            $table->decimal('amount');
-            $table->decimal('type'); // border_charges, pod
-            $table->string('file_path')->nullable(); // proof
+            $table->integer('country_id');
+            $table->integer('fine_id');
+            $table->integer('driver_id');
+            $table->decimal('amount')->nullable();
+            $table->string('file')->nullable(); // proof
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateLoadDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('load_documents');
+        Schema::dropIfExists('load_fines');
     }
 }

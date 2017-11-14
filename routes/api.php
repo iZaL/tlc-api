@@ -17,8 +17,9 @@ Route::group(['namespace' => 'Api'], function () {
 
     Route::middleware(['auth:api'])->group(function () {
 
-        Route::post('loads', 'LoadsController@bookLoad');
-        Route::get('loads', 'LoadsController@getLoads');
+        Route::get('loads/create','LoadsController@createLoad')->name('loads.create');
+        Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
+        Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
 
     });
 

@@ -43,6 +43,11 @@ class LoadsController extends Controller
         $this->countryModel = $countryModel;
     }
 
+    /**
+     * @param Request $request
+     * @return LoadResourceCollection
+     * Get loads for the Authenticated Driver
+     */
     public function getLoads(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -90,7 +95,25 @@ class LoadsController extends Controller
         return new LoadResourceCollection($loads);
     }
 
-    public function bookLoad(Request $request)
+
+    /**
+     * @param Request $request
+     * Passes the Required Data for Create Load Screen
+     */
+    public function createLoad(Request $request)
+    {
+
+        // get trailer types
+        // get packing types
+        // get customer's saved origins and destinations
+        //
+
+        $loads = $this->loadModel->query();
+
+
+    }
+
+    public function storeLoad(Request $request)
     {
         $validation = Validator::make($request->all(), [
             'shipper_id'              => 'required',
