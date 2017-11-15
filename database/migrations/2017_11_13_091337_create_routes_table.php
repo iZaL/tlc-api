@@ -17,7 +17,7 @@ class CreateRoutesTable extends Migration
             $table->increments('id');
             $table->integer('origin_country_id');
             $table->integer('destination_country_id');
-            $table->string('transit_time')->nullable();
+            $table->decimal('duration')->nullable()->notes('in hours');
 //            $table->boolean('direct')->default(1);
             $table->timestamps();
         });

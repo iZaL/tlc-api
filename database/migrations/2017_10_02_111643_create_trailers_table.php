@@ -23,6 +23,7 @@ class CreateTrailersTable extends Migration
             $table->integer('length')->nullable();
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
+            $table->integer('axles')->nullable();
             $table->integer('year')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
