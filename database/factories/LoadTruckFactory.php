@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Models\LoadTruck::class, function (Faker $faker) {
+$factory->define(\App\Models\LoadDriver::class, function (Faker $faker) {
     return [
         'load_id' => \App\Models\Load::all()->random()->first()->id,
         'truck_id' => \App\Models\Truck::all()->random()->first()->id,

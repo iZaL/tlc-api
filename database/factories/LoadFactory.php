@@ -33,7 +33,7 @@ $factory->state(\App\Models\Load::class, 'pending', function ($faker) {
     ];
 });
 
-$factory->define(\App\Models\LoadDocument::class, function (Faker $faker) {
+$factory->define(\App\Models\LoadDocumentation::class, function (Faker $faker) {
     return [
         'load_id' => \App\Models\Shipper::all()->random()->first()->id,
         'truck_id' => \App\Models\Truck::all()->random()->first()->id,
@@ -43,7 +43,7 @@ $factory->define(\App\Models\LoadDocument::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(\App\Models\LoadTruck::class, function (Faker $faker) {
+$factory->define(\App\Models\LoadDriver::class, function (Faker $faker) {
     return [
         'load_id' =>  \App\Models\Shipper::all()->random()->first()->id,
         'truck_id' =>  \App\Models\Shipper::all()->random()->first()->id,
