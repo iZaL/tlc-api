@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Location extends BaseModel
+class PushToken extends BaseModel
 {
 
 }

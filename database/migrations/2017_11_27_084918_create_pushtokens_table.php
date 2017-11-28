@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDriverLicensesTable extends Migration
+class CreatePushtokensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateDriverLicensesTable extends Migration
      */
     public function up()
     {
-        Schema::create('driver_licenses', function (Blueprint $table) {
+        Schema::create('pushtokens', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('country_id');
-            $table->integer('driver_id');
-            $table->string('number');
-            $table->date('expiry_date');
-            $table->string('image')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->string('token');
+            $table->string('os')->default('ios');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateDriverLicensesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('driver_licenses');
+        Schema::dropIfExists('pushtokens');
     }
 }

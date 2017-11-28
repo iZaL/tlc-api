@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CountriesTableSeeder::class);
         $this->call(GatespassesTableSeeder::class);
         $this->call(ShippersTableSeeder::class);
-        $this->call(LocationsTableSeeder::class);
+        $this->call(ShipperLocationsTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(TrailersTableSeeder::class);
         $this->call(PassesTableSeeder::class);

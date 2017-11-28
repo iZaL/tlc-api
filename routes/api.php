@@ -23,5 +23,14 @@ Route::group(['namespace' => 'Api'], function () {
 
     });
 
+    Route::group(['prefix' => 'auth','namespace' => 'Auth'], function () {
+        Route::get('logout', 'LoginController@logout');
+        Route::post('login', 'LoginController@login');
+        Route::post('register', 'LoginController@register');
+        Route::post('password/forgot', 'LoginController@forgotPassword'); // send email
+        Route::post('password/recover', 'LoginController@recoverPassword'); // send email
+        Route::post('password/update', 'LoginController@updatePassword'); // send email
+    });
+
 });
 

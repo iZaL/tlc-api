@@ -10,4 +10,17 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function customValidate($requestArray, $rules)
+    {
+
+        $validator = \Illuminate\Support\Facades\Validator::make($requestArray->all(),$rules);
+
+        if($validator->fails()) {
+            return ['success'=>false,'errors'=>$validator->errors()->first()];
+        }
+
+        return true;
+
+    }
 }
