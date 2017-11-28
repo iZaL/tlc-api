@@ -18,6 +18,7 @@ class CreatePackingsTable extends Migration
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }

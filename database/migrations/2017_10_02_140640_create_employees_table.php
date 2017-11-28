@@ -23,7 +23,7 @@ class CreateEmployeesTable extends Migration
             $table->string('telephone')->nullable();
             $table->string('email')->nullable();
             $table->boolean('driver_interaction')->default(0)->notes('can communicate with driver directly'); //can communicate with driver directly
-            $table->boolean('active')->default(1)->nullable();
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }

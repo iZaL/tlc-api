@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLanguagesTable extends Migration
+class CreateDriverRoutesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateLanguagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('languages', function (Blueprint $table) {
+        Schema::create('driver_routes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name_en')->nullable();
-            $table->string('name_ar')->nullable();
-            $table->string('name_hi')->nullable();
-            $table->string('code')->nullable();
+            $table->integer('driver_id');
+            $table->integer('route_id');
             $table->boolean('active')->default(1);
             $table->timestamps();
-//            $table->softDeletes();
         });
     }
 
@@ -32,6 +29,6 @@ class CreateLanguagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('languages');
+        Schema::dropIfExists('driver_routes');
     }
 }
