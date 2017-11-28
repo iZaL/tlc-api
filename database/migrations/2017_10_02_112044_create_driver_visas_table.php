@@ -18,6 +18,7 @@ class CreateDriverVisasTable extends Migration
             $table->integer('country_id');
             $table->integer('driver_id');
             $table->date('expiry_date');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

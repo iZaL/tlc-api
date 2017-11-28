@@ -17,6 +17,7 @@ class CreateDriverPassesTable extends Migration
             $table->increments('id');
             $table->integer('driver_id');
             $table->integer('pass_id');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

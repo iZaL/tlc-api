@@ -20,7 +20,7 @@ class CreateLoadFinesTable extends Migration
             $table->integer('fine_id');
             $table->integer('driver_id');
             $table->decimal('amount')->nullable();
-            $table->string('file')->nullable(); // proof
+            $table->string('image')->nullable(); // proof
             $table->timestamps();
         });
     }

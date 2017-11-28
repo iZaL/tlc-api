@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePushtokensTable extends Migration
+class CreatePushTokensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePushtokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('pushtokens', function (Blueprint $table) {
+        Schema::create('push_tokens', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->nullable();
             $table->string('token');
@@ -29,6 +29,6 @@ class CreatePushtokensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pushtokens');
+        Schema::dropIfExists('push_tokens');
     }
 }
