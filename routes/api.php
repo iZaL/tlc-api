@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['namespace' => 'Api'], function () {
+Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
     Route::middleware(['auth:api'])->group(function () {
 
@@ -30,6 +30,11 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('password/forgot', 'LoginController@forgotPassword'); // send email
         Route::post('password/recover', 'LoginController@recoverPassword'); // send email
         Route::post('password/update', 'LoginController@updatePassword'); // send email
+        Route::post('otp/confirm', 'LoginController@confirmOTP'); // send email
+    });
+
+    Route::get('a',function(){
+        return response()->json('sccc');
     });
 
 });

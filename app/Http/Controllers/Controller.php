@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Validator;
 
 class Controller extends BaseController
 {
@@ -14,10 +15,10 @@ class Controller extends BaseController
     public function customValidate($requestArray, $rules)
     {
 
-        $validator = \Illuminate\Support\Facades\Validator::make($requestArray->all(),$rules);
+        $validator = Validator::make($requestArray->all(),$rules);
 
         if($validator->fails()) {
-            return ['success'=>false,'errors'=>$validator->errors()->first()];
+            return response()->json(['success'=>false,'message'=>$validator->errors()->first()],422);
         }
 
         return true;

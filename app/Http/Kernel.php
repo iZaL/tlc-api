@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Driver;
+use App\Http\Middleware\Locale;
 use App\Http\Middleware\Shipper;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -61,5 +62,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'shipper' => Shipper::class,
         'driver' => Driver::class,
+        'locale' => Locale::class
     ];
 }

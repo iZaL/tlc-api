@@ -15,18 +15,18 @@ class LoginController extends Controller
      * @var User
      */
     private $userRepo;
-    private $pushtokenModel;
+    private $pushTokenModel;
 
     /**
      * LoginController constructor.
      * @param User $userRepo
-     * @param Pushtoken $pushtokenModel
+     * @param Pushtoken $pushTokenModel
      */
-    public function __construct(User $userRepo,Pushtoken $pushtokenModel)
+    public function __construct(User $userRepo, PushToken $pushTokenModel)
     {
         $this->middleware('guest', ['except' => 'logout']);
         $this->userRepo = $userRepo;
-        $this->pushtokenModel = $pushtokenModel;
+        $this->pushTokenModel = $pushTokenModel;
     }
 
     /*
@@ -35,28 +35,28 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-        if($request->has('api_token')) {
+        if ($request->has('api_token')) {
             return $this->loginViaToken($request);
         }
 
-        $validator = $this->customValidate($request,[
-            'email' => 'email|required',
+        $validation = Validator::make($request->all(), [
+            'email'  => 'email|required',
             'password' => 'required',
         ]);
 
-        if(is_array($validator)) {
-            return response()->json($validator);
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
         $email = strtolower($request->email);
         $password = $request->password;
 
-        $loggedIn = Auth::attempt(['email'=>$email,'password'=>$password,'active'=>true]);
+        $loggedIn = Auth::attempt(['email' => $email, 'password' => $password, 'active' => 1]);
 
-        if(!$loggedIn) {
+        if (!$loggedIn) {
             return response()->json([
-                'success'=>false,
-                'message'=> __('Wrong Credentials')
+                'success' => false,
+                'message' => trans('wrong_credentials')
             ]);
         }
 
@@ -64,11 +64,11 @@ class LoginController extends Controller
 
         $user->makeVisible('api_token');
 
-        if($request->pushtoken) {
+        if ($request->pushtoken) {
 
-            $pushToken = $this->pushtokenModel->where('token',$request->pushtoken)->first();
+            $pushToken = $this->pushTokenModel->where('token', $request->pushtoken)->first();
 
-            if($pushToken && $pushToken->user_id != $user->id) {
+            if ($pushToken && $pushToken->user_id != $user->id) {
                 $pushToken->user_id = $user->id;
                 $pushToken->save();
             }
@@ -76,7 +76,7 @@ class LoginController extends Controller
         }
 
 
-        return response()->json(['success'=>true,'data'=>$user]);
+        return response()->json(['success' => true, 'data' => $user]);
     }
 
     /*
@@ -84,36 +84,44 @@ class LoginController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = $this->customValidate($request,[
-            'name_en' => 'required|max:50',
-            'name_ar' => 'required|max:50',
-            'email' => 'email|required|unique:users,email',
+        $validation = Validator::make($request->all(), [
+            'name'     => 'required|max:50',
+            'email'    => 'email|required|unique:users,email',
             'password' => 'required|confirmed|min:6',
-            'mobile' => 'required',
+            'mobile'   => 'required|unique:users,mobile',
         ]);
 
-        if(is_array($validator)) {
-            return response()->json($validator);
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
-        $name_en = $request->name_en;
-        $name_ar = $request->name_ar;
+        $name = $request->name;
         $email = strtolower($request->email);
         $password = bcrypt($request->password);
         $mobile = $request->mobile;
-        $api_token = str_random(20);
-        $active = true;
-        $isCompany = $request->has('isCompany') ? $request->isCompany : false;
-        $company = ['description' => '' , 'phone' => '' ,'address' => ''];
+        $apiToken = str_random(16);
+//        $isShipper = $request->has('isCompany') ? $request->isCompany : false;
 
         try {
-            $user = $this->userRepo->create(
-                compact('name_en','name_ar','email','password','mobile','active','api_token','isCompany','company'));
+            $user = $this->userRepo->create([
+                'name'      => $name,
+                'email'     => $email,
+                'password'  => $password,
+                'mobile'    => $mobile,
+                'api_token' => $apiToken
+            ]);
+
+//            if($isShipper) {
+//                // create shipper
+//            } else {
+//                // create driver
+//            }
+
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'message'=>'Could not create user']);
+            return response()->json(['success' => false, 'message' => trans('general.registration_failed')]);
         }
 
-        return response()->json(['success'=>true,'data'=>$user]);
+        return response()->json(['success' => true, 'data' => $user]);
     }
 
     /*
@@ -121,28 +129,28 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        return response()->json(['success'=>true,'message'=>'logged out']);
+        return response()->json(['success' => true, 'message' => 'logged out']);
     }
 
     private function loginViaToken($request)
     {
         $user = Auth::guard('api')->user();
 
-        if(!$user) {
+        if (!$user) {
             return response()->json('wrong token');
         }
 
         $user->makeVisible('api_token');
 
-        if($request->pushtoken) {
-            $pushToken = $this->pushtokenModel->where('token',$request->pushtoken)->first();
-            if($pushToken && $pushToken->user_id != $user->id) {
+        if ($request->pushtoken) {
+            $pushToken = $this->pushTokenModel->where('token', $request->pushtoken)->first();
+            if ($pushToken && $pushToken->user_id != $user->id) {
                 $pushToken->user_id = $user->id;
                 $pushToken->save();
             }
         }
 
-        return response()->json(['success'=>true,'data'=>$user]);
+        return response()->json(['success' => true, 'data' => $user]);
     }
 
 
@@ -150,22 +158,21 @@ class LoginController extends Controller
     // Send Confirmation Code
     public function forgotPassword(Request $request)
     {
-
-        $validator = $this->customValidate($request,[
+        $validation = Validator::make($request->all(), [
             'email' => 'email|required',
         ]);
 
-        if(is_array($validator)) {
-            return response()->json($validator);
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
         // generate confirmation code
         // save in DB
         $email = strtolower($request->email);
 
-        $user = User::where('email',$email)->first();
+        $user = User::where('email', $email)->first();
 
-        if(!$user) {
-            return response()->json(['success'=>false,'message'=>'email address not found']);
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'email address not found']);
         }
 
 //        $genCode = str_random(6);
@@ -176,7 +183,7 @@ class LoginController extends Controller
 
         // send email
 
-        return response()->json(['success'=>true,'data'=>$user]);
+        return response()->json(['success' => true, 'data' => $user]);
 
     }
 
@@ -184,12 +191,12 @@ class LoginController extends Controller
     public function recoverPassword(Request $request)
     {
 
-        $validator = $this->customValidate($request,[
+        $validation = Validator::make($request->all(), [
             'email' => 'email|required',
         ]);
 
-        if(is_array($validator)) {
-            return response()->json($validator);
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
         // generate confirmation code
@@ -197,51 +204,90 @@ class LoginController extends Controller
         $email = strtolower($request->email);
         $code = $request->confirmation_code;
 
-        $user = User::where('email',$email)->first();
+        $user = User::where('email', $email)->first();
 
-        if(!$user) {
-            return response()->json(['success'=>false,'message'=>'Unknown User']);
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Unknown User']);
         }
 
-        if($code !== $user->forgot_password_code) {
-            return response()->json(['success'=>false,'message'=>'Invalid Code']);
+        if ($code !== $user->forgot_password_code) {
+            return response()->json(['success' => false, 'message' => 'Invalid Code']);
         }
 
-        return response()->json(['success'=>true,'message'=>'User Can Change Password']);
+        return response()->json(['success' => true, 'message' => 'User Can Change Password']);
 
     }
 
     public function updatePassword(Request $request)
     {
-        // generate confirmation code
-        // save in DB
-        $validator = $this->customValidate($request,[
+        $validation = Validator::make($request->all(), [
             'email' => 'email|required',
         ]);
 
-        if(is_array($validator)) {
-            return response()->json($validator);
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
         $email = strtolower($request->email);
         $password = $request->password;
 
-        $this->validate($request,[
-            'email' => 'required',
+        $this->validate($request, [
+            'email'    => 'required',
             'password' => 'required|confirmed|min:6',
         ]);
 
-        $user = User::where('email',$email)->first();
+        $user = User::where('email', $email)->first();
 
-        if(!$user) {
-            return response()->json(['success'=>false,'message'=>'Unknown User']);
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Unknown User']);
         }
 
         $user->password = bcrypt($password);
         $user->save();
 
-        return response()->json(['success'=>true,'message'=>'User Can Change Password']);
+        return response()->json(['success' => true, 'message' => 'User Can Change Password']);
 
+    }
+
+    public function confirmOTP(Request $request)
+    {
+        // generate confirmation code
+        // save in DB
+        $validation = Validator::make($request->all(), [
+            'code'   => 'required',
+            'mobile' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+        }
+
+        $user = User::where('mobile', $request->mobile)->first();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => trans('general.invalid_user')]);
+        }
+
+        if ($user->otp == $request->code) {
+            if (!$user->isActive()) {
+                $this->activateUser($user);
+                return response()->json(['success' => true, 'data' => $user]);
+            }
+            return response()->json(['success' => false, 'message' => trans('general.account_already_active')]);
+        }
+
+        return response()->json(['success' => false, 'message' => trans('general.invalid_otp')]);
+
+    }
+
+    public function activateUser($user)
+    {
+        $user->active = 1;
+        $user->save();
+
+        // send email,sms
+
+        return $user;
     }
 
 

@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'otp', 'api_token'
     ];
 
     public function shipper()
@@ -33,5 +33,10 @@ class User extends Authenticatable
     public function driver()
     {
         return $this->hasOne(Driver::class);
+    }
+
+    public function isActive()
+    {
+        return $this->active;
     }
 }

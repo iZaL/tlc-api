@@ -21,7 +21,8 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'mobile' => $faker->phoneNumber,
         'admin' => $faker->boolean(50),
         'image' => $faker->imageUrl(500,500),
-        'password' => $password ?: $password = bcrypt('secret'),
+        'password' => $password ?: $password = bcrypt('password'),
         'remember_token' => str_random(10),
+        'active' => 1
     ];
 });
