@@ -35,7 +35,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-        if ($request->has('api_token')) {
+        if(Auth::guard('api')->user()) {
             return $this->loginViaToken($request);
         }
 
@@ -64,9 +64,9 @@ class LoginController extends Controller
 
         $user->makeVisible('api_token');
 
-        if ($request->pushtoken) {
+        if ($request->push_token) {
 
-            $pushToken = $this->pushTokenModel->where('token', $request->pushtoken)->first();
+            $pushToken = $this->pushTokenModel->where('token', $request->push_token)->first();
 
             if ($pushToken && $pushToken->user_id != $user->id) {
                 $pushToken->user_id = $user->id;
@@ -100,7 +100,7 @@ class LoginController extends Controller
         $password = bcrypt($request->password);
         $mobile = $request->mobile;
         $apiToken = str_random(16);
-//        $isShipper = $request->has('isCompany') ? $request->isCompany : false;
+        $isShipper = $request->has('isShipper') ? $request->isShipper : false;
 
         try {
             $user = $this->userRepo->create([
@@ -111,11 +111,11 @@ class LoginController extends Controller
                 'api_token' => $apiToken
             ]);
 
-//            if($isShipper) {
-//                // create shipper
-//            } else {
-//                // create driver
-//            }
+            if($isShipper) {
+                $user->shipper()->create();
+            } else {
+                $user->driver()->create();
+            }
 
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => trans('general.registration_failed')]);
@@ -142,8 +142,8 @@ class LoginController extends Controller
 
         $user->makeVisible('api_token');
 
-        if ($request->pushtoken) {
-            $pushToken = $this->pushTokenModel->where('token', $request->pushtoken)->first();
+        if ($request->push_token) {
+            $pushToken = $this->pushTokenModel->where('token', $request->push_token)->first();
             if ($pushToken && $pushToken->user_id != $user->id) {
                 $pushToken->user_id = $user->id;
                 $pushToken->save();

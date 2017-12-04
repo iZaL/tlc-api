@@ -25,6 +25,8 @@ class User extends Authenticatable
         'password', 'remember_token', 'otp', 'api_token'
     ];
 
+    protected $appends = ['user_type'];
+
     public function shipper()
     {
         return $this->hasOne(Shipper::class);
@@ -38,5 +40,24 @@ class User extends Authenticatable
     public function isActive()
     {
         return $this->active;
+    }
+
+    public function getUserTypeAttribute()
+    {
+
+        if($this->admin) {
+            return 'admin';
+        }
+
+        if($this->driver) {
+            return 'driver';
+        }
+
+        if($this->shipper) {
+            return 'shipper';
+        }
+
+        return 'default';
+
     }
 }
