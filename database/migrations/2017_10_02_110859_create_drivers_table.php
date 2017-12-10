@@ -16,7 +16,6 @@ class CreateDriversTable extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->integer('truck_id')->nullable();
             $table->integer('shipper_id')->nullable();
             $table->integer('nationality')->nullable();
             $table->string('mobile')->nullable();
@@ -27,6 +26,7 @@ class CreateDriversTable extends Migration
             $table->boolean('book_direct')->default(0); //can book directly without TLC
             $table->string('status')->nullable();
             $table->boolean('active')->default(0);
+            $table->boolean('blocked')->default(0);
             $table->timestamps();
 //            $table->softDeletes();
         });

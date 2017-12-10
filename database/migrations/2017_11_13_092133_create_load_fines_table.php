@@ -18,7 +18,7 @@ class CreateLoadFinesTable extends Migration
             $table->integer('load_id');
             $table->integer('country_id');
             $table->integer('fine_id');
-            $table->integer('driver_id');
+            $table->integer('truck_id');
             $table->decimal('amount')->nullable();
             $table->string('image')->nullable(); // proof
             $table->timestamps();
