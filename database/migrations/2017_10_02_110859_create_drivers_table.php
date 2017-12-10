@@ -21,8 +21,6 @@ class CreateDriversTable extends Migration
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
             $table->integer('residence_country_id')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
             $table->boolean('book_direct')->default(0); //can book directly without TLC
             $table->string('status')->nullable();
             $table->boolean('active')->default(0);

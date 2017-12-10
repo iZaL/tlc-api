@@ -25,6 +25,8 @@ class CreateTrucksTable extends Migration
             $table->integer('max_weight')->nullable();
             $table->integer('year')->nullable();
             $table->string('image')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->timestamps();
 //            $table->softDeletes();
         });
