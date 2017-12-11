@@ -1,27 +1,60 @@
 <?php
 
-use Illuminate\Http\Request;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
+/**
+ * |--------------------------------------------------------------------------
+ * | API Routes
+ * |--------------------------------------------------------------------------
+ */
 Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | Authenticated Routes
+     * |--------------------------------------------------------------------------
+     */
+
     Route::middleware(['auth:api'])->group(function () {
+
+        /**
+        |--------------------------------------------------------------------------
+        | Load Routes
+        |--------------------------------------------------------------------------
+        */
 
         Route::get('loads/create','LoadsController@createLoad')->name('loads.create');
         Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
         Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
 
+
+        /**
+         * |--------------------------------------------------------------------------
+         * | Country Routes
+         * |--------------------------------------------------------------------------
+         */
+
+        Route::get('countries','CountriesController@getAll');
+
+
+        /**
+         * |--------------------------------------------------------------------------
+         * | Driver Routes
+         * |--------------------------------------------------------------------------
+         */
+
+        Route::group(['prefix' => 'driver','namespace' => 'Driver','middleware' => 'driver'], function () {
+
+            Route::post('profile/update','ProfileController@update');
+
+        });
+
     });
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | Auth Routes
+     * |--------------------------------------------------------------------------
+     */
 
     Route::group(['prefix' => 'auth','namespace' => 'Auth'], function () {
         Route::get('logout', 'LoginController@logout');
@@ -31,10 +64,6 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
         Route::post('password/recover', 'LoginController@recoverPassword'); // send email
         Route::post('password/update', 'LoginController@updatePassword'); // send email
         Route::post('otp/confirm', 'LoginController@confirmOTP'); // send email
-    });
-
-    Route::get('a',function(){
-        return response()->json('sccc');
     });
 
 });

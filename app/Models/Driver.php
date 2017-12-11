@@ -5,6 +5,8 @@ namespace App\Models;
 class Driver extends BaseModel
 {
 
+    protected $fillable = ['mobile','residence_country_id','nationality_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
