@@ -26,6 +26,16 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
         Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
         Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
 
+        /**
+         * |--------------------------------------------------------------------------
+         * | Truck Routes
+         * |--------------------------------------------------------------------------
+         */
+
+        Route::post('trucks','TrucksController@saveTruck');
+        Route::get('trucks/makes','TrucksController@getMakesModels');
+        Route::get('trailers','TrucksController@getTrailers');
+        Route::get('trailers/makes','TrucksController@getTrailerMakes');
 
         /**
          * |--------------------------------------------------------------------------
@@ -44,7 +54,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
         Route::group(['prefix' => 'driver','namespace' => 'Driver','middleware' => 'driver'], function () {
 
+            Route::get('profile','ProfileController@getProfile');
             Route::post('profile/update','ProfileController@update');
+
+            Route::get('trailers/makes','TrucksController@getTrailerMakes');
 
         });
 

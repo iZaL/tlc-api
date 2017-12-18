@@ -5,11 +5,33 @@ namespace App\Models;
 class Driver extends BaseModel
 {
 
-    protected $fillable = ['mobile','residence_country_id','nationality_id'];
+    protected $fillable = ['mobile','residence_country_id','nationality_country_id','user_id','shipper_id'];
+
+    protected $hidden = ['nationality_country_id','residence_country_id','shipper_id','user_id'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @todo:for now allow only has one
+     */
+    public function truck()
+    {
+//        return $this->hasMany(Truck::class);
+        return $this->hasOne(Truck::class);
+    }
+
+    public function nationality()
+    {
+        return $this->belongsTo(Country::class,'nationality_country_id');
+    }
+
+    public function residence()
+    {
+        return $this->belongsTo(Country::class,'residence_country_id');
     }
 
     public function visas()
@@ -40,6 +62,11 @@ class Driver extends BaseModel
     public function blockedList()
     {
         return $this->belongsToMany(Shipper::class,'blocked_drivers');
+    }
+
+    public function shipper()
+    {
+        return $this->belongsTo(Shipper::class);
     }
 
 }

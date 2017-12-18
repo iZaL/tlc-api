@@ -15,7 +15,7 @@ class CreateTrailersTable extends Migration
     {
         Schema::create('trailers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('make_id');
+            $table->integer('make_id')->nullable();
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
@@ -23,9 +23,10 @@ class CreateTrailersTable extends Migration
             $table->integer('length')->nullable();
             $table->integer('width')->nullable();
             $table->integer('height')->nullable();
-            $table->integer('axles')->nullable();
+            $table->string('axles')->nullable();
             $table->integer('year')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('active')->default(1);
             $table->timestamps();
 //            $table->softDeletes();
         });

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
@@ -31,6 +30,19 @@ class ProfileController extends Controller
         $this->driverModel = $driverModel;
     }
 
+    public function getProfile()
+    {
+
+        $user = Auth::guard('api')->user();
+
+        $driver = $user->driver;
+
+        $driver->load('nationality', 'residence', 'truck.trailer', 'truck.model', 'truck.make', 'visas', 'licenses', 'passes', 'blockedList', 'shipper.user');
+
+        return new UserResource($user);
+
+    }
+
     /**
      * @param Request $request
      * Get loads for the Authenticated Driver
@@ -39,12 +51,13 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
-        $driver = Auth::guard('api')->user()->driver;
+        $user = Auth::guard('api')->user();
+        $driver = $user->driver;
 
         $validation = Validator::make($request->all(), [
-            'mobile'   => 'required|unique:drivers,mobile,'.$driver->id,
-            'nationality' => 'required',
-            'residence_country_id' => 'required'
+            'mobile'                 => 'required|unique:drivers,mobile,' . $driver->id,
+            'nationality_country_id' => 'required',
+            'residence_country_id'   => 'required'
         ]);
 
         if ($validation->fails()) {
@@ -53,7 +66,9 @@ class ProfileController extends Controller
 
         $driver->update($request->all());
 
-        return new UserResource($driver->user);
+        $user->load('driver', 'driver.nationality', 'driver.residence');
+
+        return new UserResource($user);
     }
 
 

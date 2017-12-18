@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class LoadDriver extends BaseModel
+class LoadTruck extends BaseModel
 {
 
 }

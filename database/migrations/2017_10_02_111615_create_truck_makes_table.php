@@ -19,6 +19,7 @@ class CreateTruckMakesTable extends Migration
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('active')->default(1);
             $table->timestamps();
 //            $table->softDeletes();
         });

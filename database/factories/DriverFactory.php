@@ -5,8 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(\App\Models\Driver::class, function (Faker $faker) {
     return [
         'user_id'              => \App\Models\User::all()->count() ? \App\Models\User::first()->id : 1,
-        'truck_id'             => \App\Models\Truck::all()->count() ? \App\Models\Truck::first()->id : 1,
-        'nationality'          => \App\Models\Country::all()->count() ? \App\Models\Country::first()->id : 1,
+        'nationality_country_id'          => \App\Models\Country::all()->count() ? \App\Models\Country::first()->id : 1,
 //        'shipper_id'           => \App\Models\Shipper::all()->count() ? \App\Models\Shipper::all()->random()->first()->id :1,
         'shipper_id'           => null,
         'residence_country_id' => \App\Models\Country::all()->count() ? \App\Models\Country::first()->id : 1,
@@ -14,8 +13,6 @@ $factory->define(\App\Models\Driver::class, function (Faker $faker) {
 //        'license_expiry_date'  => \Carbon\Carbon::now()->addDays(rand(10, 40))->addYear(rand(1, 4))->toDateString(),
         'mobile'               => $faker->phoneNumber,
         'status'               => 'available',
-        'latitude'             => $faker->latitude,
-        'longitude'            => $faker->longitude,
     ];
 });
 

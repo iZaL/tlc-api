@@ -11,7 +11,7 @@ class TrailersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\TrailerMake::class,5)->create();
+        factory(\App\Models\TrailerMake::class,2)->create();
         factory(\App\Models\Trailer::class,5)->create();
     }
 }

@@ -9,7 +9,8 @@ class Driver
 {
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->driver && auth()->user()->driver->active) {
+        $user = auth()->user();
+        if ($user->active && $user->driver->active) {
             return $next($request);
         }
 

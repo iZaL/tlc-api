@@ -13,6 +13,7 @@ $factory->define(\App\Models\TruckMake::class, function (Faker $faker) {
 
 $factory->define(\App\Models\TruckModel::class, function (Faker $faker) {
     return [
+//        'make_id' => \App\Models\TruckMake::all()->random()->first()->id,
         'name_en' => $faker->name,
         'name_ar' => $faker->name,
         'name_hi' => $faker->name,
@@ -22,9 +23,10 @@ $factory->define(\App\Models\TruckModel::class, function (Faker $faker) {
 
 $factory->define(\App\Models\Truck::class, function (Faker $faker) {
     return [
-        'make_id'             => \App\Models\TruckMake::all()->random()->first()->id,
-        'model_id'            => \App\Models\TruckModel::all()->random()->first()->id,
-        'trailer_id'          => \App\Models\Trailer::all()->random()->first()->id,
+        'make_id'             => \App\Models\TruckMake::first() ? \App\Models\TruckMake::all()->random()->first()->id : 1,
+        'model_id'            => \App\Models\TruckModel::first() ? \App\Models\TruckModel::all()->random()->first()->id : 1,
+        'driver_id'          => \App\Models\Driver::first() ?\App\Models\Driver::all()->random()->first()->id : 1,
+    'trailer_id'            => \App\Models\Trailer::first() ? \App\Models\Trailer::all()->random()->first()->id : 1,
 //        'shipper_id'          => \App\Models\Shipper::all()->random()->first()->id,
 //        'driver_id'           => \App\Models\Driver::all()->random()->first()->id,
 //        'country_id'          => \App\Models\Country::all()->random()->first()->id,
@@ -34,5 +36,7 @@ $factory->define(\App\Models\Truck::class, function (Faker $faker) {
         'max_weight'          => rand(10000, 90000),
         'year'                => rand(1900, 2016),
         'image'               => $faker->imageUrl(500, 500),
+        'latitude'             => $faker->latitude,
+        'longitude'            => $faker->longitude,
     ];
 });

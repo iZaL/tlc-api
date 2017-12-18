@@ -22,10 +22,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'otp', 'api_token'
+        'password', 'remember_token', 'otp', 'api_token',  'driver', 'shipper', 'updated_at'
     ];
 
-    protected $appends = ['user_type'];
+    protected $appends = ['type','profile'];
 
     public function shipper()
     {
@@ -42,7 +42,7 @@ class User extends Authenticatable
         return $this->active;
     }
 
-    public function getUserTypeAttribute()
+    public function getTypeAttribute()
     {
 
         if($this->admin) {
@@ -59,5 +59,17 @@ class User extends Authenticatable
 
         return 'default';
 
+    }
+
+    public function getProfileAttribute()
+    {
+        switch ($this->type) {
+            case 'driver' :
+                return $this->driver;
+            case 'shipper' :
+                return $this->shipper;
+            default:
+                return null;
+        }
     }
 }

@@ -17,9 +17,9 @@ class CreateDriversTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('shipper_id')->nullable();
-            $table->integer('nationality')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
+            $table->integer('nationality_country_id')->nullable();
             $table->integer('residence_country_id')->nullable();
             $table->boolean('book_direct')->default(0); //can book directly without TLC
             $table->string('status')->nullable();

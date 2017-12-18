@@ -18,9 +18,9 @@ class CreateLoadsTable extends Migration
             $table->integer('shipper_id');
             $table->integer('origin_location_id');
             $table->integer('destination_location_id');
-            $table->integer('trailer_id');
+            $table->decimal('price')->nullable();
+            $table->integer('trailer_id')->nullable();
             $table->integer('fleet_count')->default(1);
-            $table->decimal('price');
             $table->string('distance')->nullable()->notes('in kms');
             $table->string('invoice_id')->nullable();
             $table->boolean('request_documents')->default(0)->notes('request drivers for copies of documents');

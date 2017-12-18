@@ -12,8 +12,7 @@ class TrucksTableSeeder extends Seeder
     public function run()
     {
         factory(\App\Models\TruckMake::class,5)->create();
-        factory(\App\Models\TruckModel::class,5)->create();
+        factory(\App\Models\TruckModel::class,50)->create();
         factory(\App\Models\Truck::class,5)->create();
-
     }
 }
