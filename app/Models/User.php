@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'otp', 'api_token',  'driver', 'shipper', 'updated_at'
+        'password', 'remember_token', 'otp', 'api_token', 'driver', 'shipper', 'updated_at'
     ];
 
     protected $appends = ['type','profile'];

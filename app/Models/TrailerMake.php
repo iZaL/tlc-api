@@ -5,7 +5,8 @@ namespace App\Models;
 class TrailerMake extends BaseModel
 {
 
-    protected $appends = ['name'];
+    protected $hidden = ['name_en','name_ar','name_hi'];
 
+    protected $appends = ['name'];
 
 }
