@@ -14,7 +14,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
      * |--------------------------------------------------------------------------
      */
 
-    Route::middleware(['auth:api'])->group(function () {
+//    Route::middleware(['auth:api'])->group(function () {
 
         /**
         |--------------------------------------------------------------------------
@@ -63,7 +63,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
         });
 
-    });
+//    });
 
     /**
      * |--------------------------------------------------------------------------

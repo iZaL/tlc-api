@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CountryCollection;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,18 +26,11 @@ class CountriesController extends Controller
     }
 
     /**
-     * @param Request $request
-     * Get loads for the Authenticated Driver
-     * //@todo: Cache Query
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function getAll(Request $request)
+    public function getAll()
     {
-        $user = Auth::guard('api')->user();
-
         $countries = $this->countryModel->all();
-
-        return response()->json(['success' => true, 'data' => $countries]);
+        return new CountryCollection($countries);
     }
 
 

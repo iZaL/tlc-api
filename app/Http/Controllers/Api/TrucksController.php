@@ -65,6 +65,11 @@ class TrucksController extends Controller
         $truckMakes = $this->truckMake->active()->get();
         $truckModels = $this->truckModel->active()->get();
 
+//        return [
+//            'success' => true,
+//            'makes'    => CountryResource::collection($this->collection),
+//            'models'   =>
+//        ];
         return response()->json(['success' => true, 'makes' => $truckMakes, 'models' => $truckModels]);
     }
 

@@ -33,7 +33,8 @@ class ProfileController extends Controller
     public function getProfile()
     {
 
-        $user = Auth::guard('api')->user();
+//        $user = Auth::guard('api')->user();
+        $user = Auth::loginUsingId(2);
 
         $driver = $user->driver;
 

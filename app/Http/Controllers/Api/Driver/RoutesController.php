@@ -25,10 +25,13 @@ class RoutesController extends Controller
     {
     }
 
+    /**
+     * @return UserResource
+     * Get Driver Routes
+     */
     public function getRoutes()
     {
         $user = Auth::guard('api')->user();
-//        $driver = $user->driver;
 
         $user->load('driver', 'driver.routes');
 
