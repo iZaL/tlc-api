@@ -60,55 +60,6 @@ class TrucksController extends Controller
         $this->trailer = $trailer;
     }
 
-//    public function getMyTruck(Request $request)
-//    {
-//        $user = Auth::user()->guard('api')->user();
-//        $driver = $user->driver;
-//
-//        $truck = $driver->load('truck');
-//
-//        return response()->json(['success' => true, 'makes' => $truckMakes, 'models' => $truckModels ]);
-//
-//    }
-
-    /**
-     * @param Request $request
-     * @return UserResource|\Illuminate\Http\JsonResponse
-     */
-    public function saveTruck(Request $request)
-    {
-        $user = Auth::guard('api')->user();
-        $driver = $user->driver;
-
-        $validation = Validator::make($request->all(), [
-//            'make_id'  => 'required',
-//            'model_id' => 'required',
-//            'plate_number' => 'required',
-//            'registration_number' => 'required',
-//            'registration_expiry' => 'required',
-//            'max_weight' => 'required',
-//            'year' => 'required',
-        ]);
-
-        if ($validation->fails()) {
-            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
-        }
-
-        $params = [];
-
-        if ($truck = $driver->truck) {
-            $driver->truck->update(array_merge($request->all(), $params));
-        } else {
-            $params['driver_id'] = $driver->id;
-            $this->truck->create(array_merge($request->all(), $params));
-        }
-
-        $user->load('driver', 'driver.truck', 'driver.truck.make', 'driver.truck.trailer', 'driver.truck.model');
-
-        return new UserResource($user);
-
-    }
-
     public function getMakesModels(Request $request)
     {
         $truckMakes = $this->truckMake->active()->get();

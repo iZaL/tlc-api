@@ -13,6 +13,7 @@ $factory->define(\App\Models\Driver::class, function (Faker $faker) {
 //        'license_expiry_date'  => \Carbon\Carbon::now()->addDays(rand(10, 40))->addYear(rand(1, 4))->toDateString(),
         'mobile'               => $faker->phoneNumber,
         'status'               => 'available',
+        'active' => 1
     ];
 });
 

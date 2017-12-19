@@ -32,7 +32,6 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
          * |--------------------------------------------------------------------------
          */
 
-        Route::post('trucks','TrucksController@saveTruck');
         Route::get('trucks/makes','TrucksController@getMakesModels');
         Route::get('trailers','TrucksController@getTrailers');
         Route::get('trailers/makes','TrucksController@getTrailerMakes');
@@ -45,7 +44,6 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
         Route::get('countries','CountriesController@getAll');
 
-
         /**
          * |--------------------------------------------------------------------------
          * | Driver Routes
@@ -57,7 +55,11 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('profile','ProfileController@getProfile');
             Route::post('profile/update','ProfileController@update');
 
-            Route::get('trailers/makes','TrucksController@getTrailerMakes');
+
+            Route::post('trucks','TrucksController@saveTruck');
+
+            Route::get('routes','RoutesController@getRoutes');
+            Route::post('routes','RoutesController@saveRoute');
 
         });
 

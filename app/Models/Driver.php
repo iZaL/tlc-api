@@ -69,4 +69,8 @@ class Driver extends BaseModel
         return $this->belongsTo(Shipper::class);
     }
 
+    public function routes()
+    {
+        return $this->belongsToMany(Route::class,'driver_routes');
+    }
 }
