@@ -27,6 +27,8 @@ class DriverResource extends Resource
             'nationality' => new CountryResource($this->whenLoaded('nationality')),
             'residence' => new CountryResource($this->whenLoaded('residence')),
             'truck' => new TruckResource($this->whenLoaded('truck')),
+            'routes' => RoutesResource::collection($this->whenLoaded('routes')),
+            'available_routes' => RoutesResource::collection($this->whenLoaded('available_routes'))
         ];
     }
 }

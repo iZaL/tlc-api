@@ -26,6 +26,46 @@ class DriverRoutesTestTest extends TestCase
     use RefreshDatabase;
 
 
+    public function test_available_routes_for_driver()
+    {
+
+
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $qa = $this->_createCountry('QA');
+        $om = $this->_createCountry('OM');
+        $bh = $this->_createCountry('BH');
+
+        $driver = factory(Driver::class)->create([
+            'user_id' => function () {
+                return factory(User::class)->create()->id;
+            },
+            'residence_country_id' => $kw->id
+        ]);
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+        $routeKWSA = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $sa]);
+        $routeKWQA = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $qa]);
+        $routeKWOM = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $om]);
+        $routeOMSA = factory(\App\Models\Route::class)->create(['origin_country_id' => $om, 'destination_country_id' => $sa]);
+        $routeQASA = factory(\App\Models\Route::class)->create(['origin_country_id' => $qa, 'destination_country_id' => $sa]);
+        $routeOMKW = factory(\App\Models\Route::class)->create(['origin_country_id' => $om, 'destination_country_id' => $kw]);
+        $routeBHKW = factory(\App\Models\Route::class)->create(['origin_country_id' => $bh, 'destination_country_id' => $kw]);
+
+
+        $routeKWSA->drivers()->save($driver);
+        $routeKWQA->drivers()->save($driver);
+        $routeOMSA->drivers()->save($driver);
+        $routeQASA->drivers()->save($driver);
+        $routeOMKW->drivers()->save($driver);
+        $routeBHKW->drivers()->save($driver);
+
+        $driverLoadingCountries = $driver->available_routes;
+
+        $this->assertEquals([$routeKWSA->id,$routeKWQA->id,$routeKWOM->id],$driverLoadingCountries->pluck('id')->toArray());
+
+    }
     public function test_driver_can_add_route()
     {
         $driver = factory(Driver::class)->create([
@@ -48,5 +88,45 @@ class DriverRoutesTestTest extends TestCase
 
     }
 
+    public function test_driver_gets_routes()
+    {
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $qa = $this->_createCountry('QA');
+        $om = $this->_createCountry('OM');
+        $bh = $this->_createCountry('BH');
+
+        $driver = factory(Driver::class)->create([
+            'user_id' => function () {
+                return factory(User::class)->create()->id;
+            },
+            'residence_country_id' => $kw->id
+        ]);
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+        $routeKWSA = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $sa]);
+        $routeKWQA = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $qa]);
+        $routeKWOM = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $om]);
+        $routeOMSA = factory(\App\Models\Route::class)->create(['origin_country_id' => $om, 'destination_country_id' => $sa]);
+        $routeQASA = factory(\App\Models\Route::class)->create(['origin_country_id' => $qa, 'destination_country_id' => $sa]);
+        $routeOMKW = factory(\App\Models\Route::class)->create(['origin_country_id' => $om, 'destination_country_id' => $kw]);
+        $routeBHKW = factory(\App\Models\Route::class)->create(['origin_country_id' => $bh, 'destination_country_id' => $kw]);
+
+
+        $routeKWSA->drivers()->save($driver);
+        $routeKWQA->drivers()->save($driver);
+        $routeOMSA->drivers()->save($driver);
+        $routeQASA->drivers()->save($driver);
+        $routeOMKW->drivers()->save($driver);
+        $routeBHKW->drivers()->save($driver);
+
+        $response = $this->json('GET', '/api/driver/routes', [], $header);
+
+        $response->assertJson(['success'=>false]);
+
+//        $this->assertDatabaseHas('driver_routes',array_merge($body,['driver_id'=>$driver->id]));
+
+    }
 
 }

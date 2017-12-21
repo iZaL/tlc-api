@@ -4,26 +4,13 @@
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\UserResource;
-use App\Models\Country;
-use App\Models\Load;
-use App\Models\Shipper;
-use App\Models\Truck;
-use App\Models\TruckMake;
-use App\Models\TruckModel;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class RoutesController extends Controller
 {
-
-    public function __construct()
-    {
-    }
 
     /**
      * @return UserResource
@@ -33,10 +20,9 @@ class RoutesController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $user->load('driver', 'driver.routes');
+        $user->load(['driver.routes','driver.available_routes']);
 
         return new UserResource($user);
-
     }
 
     public function saveRoute(Request $request)
@@ -52,7 +38,7 @@ class RoutesController extends Controller
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
-        $driver->routes()->syncWithoutDetaching([$request->route_id]);
+        $driver->routes()->toggle([$request->route_id]);
 
         $user->load(['driver.routes']);
 
