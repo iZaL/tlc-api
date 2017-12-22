@@ -17,7 +17,7 @@ class CreateRouteTransitsTable extends Migration
             $table->increments('id');
             $table->integer('route_id');
             $table->integer('country_id');
-            $table->integer('order')->nullable();
+            $table->integer('order')->default(1);
             $table->timestamps();
         });
     }

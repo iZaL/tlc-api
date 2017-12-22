@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
         $this->call(LanguagesTableSeeder::class);
         $this->call(TrucksTableSeeder::class);
         $this->call(TrailersTableSeeder::class);
-        $this->call(PassesTableSeeder::class);
+//        $this->call(RoutesTableSeeder::class);
+//        $this->call(PassesTableSeeder::class);
         $this->call(DriversTableSeeder::class);
         $this->call(LoadsTableSeeder::class);
     }

@@ -11,7 +11,7 @@ $factory->define(\App\Models\Driver::class, function (Faker $faker) {
         'residence_country_id' => \App\Models\Country::all()->count() ? \App\Models\Country::first()->id : 1,
 //        'licence_number'       => str_random(10),
 //        'license_expiry_date'  => \Carbon\Carbon::now()->addDays(rand(10, 40))->addYear(rand(1, 4))->toDateString(),
-        'mobile'               => $faker->phoneNumber,
+        'mobile'               => '99'.rand(111111,999999),
         'status'               => 'available',
         'active' => 1
     ];

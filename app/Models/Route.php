@@ -20,4 +20,10 @@ class Route extends BaseModel
     {
         return $this->belongsToMany(Driver::class,'driver_routes');
     }
+
+    public function transits()
+    {
+        return $this->belongsToMany(Country::class,'route_transits');
+    }
+
 }
