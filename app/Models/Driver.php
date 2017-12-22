@@ -44,12 +44,12 @@ class Driver extends BaseModel
         return $this->belongsToMany(Country::class,'driver_licenses')->withPivot(['expiry_date','number']);
     }
 
-    public function validVisas()
+    public function valid_visas()
     {
         return $this->visas()->wherePivot('expiry_date','>',date('Y-m-d'));
     }
 
-    public function validLicenses()
+    public function valid_licenses()
     {
         return $this->licenses()->wherePivot('expiry_date','>',date('Y-m-d'));
     }
@@ -59,7 +59,7 @@ class Driver extends BaseModel
         return $this->belongsToMany(Pass::class,'driver_passes');
     }
 
-    public function blockedList()
+    public function blocked_list()
     {
         return $this->belongsToMany(Shipper::class,'blocked_drivers');
     }

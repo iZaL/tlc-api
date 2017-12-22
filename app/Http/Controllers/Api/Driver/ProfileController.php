@@ -38,7 +38,18 @@ class ProfileController extends Controller
 
         $driver = $user->driver;
 
-        $driver->load('nationality', 'residence', 'truck.trailer', 'truck.model', 'truck.make', 'visas', 'licenses', 'passes', 'blockedList', 'shipper.user');
+        $driver->load([
+            'nationality',
+            'residence',
+            'truck.trailer',
+            'truck.model',
+            'truck.make',
+            'visas',
+            'licenses',
+            'passes',
+            'blocked_list',
+            'shipper.user'
+        ]);
 
         return new UserResource($user);
 

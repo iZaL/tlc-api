@@ -20,7 +20,7 @@ class RoutesController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        $user->load(['driver.routes','driver.available_routes']);
+        $user->load(['driver.routes','driver.residence.loading_routes','driver.available_routes']);
 
         return new UserResource($user);
     }
