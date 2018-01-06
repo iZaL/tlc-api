@@ -20,6 +20,8 @@ class RoutesResource extends Resource
             'id' => $this->id,
             'origin' => new CountryResource($this->origin),
             'destination' => new CountryResource($this->destination),
+            'transits' => CountryResource::collection($this->whenLoaded('transits')),
+            'has_added' => $this->has_added
         ];
     }
 }

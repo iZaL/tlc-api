@@ -15,13 +15,11 @@ class Driver extends BaseModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      * @todo:for now allow only has one
      */
     public function truck()
     {
-//        return $this->hasMany(Truck::class);
-        return $this->hasOne(Truck::class);
+        return $this->belongsTo(Truck::class);
     }
 
     public function nationality()
@@ -36,12 +34,16 @@ class Driver extends BaseModel
 
     public function visas()
     {
-        return $this->belongsToMany(Country::class,'driver_visas')->withPivot('expiry_date');
+        return $this->belongsToMany(Country::class,'driver_visas')
+            ->withPivot(['expiry_date','number','image'])
+            ;
     }
 
     public function licenses()
     {
-        return $this->belongsToMany(Country::class,'driver_licenses')->withPivot(['expiry_date','number']);
+        return $this->belongsToMany(Country::class,'driver_licenses')
+            ->withPivot(['expiry_date','number','image'])
+            ;
     }
 
     public function valid_visas()
@@ -74,9 +76,14 @@ class Driver extends BaseModel
         return $this->belongsToMany(Route::class,'driver_routes');
     }
 
-    public function available_routes()
+    public function loads()
     {
-        return $this->residence->loading_routes();
+        return $this->belongsToMany(Load::class,'load_drivers');
     }
+
+//    public function available_routes()
+//    {
+//        return $this->residence->loading_routes();
+//    }
 
 }

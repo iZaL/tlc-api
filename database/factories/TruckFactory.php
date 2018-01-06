@@ -25,7 +25,7 @@ $factory->define(\App\Models\Truck::class, function (Faker $faker) {
     return [
         'make_id'             => \App\Models\TruckMake::first() ? \App\Models\TruckMake::all()->random()->first()->id : 1,
         'model_id'            => \App\Models\TruckModel::first() ? \App\Models\TruckModel::all()->random()->first()->id : 1,
-        'driver_id'          => \App\Models\Driver::first() ?\App\Models\Driver::all()->random()->first()->id : 1,
+//        'driver_id'          => \App\Models\Driver::first() ?\App\Models\Driver::all()->random()->first()->id : 1,
     'trailer_id'            => \App\Models\Trailer::first() ? \App\Models\Trailer::all()->random()->first()->id : 1,
 //        'shipper_id'          => \App\Models\Shipper::all()->random()->first()->id,
 //        'driver_id'           => \App\Models\Driver::all()->random()->first()->id,

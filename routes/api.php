@@ -61,6 +61,11 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('routes','RoutesController@getRoutes');
             Route::post('routes','RoutesController@saveRoute');
 
+            Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
+
+            Route::get('loads/requests','LoadsController@getLoadRequests');
+            Route::get('loads/{id}/details','LoadsController@getLoadDetails');
+
         });
 
 //    });

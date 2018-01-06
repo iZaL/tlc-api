@@ -19,6 +19,8 @@ class CountryResource extends Resource
         return  [
             'id' => $this->id,
             'name' => $this->name,
+            'loading_routes' => RoutesResource::collection($this->whenLoaded('loading_routes')),
+            'destination_routes' => RoutesResource::collection($this->whenLoaded('destination_routes')),
         ];
     }
 }

@@ -17,8 +17,17 @@ class CreateShipperLocationsTable extends Migration
             $table->increments('id');
             $table->integer('shipper_id');
             $table->integer('country_id');
-            $table->string('latitude');
-            $table->string('longitude');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('city_en')->nullable();
+            $table->string('city_ar')->nullable();
+            $table->string('city_hi')->nullable();
+            $table->string('state_en')->nullable();
+            $table->string('state_ar')->nullable();
+            $table->string('state_hi')->nullable();
+            $table->mediumText('address_en')->nullable();
+            $table->mediumText('address_ar')->nullable();
+            $table->mediumText('address_hi')->nullable();
             $table->string('type'); // origin, destination
             $table->timestamps();
         });

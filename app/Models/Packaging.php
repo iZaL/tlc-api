@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-class LoadTruck extends BaseModel
+class Packaging extends BaseModel
 {
+
 
 }

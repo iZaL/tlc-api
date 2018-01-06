@@ -16,7 +16,7 @@ class CreateLoadDocumentationsTable extends Migration
         Schema::create('load_documentations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('load_id');
-            $table->integer('truck_id');
+            $table->integer('driver_id');
             $table->integer('country_id');
             $table->integer('documentation_id');
             $table->decimal('amount');

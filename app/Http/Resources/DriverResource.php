@@ -18,6 +18,7 @@ class DriverResource extends Resource
     {
         return [
             'id' => $this->id,
+            'schema' => 'drivers',
             'mobile' => $this->mobile,
             'phone' => $this->phone,
             'book_direct' => $this->book_direct,
@@ -28,11 +29,10 @@ class DriverResource extends Resource
             'residence' => new CountryResource($this->whenLoaded('residence')),
             'truck' => new TruckResource($this->whenLoaded('truck')),
             'routes' => RoutesResource::collection($this->whenLoaded('routes')),
-            'available_routes' => RoutesResource::collection($this->whenLoaded('available_routes')),
-            'visas' => CountryResource::collection($this->whenLoaded('visas')),
-            'licenses' => CountryResource::collection($this->whenLoaded('licenses')),
+            'visas' => LicenseVisaResource::collection($this->whenLoaded('visas')),
+            'licenses' => LicenseVisaResource::collection($this->whenLoaded('licenses')),
             'shipper' => new ShipperResource($this->whenLoaded('shipper')),
-//            'profile' =>  new DriverResource($this->driver)
+            'loads' => LoadsResource::collection($this->whenLoaded('loads'))
         ];
     }
 }

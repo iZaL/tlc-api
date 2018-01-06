@@ -14,22 +14,22 @@ class UserResource extends Resource
      * @param  \Illuminate\Http\Request
      * @return array
      */
+
     public function toArray($request)
     {
         return [
             'success' => true,
             'data'    => [
-                'id' => $this->id,
-                'name' => $this->name,
-                'email' => $this->email,
+                'id'     => $this->id,
+                'name'   => $this->name,
+                'email'  => $this->email,
                 'mobile' => $this->mobile,
-                'admin' => $this->admin,
-                'image' => $this->image,
+                'image'  => $this->image,
                 'active' => $this->active,
-                'profile' => $this->when($this->driver || $this->shipper, function () {
-                    if($this->driver) {
-                        return new DriverResource($this->driver);
-                    }
+                'type'   => $this->type,
+                'admin'  => $this->when($this->admin, true),
+                'profile' => $this->when($this->type === 10, function () {
+                    return new DriverResource($this->driver);
                 }),
             ],
         ];

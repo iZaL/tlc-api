@@ -17,6 +17,7 @@ class CreateDriversTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('shipper_id')->nullable();
+            $table->integer('truck_id')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
             $table->integer('nationality_country_id')->nullable();

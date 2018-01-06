@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\UserResource;
 use App\Models\Country;
@@ -60,10 +61,6 @@ class TrucksController extends Controller
         $this->trailer = $trailer;
     }
 
-    /**
-     * @param Request $request
-     * @return UserResource|\Illuminate\Http\JsonResponse
-     */
     public function saveTruck(Request $request)
     {
         $user = Auth::guard('api')->user();
@@ -92,9 +89,9 @@ class TrucksController extends Controller
             $this->truck->create(array_merge($request->all(), $params));
         }
 
-        $user->load('driver', 'driver.truck', 'driver.truck.make', 'driver.truck.trailer', 'driver.truck.model');
+        $driver->load('truck.make', 'truck.trailer', 'truck.model');
 
-        return new UserResource($user);
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 
     }
 

@@ -17,8 +17,8 @@ class CreateDriverLicensesTable extends Migration
             $table->increments('id');
             $table->integer('country_id');
             $table->integer('driver_id');
-            $table->string('number');
-            $table->date('expiry_date');
+            $table->string('number')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });

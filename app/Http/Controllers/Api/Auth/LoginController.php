@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\Pushtoken;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,12 +36,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-        if(Auth::guard('api')->user()) {
+        if (Auth::guard('api')->user()) {
             return $this->loginViaToken($request);
         }
 
         $validation = Validator::make($request->all(), [
-            'email'  => 'email|required',
+            'email'    => 'email|required',
             'password' => 'required',
         ]);
 
@@ -62,8 +63,6 @@ class LoginController extends Controller
 
         $user = Auth::user();
 
-        $user->makeVisible('api_token');
-
         if ($request->push_token) {
 
             $pushToken = $this->pushTokenModel->where('token', $request->push_token)->first();
@@ -75,8 +74,10 @@ class LoginController extends Controller
 
         }
 
+        return (new UserResource($user))->additional(['meta' => [
+            'api_token' => $user->api_token,
+        ]]);
 
-        return response()->json(['success' => true, 'data' => $user]);
     }
 
     /*
@@ -111,7 +112,7 @@ class LoginController extends Controller
                 'api_token' => $apiToken
             ]);
 
-            if($isShipper) {
+            if ($isShipper) {
                 $user->shipper()->create();
             } else {
                 $user->driver()->create();
@@ -121,7 +122,7 @@ class LoginController extends Controller
             return response()->json(['success' => false, 'message' => trans('general.registration_failed')]);
         }
 
-        return response()->json(['success' => true, 'data' => $user]);
+        return new UserResource($user);
     }
 
     /*
@@ -150,7 +151,7 @@ class LoginController extends Controller
             }
         }
 
-        return response()->json(['success' => true, 'data' => $user]);
+        return new UserResource($user);
     }
 
 
@@ -183,7 +184,7 @@ class LoginController extends Controller
 
         // send email
 
-        return response()->json(['success' => true, 'data' => $user]);
+        return response()->json(['success' => true]);
 
     }
 

@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-class Packing extends BaseModel
+class LoadDriver extends BaseModel
 {
-
 
 }

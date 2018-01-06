@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Driver;
 
 use App\Models\Country;
 use App\Models\Driver;
@@ -20,13 +20,12 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class DriverProfileTest extends TestCase
+class DriverLoadsTest extends TestCase
 {
 
     use RefreshDatabase;
 
-
-    public function test_driver_can_update_profile()
+    public function test_driver_gets_load_requests()
     {
         $driver = factory(Driver::class)->create([
             'user_id' => function () {
@@ -35,20 +34,12 @@ class DriverProfileTest extends TestCase
         ]);
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-
-        $body = [
-            'mobile'                 => str_random(8),
-            'nationality_country_id' => 1,
-            'residence_country_id'   => 1
-        ];
-
-        $response = $this->json('POST', '/api/driver/profile/update', $body, $header);
+        $response = $this->json('GET', '/api/driver/loads/requests', [], $header);
 
         $response->assertJson(['success'=>true]);
 
-        $this->assertDatabaseHas('drivers',array_merge($body,['id'=>$driver->id]));
-
     }
+
 
 
 }

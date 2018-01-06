@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Driver;
+use App\Http\Resources\DriverResource;
 use App\Http\Resources\UserResource;
 use App\Models\Country;
 use Illuminate\Http\Request;
@@ -33,38 +34,29 @@ class ProfileController extends Controller
     public function getProfile()
     {
 
-//        $user = Auth::guard('api')->user();
-        $user = Auth::loginUsingId(2);
+        $user = Auth::guard('api')->user();
+//        $user = Auth::loginUsingId(2);
 
         $driver = $user->driver;
 
         $driver->load([
             'nationality',
-            'residence',
+            'residence.loading_routes.drivers',
             'truck.trailer',
             'truck.model',
             'truck.make',
-            'visas',
-            'licenses',
             'passes',
             'blocked_list',
             'shipper.user'
         ]);
 
-        return new UserResource($user);
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 
     }
 
-    /**
-     * @param Request $request
-     * Get loads for the Authenticated Driver
-     * //@todo: Cache Query
-     * @return UserResource|\Illuminate\Http\JsonResponse
-     */
     public function update(Request $request)
     {
-        $user = Auth::guard('api')->user();
-        $driver = $user->driver;
+        $driver = Auth::guard('api')->user()->driver;
 
         $validation = Validator::make($request->all(), [
             'mobile'                 => 'required|unique:drivers,mobile,' . $driver->id,
@@ -78,9 +70,10 @@ class ProfileController extends Controller
 
         $driver->update($request->all());
 
-        $user->load('driver', 'driver.nationality', 'driver.residence');
+        $driver->load('nationality', 'residence');
 
-        return new UserResource($user);
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+
     }
 
 

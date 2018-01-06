@@ -19,15 +19,53 @@ class Load extends BaseModel
         'distance'
     ];
 
-    public function scopeOfStatus($query,$status)
+    public function origin()
     {
-        return $query->where('status',$status);
+        return $this->belongsTo(ShipperLocation::class,'origin_location_id');
+    }
+
+    public function destination()
+    {
+        return $this->belongsTo(ShipperLocation::class,'destination_location_id');
+    }
+
+    public function trailer()
+    {
+        return $this->belongsTo(Trailer::class);
+    }
+
+    public function packaging()
+    {
+        return $this->belongsTo(Packaging::class);
+    }
+
+    public function shipper()
+    {
+        return $this->belongsTo(Shipper::class);
     }
 
     public function passes()
     {
         return $this->belongsToMany(Pass::class,'load_passes');
     }
+
+    public function fines()
+    {
+        return $this->belongsToMany(Fine::class,'load_fines');
+    }
+
+    public function documentations()
+    {
+        return $this->belongsToMany(Documentation::class,'load_documentations');
+    }
+
+
+    public function drivers()
+    {
+        return $this->belongsToMany(Driver::class,'load_drivers');
+    }
+
+
 
 }
 

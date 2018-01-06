@@ -20,6 +20,7 @@ class CreateLoadsTable extends Migration
             $table->integer('destination_location_id');
             $table->decimal('price')->nullable();
             $table->integer('trailer_id')->nullable();
+            $table->integer('packaging_id')->nullable();
             $table->integer('fleet_count')->default(1);
             $table->string('distance')->nullable()->notes('in kms');
             $table->string('invoice_id')->nullable();

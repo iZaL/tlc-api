@@ -5,8 +5,15 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable
 {
+
+    const ADMIN_CODE = 100;
+    const DRIVER_CODE = 10;
+    const SHIPPER_CODE = 20;
+    const GUEST_CODE = 0;
+
     use Notifiable;
 
     /**
@@ -25,7 +32,7 @@ class User extends Authenticatable
         'password', 'remember_token', 'otp', 'api_token', 'driver', 'shipper', 'updated_at'
     ];
 
-    protected $appends = ['type','profile'];
+    protected $appends = ['type'];
 
     public function shipper()
     {
@@ -46,30 +53,19 @@ class User extends Authenticatable
     {
 
         if($this->admin) {
-            return 'admin';
+            return self::ADMIN_CODE;
         }
 
         if($this->driver) {
-            return 'driver';
+            return self::DRIVER_CODE;
         }
 
         if($this->shipper) {
-            return 'shipper';
+            return self::SHIPPER_CODE;
         }
 
-        return 'default';
+        return self::GUEST_CODE;
 
     }
 
-    public function getProfileAttribute()
-    {
-        switch ($this->type) {
-            case 'driver' :
-                return $this->driver;
-            case 'shipper' :
-                return $this->shipper;
-            default:
-                return null;
-        }
-    }
 }
