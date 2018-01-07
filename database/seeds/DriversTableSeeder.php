@@ -30,7 +30,6 @@ class DriversTableSeeder extends Seeder
             'nationality_country_id'=>$in->id
         ]);
 
-
 //        ['origin_country_id'=>$kw->id,'destination_country_id'=>$sa->id]
         $routeKWSA = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$sa->id)->first();
         $routeKWOM = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$om->id)->first();
@@ -53,6 +52,22 @@ class DriversTableSeeder extends Seeder
         $driver->visas()->attach($sa->id,['expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
         $driver->visas()->attach($ae->id,['expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
         $driver->visas()->attach($om->id,['expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
+
+
+        // loads
+
+        // create shipper
+        $shipper = factory(\App\Models\Shipper::class)->create();
+        $shipperOrigin= $shipper->locations()->create(['country_id' => $kw->id,'type' => 'origin', 'latitude' => '29.3759', 'longitude' => '47.9774','city_en' => 'Jahra']);
+        $shipperDestination = $shipper->locations()->create(['country_id' => $sa->id,'type' => 'destination', 'latitude' => '23.8859', 'longitude' => '45.0792','city_en' => 'Jeddah']);
+
+        $load = factory(\App\Models\Load::class)->create([
+            'shipper_id' => $shipper->id,
+            'origin_location_id' => $shipperOrigin->id,
+            'destination_location_id' => $shipperDestination->id
+        ]);
+
+        $load->jobs()->create(['driver_id'=>$driver->id]);
 
     }
 }

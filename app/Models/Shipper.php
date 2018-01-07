@@ -15,4 +15,8 @@ class Shipper extends BaseModel
         return $this->book_direct;
     }
 
+    public function locations()
+    {
+        return $this->hasMany(ShipperLocation::class);
+    }
 }

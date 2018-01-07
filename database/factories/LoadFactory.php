@@ -16,7 +16,10 @@ $factory->define(\App\Models\Load::class, function (Faker $faker) {
         'request_pictures' => $faker->boolean(50),
         'fixed_rate' => $faker->boolean(50),
         'status' => 'busy',
-        'scheduled_at' => \Carbon\Carbon::now()->addDays(1,10)->toDateTimeString(),
+        'load_date' => \Carbon\Carbon::now()->addDays(1,10)->toDateString(),
+        'load_time' => '2pm - 5pm',
+        'unload_date' => \Carbon\Carbon::now()->addDays(1,10)->toDateString(),
+        'unload_time' => '1pm - 10pm',
         'use_own_truck' => 0
     ];
 });
@@ -33,7 +36,7 @@ $factory->state(\App\Models\Load::class, 'pending', function ($faker) {
     ];
 });
 
-$factory->define(\App\Models\LoadDocumentation::class, function (Faker $faker) {
+$factory->define(\App\Models\JobDocumentation::class, function (Faker $faker) {
     return [
         'load_id' => \App\Models\Shipper::all()->random()->first()->id,
         'driver_id' => \App\Models\Driver::all()->random()->first()->id,
@@ -43,7 +46,7 @@ $factory->define(\App\Models\LoadDocumentation::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(\App\Models\LoadDriver::class, function (Faker $faker) {
+$factory->define(\App\Models\Job::class, function (Faker $faker) {
     return [
         'load_id' =>  \App\Models\Shipper::all()->random()->first()->id,
         'driver_id' =>  \App\Models\Driver::all()->random()->first()->id,

@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-class LoadDriver extends BaseModel
+class JobFine extends BaseModel
 {
+
 
 }

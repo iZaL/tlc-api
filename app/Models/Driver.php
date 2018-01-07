@@ -78,7 +78,7 @@ class Driver extends BaseModel
 
     public function loads()
     {
-        return $this->belongsToMany(Load::class,'load_drivers');
+        return $this->belongsToMany(Load::class,'jobs');
     }
 
 //    public function available_routes()

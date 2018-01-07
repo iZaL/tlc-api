@@ -44,27 +44,19 @@ class Load extends BaseModel
         return $this->belongsTo(Shipper::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * Requires Passes
+     */
     public function passes()
     {
         return $this->belongsToMany(Pass::class,'load_passes');
     }
 
-    public function fines()
+    public function jobs()
     {
-        return $this->belongsToMany(Fine::class,'load_fines');
+        return $this->hasMany(Job::class);
     }
-
-    public function documentations()
-    {
-        return $this->belongsToMany(Documentation::class,'load_documentations');
-    }
-
-
-    public function drivers()
-    {
-        return $this->belongsToMany(Driver::class,'load_drivers');
-    }
-
 
 
 }
