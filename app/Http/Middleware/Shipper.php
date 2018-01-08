@@ -9,7 +9,9 @@ class Shipper
 {
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->shipper && auth()->user()->shipper->active) {
+        $user = auth()->user();
+
+        if ($user->shipper && $user->shipper->active) {
             return $next($request);
         }
 

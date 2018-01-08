@@ -40,7 +40,7 @@ class ShipperTest extends TestCase
         $others = [];
         $postData = array_merge($loadData, $others);
 
-        $response = $this->json('POST', '/api/loads', $postData, $header);
+        $response = $this->json('POST', '/api/shipper/loads', $postData, $header);
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -58,7 +58,7 @@ class ShipperTest extends TestCase
         $loadData = $this->_createLoadPostData();
         $others = ['status' => 'pending'];
         $postData = array_merge($loadData, $others);
-        $this->json('POST', '/api/loads', $loadData, $header);
+        $this->json('POST', '/api/shipper/loads', $loadData, $header);
         $this->assertDatabaseHas('loads', $postData);
     }
 
@@ -69,7 +69,7 @@ class ShipperTest extends TestCase
         $loadData = $this->_createLoadPostData();
         $others = ['status' => 'approved'];
         $postData = array_merge($loadData, $others);
-        $this->json('POST', '/api/loads', $loadData, $header);
+        $this->json('POST', '/api/shipper/loads', $loadData, $header);
         $this->assertDatabaseHas('loads', $postData);
     }
 

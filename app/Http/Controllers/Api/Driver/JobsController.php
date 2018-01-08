@@ -44,23 +44,25 @@ class JobsController extends Controller
 
         $now = Carbon::now();
 
-//        $jobs = $this->jobModel
-////            ->with(['loads'=>function($q) use ($now) {
-////                $q->whereDate('load_date','>',$now);
-////            }])
-////            ->where('driver_id',$driver->id)
-////            ->get()
-//        ->all()
-////            ->where
-//        ;
+        $jobs = $this->jobModel
+//            ->with(['loads'=>function($q) use ($now) {
+//                $q->whereDate('load_date','>',$now);
+//            }])
+//            ->where('driver_id',$driver->id)
+//            ->get()
+        ->all()
+//            ->where
+        ;
 
-        $driver->load([
-            'loads.origin.country',
-            'loads.destination.country',
-            'loads.trailer'
-        ]);
+//        dd(Job::all()->toArray());
 
-        return response()->json(['success'=>true,'data'=>$driver]);
+//        $driver->load([
+//            'loads.origin.country',
+//            'loads.destination.country',
+//            'loads.trailer'
+//        ]);
+
+        return response()->json(['success'=>true,'data'=>$jobs]);
     }
 //
 //    public function getLoadDetails($loadID)

@@ -14,7 +14,7 @@ class Load extends BaseModel
         'request_documents',
         'request_pictures',
         'fixed_rate',
-        'scheduled_at',
+        'load_date',
         'status',
         'distance'
     ];

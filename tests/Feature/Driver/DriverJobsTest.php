@@ -2,29 +2,20 @@
 
 namespace Tests\Feature\Driver;
 
-use App\Models\Country;
 use App\Models\Driver;
-use App\Models\DriverLicense;
-use App\Models\DriverVisas;
 use App\Models\Job;
-use App\Models\Load;
-use App\Models\Location;
-use App\Models\Pass;
-use App\Models\Shipper;
-use App\Models\Trailer;
-use App\Models\Truck;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Route;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class DriverJobsTest extends TestCase
 {
 
+//    use DatabaseMigrations;
     use RefreshDatabase;
+
 
     public function test_driver_gets_jobs_requests()
     {
@@ -37,29 +28,29 @@ class DriverJobsTest extends TestCase
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
         $response = $this->json('GET', '/api/driver/jobs', [], $header);
 
-        $loadValid = $this->_createLoad([
+        $validLoad = $this->_createLoad([
             'trailer_id' => 2,
             'origin_location_id' => 1,
             'destination_location_id' => 2,
             'load_date' => Carbon::now()->addDays(1)->toDateString(),
         ]);
 
-        $loadExpired = $this->_createLoad([
+
+        $expiredLoad = $this->_createLoad([
             'trailer_id' => 2,
             'origin_location_id' => 1,
             'destination_location_id' => 2,
             'load_date' => Carbon::now()->subDays(1)->toDateString(),
         ]);
 
-        $job1= $loadExpired->jobs()->create(['driver_id' => $driver->id]);
-        $job2 = $loadValid->jobs()->create(['driver_id' => $driver->id]);
+//        $job1= $expiredLoad->jobs()->create(['driver_id' => $driver->id]);
+//        $job2 = $validLoad->jobs()->create(['driver_id' => $driver->id]);
 
-        $a  = factory(Job::class)->create();
+        $validJob = factory(Job::class)->create(['load_id'=>$validLoad->id,'driver_id'=>$driver->id]);
+        $expiredJob = factory(Job::class)->create(['load_id'=>$expiredLoad->id,'driver_id'=>$driver->id]);
 
-        dd($a);
-
-        $response->assertJson(['success'=>true,'data'=>[['id'=>$job1->id]]]);
-        $response->assertJsonMissing(['data'=>[['id'=>$job2->id]]]);
+        $response->assertJson(['success'=>true,'data'=>[['id'=>$validJob->id]]]);
+        $response->assertJsonMissing(['data'=>[['id'=>$expiredJob->id]]]);
 
     }
 

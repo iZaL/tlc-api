@@ -14,17 +14,9 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
      * |--------------------------------------------------------------------------
      */
 
-//    Route::middleware(['auth:api'])->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
 
-        /**
-        |--------------------------------------------------------------------------
-        | Load Routes
-        |--------------------------------------------------------------------------
-        */
 
-        Route::get('loads/create','LoadsController@createLoad')->name('loads.create');
-        Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
-        Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
 
         /**
          * |--------------------------------------------------------------------------
@@ -35,6 +27,21 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
         Route::get('trucks/makes','TrucksController@getMakesModels');
         Route::get('trailers','TrucksController@getTrailers');
         Route::get('trailers/makes','TrucksController@getTrailerMakes');
+
+
+        Route::group(['prefix' => 'shipper','namespace' => 'Shipper','middleware' => 'shipper'], function () {
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | Load Routes
+             * |--------------------------------------------------------------------------
+             */
+
+            Route::get('loads/create', 'LoadsController@createLoad')->name('loads.create');
+            Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
+            Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
+
+        });
 
         /**
          * |--------------------------------------------------------------------------
@@ -63,8 +70,11 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
 
-            Route::get('jobs','LoadsController@getLoadRequests');
+//            Route::get('jobs','LoadsController@getLoadRequests');
+            Route::get('jobs','JobsController@getUpcomingJobs');
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
+
+            Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
 
 
 //            Route::get('jobs','JobsController@getUpcomingJobs');
@@ -72,7 +82,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
         });
 
-//    });
+    });
 
     /**
      * |--------------------------------------------------------------------------

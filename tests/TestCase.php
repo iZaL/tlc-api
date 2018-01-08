@@ -33,7 +33,7 @@ abstract class TestCase extends BaseTestCase
             'request_documents'       => 0,
             'request_pictures'        => 0,
             'fixed_rate'              => 1,
-            'scheduled_at'            => '2017-10-19 11:15:25'
+            'load_date'            => '2017-10-19'
         ];
 
         return array_merge($postData, $array);

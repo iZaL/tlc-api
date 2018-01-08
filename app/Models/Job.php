@@ -5,6 +5,8 @@ namespace App\Models;
 class Job extends BaseModel
 {
 
+    protected $table = 'jobs';
+
     public function fines()
     {
         return $this->belongsToMany(Fine::class,'job_fines');
