@@ -25,16 +25,18 @@ class DriverTripsTest extends TestCase
             'load_date' => Carbon::now()->subDays(1)->toDateString(),
         ]);
 
-        $validTrip= $expiredLoad->trips()->create(['driver_id' => $driver->id]);
-        $expiredTrip = $validLoad->trips()->create(['driver_id' => $driver->id]);
+        $validTrip = $validLoad->trips()->create(['driver_id' => $driver->id]);
+        $expiredTrip = $expiredLoad->trips()->create(['driver_id' => $driver->id]);
 
         $response = $this->json('GET', '/api/driver/trips', [], $header);
 
         $response->assertJson(['success'=>true,'data'=>[['id'=>$validTrip->id]]]);
-        $response->assertJsonMissing(['data'=>[['id'=>$expiredTrip->id]]]);
+
+        $missingJsonFragment = ['id'=>$expiredTrip->id];
+
+        $response->assertJsonMissing($missingJsonFragment);
 
     }
-
 
 
 }

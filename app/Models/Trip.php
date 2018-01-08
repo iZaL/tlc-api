@@ -7,11 +7,15 @@ class Trip extends BaseModel
 
     protected $table = 'trips';
 
-    public function load()
+    public function booking()
     {
-        return $this->belongsTo(Load::class);
+        return $this->belongsTo(Load::class,'load_id');
     }
 
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
     public function fines()
     {
         return $this->belongsToMany(Fine::class,'trip_fines');

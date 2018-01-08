@@ -27,10 +27,15 @@ class TripsController extends Controller
     {
         $driver = Auth::guard('api')->user()->driver;
 
-//        $now = Carbon::now();
+        $today = Carbon::today()->toDateString();
 
         $trips = $this->tripModel
-            ->with(['load'])
+            ->whereHas('booking',function($q) use ($today) {
+                $q
+                    ->whereDate('load_date','>=',$today)
+                ;
+            })
+            ->orderBy('load_date','asc')
             ->get()
         ;
 
