@@ -67,7 +67,7 @@ class DriversTableSeeder extends Seeder
             'destination_location_id' => $shipperDestination->id
         ]);
 
-        $load->jobs()->create(['driver_id'=>$driver->id]);
+        $load->trips()->create(['driver_id'=>$driver->id]);
 
     }
 }

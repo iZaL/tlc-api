@@ -25,39 +25,16 @@ class DriverTripsTest extends TestCase
             'load_date' => Carbon::now()->subDays(1)->toDateString(),
         ]);
 
-        $validJob= $expiredLoad->trips()->create(['driver_id' => $driver->id]);
-        $expiredJob = $validLoad->trips()->create(['driver_id' => $driver->id]);
+        $validTrip= $expiredLoad->trips()->create(['driver_id' => $driver->id]);
+        $expiredTrip = $validLoad->trips()->create(['driver_id' => $driver->id]);
 
         $response = $this->json('GET', '/api/driver/trips', [], $header);
 
-        $response->assertJson(['success'=>true,'data'=>[['id'=>$validJob->id]]]);
-        $response->assertJsonMissing(['data'=>[['id'=>$expiredJob->id]]]);
+        $response->assertJson(['success'=>true,'data'=>[['id'=>$validTrip->id]]]);
+        $response->assertJsonMissing(['data'=>[['id'=>$expiredTrip->id]]]);
 
     }
 
 
-    public function test_driver_trips_excludes_trips_()
-    {
-        $driver = $this->_createDriver();
-
-        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-
-        $validLoad = $this->_createLoad([
-            'load_date' => Carbon::now()->addDays(1)->toDateString(),
-        ]);
-
-        $expiredLoad = $this->_createLoad([
-            'load_date' => Carbon::now()->subDays(1)->toDateString(),
-        ]);
-
-        $validJob= $expiredLoad->trips()->create(['driver_id' => $driver->id]);
-        $expiredJob = $validLoad->trips()->create(['driver_id' => $driver->id]);
-
-        $response = $this->json('GET', '/api/driver/trips', [], $header);
-
-        $response->assertJson(['success'=>true,'data'=>[['id'=>$validJob->id]]]);
-        $response->assertJsonMissing(['data'=>[['id'=>$expiredJob->id]]]);
-
-    }
 
 }

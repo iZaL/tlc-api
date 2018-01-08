@@ -23,14 +23,17 @@ class TripsController extends Controller
         $this->tripModel = $tripModel;
     }
 
-    public function getUpcomingJobs()
+    public function getUpcomingTrips()
     {
         $driver = Auth::guard('api')->user()->driver;
 
 //        $now = Carbon::now();
 
-        $jobs = Load::all();
+        $trips = $this->tripModel
+            ->with(['load'])
+            ->get()
+        ;
 
-        return response()->json(['success'=>true,'data'=>$jobs]);
+        return response()->json(['success'=>true,'data'=>$trips]);
     }
 }
