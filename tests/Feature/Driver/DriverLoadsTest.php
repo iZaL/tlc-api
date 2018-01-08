@@ -2,23 +2,13 @@
 
 namespace Tests\Feature\Driver;
 
-use App\Models\Country;
 use App\Models\Driver;
-use App\Models\DriverLicense;
-use App\Models\DriverVisas;
 use App\Models\Load;
-use App\Models\ShipperLocation;
 use App\Models\Pass;
-use App\Models\Shipper;
-use App\Models\Trailer;
-use App\Models\Truck;
+use App\Models\ShipperLocation;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Route;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class DriverLoadsTest extends TestCase
 {

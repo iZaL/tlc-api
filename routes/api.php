@@ -71,7 +71,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
 
 //            Route::get('jobs','LoadsController@getLoadRequests');
-            Route::get('jobs','JobsController@getUpcomingJobs');
+            Route::get('trips','TripsController@getUpcomingTrips');
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
 
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');

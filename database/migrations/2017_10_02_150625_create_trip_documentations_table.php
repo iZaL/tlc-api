@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateJobDocumentationsTable extends Migration
+class CreateTripDocumentationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateJobDocumentationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_documentations', function (Blueprint $table) {
+        Schema::create('trip_documentations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('job_id');
+            $table->integer('trip_id');
             $table->integer('documentation_id');
             $table->integer('country_id')->nullable();
             $table->decimal('amount')->nullable();
@@ -31,6 +31,6 @@ class CreateJobDocumentationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('load_documents');
+        Schema::dropIfExists('trip_documentations');
     }
 }

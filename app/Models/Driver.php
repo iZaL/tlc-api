@@ -81,9 +81,4 @@ class Driver extends BaseModel
         return $this->belongsToMany(Load::class,'jobs');
     }
 
-//    public function available_routes()
-//    {
-//        return $this->residence->loading_routes();
-//    }
-
 }

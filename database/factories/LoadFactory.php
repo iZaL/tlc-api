@@ -22,8 +22,6 @@ $factory->define(\App\Models\Load::class, function (Faker $faker) {
         'unload_time' => '1pm - 10pm',
         'use_own_truck' => 0
     ];
-
-
     return $a;
 });
 
@@ -36,25 +34,6 @@ $factory->state(\App\Models\Load::class, 'waiting', function ($faker) {
 $factory->state(\App\Models\Load::class, 'pending', function ($faker) {
     return [
         'status' => 'pending',
-    ];
-});
-
-$factory->define(\App\Models\JobDocumentation::class, function (Faker $faker) {
-    return [
-        'load_id' => \App\Models\Shipper::all()->random()->first()->id,
-        'driver_id' => \App\Models\Driver::all()->random()->first()->id,
-        'amount' => rand(10,100),
-        'type' => 'POD',
-        'file_path' => $faker->imageUrl(500,500)
-    ];
-});
-
-$factory->define(\App\Models\Job::class, function (Faker $faker) {
-    return [
-        'load_id' => \App\Models\Shipper::first() ? \App\Models\Shipper::all()->random()->first()->id : 1,
-        'driver_id' => \App\Models\Driver::first() ?  \App\Models\Driver::all()->random()->first()->id : 1,
-        'amount' => rand(10,100),
-        'reached_at' => \Carbon\Carbon::now()->addDays(rand(1,10))->toDateTimeString()
     ];
 });
 

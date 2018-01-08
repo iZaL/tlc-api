@@ -53,9 +53,9 @@ class Load extends BaseModel
         return $this->belongsToMany(Pass::class,'load_passes');
     }
 
-    public function jobs()
+    public function trips()
     {
-        return $this->hasMany(Job::class);
+        return $this->hasMany(Trip::class);
     }
 
 

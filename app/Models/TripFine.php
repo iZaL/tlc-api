@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class JobFine extends BaseModel
+class TripFine extends BaseModel
 {
 
 
