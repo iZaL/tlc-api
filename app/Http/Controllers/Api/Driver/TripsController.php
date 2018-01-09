@@ -47,7 +47,7 @@ class TripsController extends Controller
 
     public function confirmTrip($tripID, Request $request)
     {
-        $trip = $this->tripModel->find($tripID);
+        $trip = $this->tripModel->with(['booking.trips'])->find($tripID);
         $driver = Auth::guard('api')->user()->driver;
 
         $tripManager = new TripManager($trip,$driver);
