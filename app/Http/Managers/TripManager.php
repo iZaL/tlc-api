@@ -3,6 +3,7 @@
 namespace App\Http\Managers;
 
 
+use App\Exceptions\Driver\BusyOnScheduleException;
 use App\Exceptions\Driver\DuplicateTripException;
 use App\Exceptions\Driver\FleetsBookedException;
 use App\Exceptions\Driver\ShipperBlockedException;
@@ -10,6 +11,7 @@ use App\Exceptions\Driver\TLCBlockedException;
 use App\Exceptions\TripConfirmationFailedException;
 use App\Models\Driver;
 use App\Models\Trip;
+use Carbon\Carbon;
 
 class TripManager
 {
@@ -34,16 +36,15 @@ class TripManager
     }
 
     /**
-     * @return $this
-     * @throws TLCBlockedException
+     * @return boolean
      */
     public function confirmTrip()
     {
-        $driver = $this->driver;
-        $this->isDriverBlocked();
-        $this->isDriverBlockedByShipper();
-        $this->hasDuplicateTrip();
-        return $this;
+        if($this->canBookTrip()) {
+            $this->confirm();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -118,7 +119,39 @@ class TripManager
         }
 
         return false;
-
     }
 
+    private function canBookTrip()
+    {
+        $this->isDriverBlocked();
+        $this->isDriverBlockedByShipper();
+        $this->hasDuplicateTrip();
+        return true;
+    }
+
+    /**
+     * @throws BusyOnScheduleException
+     */
+    public function driverHasAnotherTrip()
+    {
+        $driver = $this->driver;
+        $load = $this->trip->booking;
+        $loadDate = $load->load_date; // ex:2018-01-12
+        $driverAvailableDate = $driver->available_from; // ex: 2018-01-11
+
+//        dd('2018-01-14' > '2018-01-12');
+        if($driverAvailableDate >= $loadDate) {
+            throw new BusyOnScheduleException('wa');
+        }
+
+        return false;
+    }
+
+//    /**
+//     * Confirm the booking
+//     */
+//    public function confirm()
+//    {
+//        $this->update
+//    }
 }

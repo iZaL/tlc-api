@@ -94,5 +94,22 @@ class TripManagerTest extends TestCase
         $this->assertFalse($try);
     }
 
+    /**
+     * @expectedException \App\Exceptions\Driver\BusyOnScheduleException
+     */
+    public function test_driver_has_another_trip()
+    {
+        $loadDate = Carbon::now()->addDays(1)->toDateTimeString();
+        $availableDate = Carbon::now()->addDays(1)->toDateTimeString();
+        $load = $this->_createLoad(['load_date' => $loadDate ]);
 
+        $driver = $this->_createDriver([
+            'available_from' => $availableDate
+        ]);
+
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222]);
+        $method = self::getMethod('driverHasAnotherTrip');
+        $tripManager = new TripManager($trip,$driver);
+        $method->invokeArgs($tripManager,[]);
+    }
 }
