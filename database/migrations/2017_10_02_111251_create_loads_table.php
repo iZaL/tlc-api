@@ -32,7 +32,12 @@ class CreateLoadsTable extends Migration
             $table->string('load_time',10)->nullable();
             $table->date('unload_date')->nullable();
             $table->string('unload_time', 10)->nullable();
-            $table->string('status',10)->nullable()->default('pending');
+            $table->string('status',10)->default('pending')->notes(
+                // default pending
+                // approved (all fleets has been confirmed by drivers) once this status is set, after this no more trip booking allowed
+                // completed (all fleets unloaded or reached destination)
+                //
+            );
             $table->timestamps();
             $table->softDeletes();
         });

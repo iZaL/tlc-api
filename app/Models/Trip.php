@@ -26,4 +26,9 @@ class Trip extends BaseModel
         return $this->belongsToMany(Documentation::class,'trip_documentations');
     }
 
+    public function confirmTrip()
+    {
+
+    }
+
 }

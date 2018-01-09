@@ -72,6 +72,9 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
 //            Route::get('jobs','LoadsController@getLoadRequests');
             Route::get('trips','TripsController@getUpcomingTrips');
+            Route::post('trips/{id}/confirm','TripsController@confirmTrip');
+
+
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
 
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');

@@ -22,12 +22,21 @@ class CreateDriversTable extends Migration
             $table->string('phone')->nullable();
             $table->integer('nationality_country_id')->nullable();
             $table->integer('residence_country_id')->nullable();
-            $table->boolean('book_direct')->default(0); //can book directly without TLC
-            $table->string('status')->nullable();
+            $table->boolean('book_direct')->default(1); //can book directly without TLC
             $table->boolean('active')->default(0);
             $table->boolean('blocked')->default(0);
+            $table->boolean('available')->default(1)
+                ->notes(
+                // default available to true i.e online
+                // false is offline
+                );
+            $table->timestamp('available_from')
+                ->default(\Carbon\Carbon::now()->toDateTimeString())
+                ->notes(
+                // before each booking, check whether the driver is available at the date,
+                // once the driver books a trip, change the available date to offload date or some other dates (discuss with tlc)
+                );
             $table->timestamps();
-//            $table->softDeletes();
         });
     }
 

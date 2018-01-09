@@ -4,10 +4,12 @@
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Managers\TripManager;
 use App\Models\Trip;
 use App\Models\Load;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TripsController extends Controller
@@ -40,5 +42,24 @@ class TripsController extends Controller
         ;
 
         return response()->json(['success'=>true,'data'=>$trips]);
+    }
+
+
+    public function confirmTrip($tripID, Request $request)
+    {
+        $trip = $this->tripModel->find($tripID);
+        $driver = Auth::guard('api')->user()->driver;
+
+        $tripManager = new TripManager($trip,$driver);
+
+        try {
+            $tripManager->confirmTrip();
+        } catch (\Exception $e) {
+            return response()->json(['success'=>false,'message' => $e->getMessage()]);
+        }
+
+        return response()->json(['success'=>true]);
+
+
     }
 }

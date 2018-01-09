@@ -11,10 +11,12 @@ use App\Models\Shipper;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use ReflectionClass;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
 
     public function _createUser()
     {

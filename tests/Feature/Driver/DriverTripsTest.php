@@ -11,6 +11,20 @@ class DriverTripsTest extends TestCase
 
     use RefreshDatabase;
 
+
+    public function test_driver_cannot_book_when_he_is_on_another_trip()
+    {
+        $loadDate = Carbon::now()->addDays(1);
+        $availableDate = Carbon::now()->addDays(2);
+        $load = $this->_createLoad(['load_date' => $loadDate ]);
+        $driver = $this->_createDriver([
+            'available_from' => $availableDate
+        ]);
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+    }
+
     public function test_driver_trips_excludes_expired_jobs()
     {
         $driver = $this->_createDriver();
