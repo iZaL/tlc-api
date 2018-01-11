@@ -63,6 +63,10 @@ class TripsController extends Controller
 
         if($tripManager->confirmTrip()) {
             //@todo: send notifications
+
+            //@todo: check whether all the fleets are booked, if yes, set load status respectively
+
+
             return response()->json(['success'=>true]);
         }
 

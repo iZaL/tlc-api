@@ -44,7 +44,7 @@ class LoginTest extends TestCase
         $driver = $this->_createDriver();
         $response = $this->json('POST', '/api/auth/login',['email'=>$driver->user->email,'password'=>'password']);
 
-        $response->assertJson(['success'=>true,'data'=>['id'=>$driver->user->id,'profile'=>[['id'=>$driver->id]]],'meta'=>['api_token'=>$driver->user->api_token]]);
+        $response->assertJson(['success'=>true,'data'=>['id'=>$driver->user->id,'profile'=>['id'=>$driver->id]],'meta'=>['api_token'=>$driver->user->api_token]]);
 
     }
 

@@ -86,4 +86,44 @@ class DriverTripsTest extends TestCase
 
     }
 
+    public function test_driver_cannot_book_trip_for_approved_loads()
+    {
+        $driver = $this->_createDriver();
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+        $load = $this->_createLoad([
+            'status' => 'approved'
+        ]);
+
+        $validTrip = $load->trips()->create(['driver_id' => $driver->id]);
+
+        $response = $this->json('POST', '/api/driver/trips/'.$validTrip->id.'/confirm', [], $header);
+
+        $response->assertJson(['success'=>false,'message'=>'load_already_approved']);
+
+        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
+    }
+
+    public function test_driver_cannot_book_trip_for_expired_loads()
+    {
+        $driver = $this->_createDriver();
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+        $loadDate = Carbon::now()->subDays(5)->toDateString();
+
+        $load = $this->_createLoad([
+            'load_date' => $loadDate
+        ]);
+
+        $validTrip = $load->trips()->create(['driver_id' => $driver->id]);
+
+        $response = $this->json('POST', '/api/driver/trips/'.$validTrip->id.'/confirm', [], $header);
+
+        $response->assertJson(['success'=>false,'message'=>'load_expired']);
+
+        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
+    }
+
 }

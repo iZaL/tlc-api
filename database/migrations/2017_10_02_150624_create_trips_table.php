@@ -22,9 +22,9 @@ class CreateTripsTable extends Migration
             $table->string('status')->default('pending')
                 ->notes('// 
                 1- pending
-                2- accepted
+                2- approved 
                 3- rejected
-                4- working // on the way
+                4- working // the driver (truck) has dispatched
                 5- completed // unloaded
                 ');
             $table->timestamps();

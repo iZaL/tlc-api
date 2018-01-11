@@ -6,6 +6,7 @@ namespace App\Http\Managers;
 use App\Exceptions\Driver\BusyOnScheduleException;
 use App\Exceptions\Driver\DuplicateTripException;
 use App\Exceptions\Driver\FleetsBookedException;
+use App\Exceptions\Driver\LoadHasAlreadyApproved;
 use App\Exceptions\Driver\ShipperBlockedException;
 use App\Exceptions\Driver\TLCBlockedException;
 use App\Exceptions\Load\LoadExpiredException;
@@ -46,6 +47,19 @@ class TripManager
         $today = Carbon::today()->toDateString();
         if ($bookingDate <= $today) {
             throw new LoadExpiredException('load_expired');
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @throws LoadHasAlreadyApproved
+     */
+    private function isAllowedToBook()
+    {
+        $loadStatus = $this->trip->booking->status;
+        if ($loadStatus !== 'pending') {
+            throw new LoadHasAlreadyApproved('load_already_approved');
         }
         return false;
     }
@@ -172,11 +186,21 @@ class TripManager
     }
 
     /**
+     * @throws LoadExpiredException
+     * @throws LoadHasAlreadyApproved
+     */
+    private function isValidLoad()
+    {
+        $this->isAllowedToBook();
+        $this->isLoadExpired();
+    }
+
+    /**
      * @throws \Exception
      */
     public function validateTrip()
     {
-        $this->isLoadExpired();
+        $this->isValidLoad();
         $this->isDriverBlocked();
         $this->isDriverBlockedByShipper();
         $this->hasDuplicateTrip();
