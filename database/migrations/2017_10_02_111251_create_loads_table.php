@@ -34,9 +34,9 @@ class CreateLoadsTable extends Migration
             $table->string('unload_time', 10)->nullable();
             $table->string('status',10)->default('pending')->notes(
                 // default pending
-                // approved (all fleets has been confirmed by drivers) once this status is set, after this no more trip booking allowed
+                // rejected (the load has been rejected )
+                // confirmed (all fleets has been confirmed by drivers) once this status is set, after this no more trip booking allowed
                 // working (all fleets has dispatched)
-                // rejected (the load has been rejected)
                 // completed (all fleets unloaded or reached destination)
             );
             $table->timestamps();

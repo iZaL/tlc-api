@@ -74,6 +74,7 @@ class TripManagerTest extends TestCase
         $load = $this->_createLoad();
         $driver = $this->_createDriver();
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver->id,'status' => 'confirmed']);
+
         $method = self::getMethod('hasDuplicateTrip');
         $tripManager = new TripManager($trip,$driver);
         $method->invokeArgs($tripManager,[]);
@@ -95,11 +96,18 @@ class TripManagerTest extends TestCase
 
     public function test_is_load_fleets_booked_returns_false_if_fleet_book_is_not_booked()
     {
-        $load = $this->_createLoad(['fleet_count'=>2]);
+        $load = $this->_createLoad(['fleet_count'=>3]);
+        $load2 = $this->_createLoad(['fleet_count' =>3]);
         $driver = $this->_createDriver();
+
+        $differentTrip = factory(Trip::class)->create(['load_id'=>$load2->id,'driver_id'=>222,'status' => 'confirmed']);
+
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'confirmed']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'working']);
+
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'pending']);
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'pending']);
+
         $method = self::getMethod('isLoadFleetsBooked');
         $tripManager = new TripManager($trip,$driver);
         $try = $method->invokeArgs($tripManager,[]);

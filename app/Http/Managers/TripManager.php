@@ -6,7 +6,7 @@ namespace App\Http\Managers;
 use App\Exceptions\Driver\BusyOnScheduleException;
 use App\Exceptions\Driver\DuplicateTripException;
 use App\Exceptions\Driver\FleetsBookedException;
-use App\Exceptions\Driver\LoadHasAlreadyApproved;
+use App\Exceptions\Driver\LoadHasAlreadyConfirmed;
 use App\Exceptions\Driver\ShipperBlockedException;
 use App\Exceptions\Driver\TLCBlockedException;
 use App\Exceptions\Load\LoadExpiredException;
@@ -53,13 +53,13 @@ class TripManager
 
     /**
      * @return bool
-     * @throws LoadHasAlreadyApproved
+     * @throws LoadHasAlreadyConfirmed
      */
     private function isAllowedToBook()
     {
         $loadStatus = $this->trip->booking->status;
         if ($loadStatus !== 'pending') {
-            throw new LoadHasAlreadyApproved('load_already_approved');
+            throw new LoadHasAlreadyConfirmed('load_already_confirmed');
         }
         return false;
     }
@@ -104,7 +104,7 @@ class TripManager
         $hasTrips = $driver->trips->contains($this->trip->id);
 
         if ($hasTrips) {
-            $oldTrips = $driver->trips->where('status', '!=', 'pending')->count();
+            $oldTrips = $driver->trips->where('status','!=','pending')->count();
 
             if ($oldTrips > 0) {
                 throw new DuplicateTripException('duplicate_trip');
@@ -121,14 +121,16 @@ class TripManager
     private function isLoadFleetsBooked()
     {
         $load = $this->trip->booking;
-        $loadFleets = $load->fleet_count;
+        $fleetCount = $load->fleet_count;
 
-        $loadTrips = $load->trips
-            ->where('status', '!=', 'pending')
-            ->where('status', '!=', 'rejected')
-            ->count();
+        $loadTrips = $load->trips()
+            ->where('status', 'confirmed')
+            ->orWhere('status', 'working')
+            ->orWhere('status', 'completed')
+            ->count()
+        ;
 
-        if ($loadTrips >= $loadFleets) {
+        if ($loadTrips === $fleetCount) {
             throw new FleetsBookedException('fleet_bookings_full');
         }
 
@@ -187,7 +189,7 @@ class TripManager
 
     /**
      * @throws LoadExpiredException
-     * @throws LoadHasAlreadyApproved
+     * @throws LoadHasAlreadyConfirmed
      */
     private function isValidLoad()
     {

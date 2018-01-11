@@ -31,8 +31,50 @@ class LoadManager
         $this->load = $load;
     }
 
-    public function updateStatus()
+
+    private function confirm()
     {
+        // get no of fleet
+        // if 1, direct approve
+
+        $load = $this->load;
+
+        $fleetCount = $load->fleet_count;
+
+        if($fleetCount > 1) {
+            $loadTrips = $load->trips()
+                ->where('status', 'confirmed')
+                ->orWhere('status', 'working')
+                ->orWhere('status', 'completed')
+                ->count()
+            ;
+        } else {
+            $loadTrips = 1;
+        }
+
+        if($loadTrips == $fleetCount) {
+
+            //@todo:  send confirm notifications
+
+            $load->status = 'confirmed';
+            $load->save();
+        }
+
+    }
+
+    /**
+     * @param $status
+     * @return LoadManager
+     */
+    public function updateStatus($status)
+    {
+        switch ($status) {
+            case 'confirmed':
+                $this->confirm();
+                break;
+        }
+
+        return $this;
 
     }
 

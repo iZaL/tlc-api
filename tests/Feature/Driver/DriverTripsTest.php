@@ -72,6 +72,7 @@ class DriverTripsTest extends TestCase
         ]);
 
         $bookedFrom = Carbon::now()->addDays(3)->toDateString();
+
         $bookedUntil = Carbon::now()->addDays(6)->toDateString();
 
         $driver->blocked_dates()->create(['from' => $bookedFrom, 'to' => $bookedUntil ]);
@@ -93,14 +94,14 @@ class DriverTripsTest extends TestCase
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
 
         $load = $this->_createLoad([
-            'status' => 'approved'
+            'status' => 'confirmed'
         ]);
 
         $validTrip = $load->trips()->create(['driver_id' => $driver->id]);
 
         $response = $this->json('POST', '/api/driver/trips/'.$validTrip->id.'/confirm', [], $header);
 
-        $response->assertJson(['success'=>false,'message'=>'load_already_approved']);
+        $response->assertJson(['success'=>false,'message'=>'load_already_confirmed']);
 
         $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
     }
@@ -124,6 +125,54 @@ class DriverTripsTest extends TestCase
         $response->assertJson(['success'=>false,'message'=>'load_expired']);
 
         $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
+    }
+
+    public function test_load_status_gets_updated_after_trip_confirmation()
+    {
+        $driver = $this->_createDriver();
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+        $loadDate = Carbon::now()->addDays(5)->toDateString();
+
+        $load = $this->_createLoad([
+            'load_date' => $loadDate,
+            'fleet_count' => 1
+        ]);
+
+        $validTrip = $load->trips()->create(['driver_id' => $driver->id]);
+
+        $response = $this->json('POST', '/api/driver/trips/'.$validTrip->id.'/confirm', [], $header);
+
+        $response->assertJson(['success'=>true]);
+
+        $this->assertDatabaseHas('loads',['id'=>$load->id,'status'=>'confirmed']);
+    }
+
+    public function test_load_status_gets_updated_after_trip_confirmation_for_fleet_count()
+    {
+        $driver = $this->_createDriver();
+
+        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+
+        $loadDate = Carbon::now()->addDays(5)->toDateString();
+
+        $load = $this->_createLoad([
+            'load_date' => $loadDate,
+            'fleet_count' => 3
+        ]);
+
+        $validTrip1 = $load->trips()->create(['driver_id' => $driver->id]);
+        $validTrip2 = $load->trips()->create(['driver_id' => 333, 'status' => 'confirmed']);
+        $validTrip2 = $load->trips()->create(['driver_id' => 444, 'status' => 'working']);
+        $validTrip3 = $load->trips()->create(['driver_id' => 555, 'status' => 'rejected']);
+
+        $response = $this->json('POST', '/api/driver/trips/'.$validTrip1->id.'/confirm', [], $header);
+
+        $response->assertJson(['success'=>true]);
+
+        $this->assertDatabaseHas('loads',['id'=>$load->id,'status'=>'confirmed']);
+
     }
 
 }

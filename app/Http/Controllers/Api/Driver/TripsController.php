@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Managers\LoadManager;
 use App\Http\Managers\TripManager;
 use App\Models\Trip;
 use App\Models\Load;
@@ -66,6 +67,9 @@ class TripsController extends Controller
 
             //@todo: check whether all the fleets are booked, if yes, set load status respectively
 
+            $load = $trip->booking;
+            $loadManager = new LoadManager($load);
+            $loadManager->updateStatus('confirmed');
 
             return response()->json(['success'=>true]);
         }

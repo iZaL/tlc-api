@@ -8,7 +8,7 @@
 
 namespace App\Exceptions\Driver;
 
-class LoadHasAlreadyApproved extends \Exception
+class LoadHasAlreadyConfirmed extends \Exception
 {
 
 }

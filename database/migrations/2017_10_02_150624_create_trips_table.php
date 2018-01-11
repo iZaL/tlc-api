@@ -22,10 +22,12 @@ class CreateTripsTable extends Migration
             $table->string('status')->default('pending')
                 ->notes('// 
                 1- pending
-                2- approved 
+                2- approved ( before admin confirmation )
                 3- rejected
-                4- working // the driver (truck) has dispatched
-                5- completed // unloaded
+                
+                4- confirmed // has confirmed but not dispatched
+                5- working // the driver (truck) has dispatched
+                6- completed // unloaded
                 ');
             $table->timestamps();
         });
