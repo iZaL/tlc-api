@@ -14,7 +14,7 @@ $factory->define(\App\Models\Driver::class, function (Faker $faker) {
         'active' => 1,
         'book_direct' => 1,
         'blocked' => 0,
-        'available_from' => \Carbon\Carbon::now()->toDateTimeString()
+//        'available_from' => \Carbon\Carbon::now()->toDateTimeString()
     ];
 });
 

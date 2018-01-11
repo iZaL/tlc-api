@@ -44,22 +44,29 @@ class TripsController extends Controller
         return response()->json(['success'=>true,'data'=>$trips]);
     }
 
-
     public function confirmTrip($tripID, Request $request)
     {
         $trip = $this->tripModel->with(['booking.trips'])->find($tripID);
         $driver = Auth::guard('api')->user()->driver;
 
+        if(!$driver->available) {
+            return response()->json(['success'=>false,'message' => __('general.driver_offline')]);
+        }
+
         $tripManager = new TripManager($trip,$driver);
 
         try {
-            $tripManager->confirmTrip();
+            $tripManager->validateTrip();
         } catch (\Exception $e) {
             return response()->json(['success'=>false,'message' => $e->getMessage()]);
         }
 
-        return response()->json(['success'=>true]);
+        if($tripManager->confirmTrip()) {
+            //@todo: send notifications
+            return response()->json(['success'=>true]);
+        }
 
+        return response()->json(['success'=>false,'message' => __('general.unknown_error')]);
 
     }
 }

@@ -8,6 +8,7 @@ use App\Exceptions\Driver\DuplicateTripException;
 use App\Exceptions\Driver\FleetsBookedException;
 use App\Exceptions\Driver\ShipperBlockedException;
 use App\Exceptions\Driver\TLCBlockedException;
+use App\Exceptions\Load\LoadExpiredException;
 use App\Exceptions\TripConfirmationFailedException;
 use App\Models\Driver;
 use App\Models\Trip;
@@ -36,13 +37,15 @@ class TripManager
     }
 
     /**
-     * @return boolean
+     * @return bool
+     * @throws LoadExpiredException
      */
-    public function confirmTrip()
+    private function isLoadExpired()
     {
-        if($this->canBookTrip()) {
-            $this->confirm();
-            return true;
+        $bookingDate = $this->trip->booking->load_date;
+        $today = Carbon::today()->toDateString();
+        if ($bookingDate <= $today) {
+            throw new LoadExpiredException('load_expired');
         }
         return false;
     }
@@ -53,8 +56,8 @@ class TripManager
      */
     private function isDriverBlocked()
     {
-        if($this->driver->blocked) {
-            throw new TLCBlockedException(__('general.driver_blocked'));
+        if ($this->driver->blocked) {
+            throw new TLCBlockedException('driver_blocked');
         }
         return false;
     }
@@ -68,10 +71,8 @@ class TripManager
         $shipperID = $this->trip->booking->shipper_id;
 
         $driver = $this->driver;
-        $driver->load('blocked_list');
-
-        if($driver->blocked_list->contains($shipperID)) {
-            throw new ShipperBlockedException(__('general.driver_blocked'));
+        if ($driver->blocked_list->contains($shipperID)) {
+            throw new ShipperBlockedException('driver_blocked');
         }
 
         return false;
@@ -86,14 +87,13 @@ class TripManager
     private function hasDuplicateTrip()
     {
         $driver = $this->driver;
-        $driver->load('trips');
         $hasTrips = $driver->trips->contains($this->trip->id);
 
-        if($hasTrips) {
-            $oldTrips = $driver->trips->where('status','!=','pending')->count();
+        if ($hasTrips) {
+            $oldTrips = $driver->trips->where('status', '!=', 'pending')->count();
 
-            if($oldTrips > 0) {
-                throw new DuplicateTripException(__('general.duplicate_trip'));
+            if ($oldTrips > 0) {
+                throw new DuplicateTripException('duplicate_trip');
             }
         }
 
@@ -110,48 +110,78 @@ class TripManager
         $loadFleets = $load->fleet_count;
 
         $loadTrips = $load->trips
-            ->where('status','!=','pending')
-            ->where('status','!=','rejected')
+            ->where('status', '!=', 'pending')
+            ->where('status', '!=', 'rejected')
             ->count();
 
-        if($loadTrips >= $loadFleets) {
-            throw new FleetsBookedException(__('general.fleet_bookings_full'));
+        if ($loadTrips >= $loadFleets) {
+            throw new FleetsBookedException('fleet_bookings_full');
         }
 
         return false;
     }
 
-    private function canBookTrip()
-    {
-        $this->isDriverBlocked();
-        $this->isDriverBlockedByShipper();
-        $this->hasDuplicateTrip();
-        return true;
-    }
 
     /**
      * @throws BusyOnScheduleException
+     * Checks whether the driver's available date doesn't match the load date
      */
     public function driverHasAnotherTrip()
     {
         $driver = $this->driver;
-        $load = $this->trip->booking;
-        $loadDate = $load->load_date; // ex:2018-01-12
-        $driverAvailableDate = $driver->available_from; // ex: 2018-01-11
+        $loadDate = $this->trip->booking->load_date;
 
-//        dd('2018-01-14' > '2018-01-12');
-        if($driverAvailableDate >= $loadDate) {
-            throw new BusyOnScheduleException('wa');
+        $driverBlockedDates = $driver->blocked_dates()
+            ->whereDate('driver_blocked_dates.from', '<=', $loadDate)
+            ->where('driver_blocked_dates.to', '>=', $loadDate)
+            ->count();
+
+        if ($driverBlockedDates > 0) {
+            throw new BusyOnScheduleException('driver_has_trip');
         }
 
         return false;
     }
 
-//    /**
-//     * Confirm the booking
-//     */
-//    public function confirm()
-//    {
-//        $this->update
-//    }
+    /**
+     * @todo:figure out transit days
+     */
+    private function updateDriverBlockedDates()
+    {
+        $driver = $this->driver;
+        $loadDate = $this->trip->booking->load_date;
+        $returnDate = Carbon::parse($loadDate)->addDays(3)->toDateString();
+        $driver->blocked_dates()->create(['from' => $loadDate, 'to' => $returnDate]);
+    }
+
+    private function updateTripStatus($status)
+    {
+        $trip = $this->trip;
+        $trip->status = $status;
+        $trip->save();
+    }
+
+    /**
+     * Confirm the booking
+     */
+    public function confirmTrip()
+    {
+        $this->updateDriverBlockedDates();
+        $this->updateTripStatus('confirmed');
+        return true;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function validateTrip()
+    {
+        $this->isLoadExpired();
+        $this->isDriverBlocked();
+        $this->isDriverBlockedByShipper();
+        $this->hasDuplicateTrip();
+        $this->isLoadFleetsBooked();
+        $this->driverHasAnotherTrip();
+    }
+
 }

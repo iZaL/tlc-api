@@ -86,4 +86,9 @@ class Driver extends BaseModel
         return $this->hasMany(Trip::class);
     }
 
+    public function blocked_dates()
+    {
+        return $this->hasMany(DriverBlockedDate::class);
+    }
+
 }

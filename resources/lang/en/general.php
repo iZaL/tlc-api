@@ -7,5 +7,6 @@ return [
     'load_created' => 'Load Created',
     'registration_failed' => 'Registration Failed',
     'invalid_otp' => 'Invalid Confirmation Code',
-    'account_already_active' => 'Account is already active'
+    'account_already_active' => 'Account is already active',
+    'unknown_error' => 'Unknown Error'
 ];
