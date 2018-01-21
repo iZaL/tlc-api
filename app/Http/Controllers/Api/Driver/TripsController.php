@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api\Driver;
 use App\Http\Controllers\Controller;
 use App\Http\Managers\LoadManager;
 use App\Http\Managers\TripManager;
+use App\Http\Resources\TripResource;
 use App\Models\Trip;
 use App\Models\Load;
 use App\Models\User;
@@ -33,16 +34,20 @@ class TripsController extends Controller
         $today = Carbon::today()->toDateString();
 
         $trips = $this->tripModel
+            ->with(['booking.trailer','booking.origin','booking.destination'])
             ->whereHas('booking',function($q) use ($today) {
                 $q
                     ->whereDate('load_date','>=',$today)
+                    ->orderBy('load_date','desc')
                 ;
             })
-            ->orderBy('load_date','asc')
+            ->ofStatus('pending')
             ->get()
         ;
 
-        return response()->json(['success'=>true,'data'=>$trips]);
+        $driver->upcoming_trips = TripResource::collection($trips);
+
+        return response()->json(['success'=>true,'data'=>$driver]);
     }
 
     public function confirmTrip($tripID, Request $request)

@@ -20,9 +20,10 @@ class CreateEmployeesTable extends Migration
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
             $table->string('mobile')->nullable();
-            $table->string('telephone')->nullable();
+            $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->boolean('driver_interaction')->default(0)->notes('can communicate with driver directly'); //can communicate with driver directly
+            $table->string('image')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
         });

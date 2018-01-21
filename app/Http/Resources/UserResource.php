@@ -28,8 +28,10 @@ class UserResource extends Resource
                 'active' => $this->active,
                 'type'   => $this->type,
                 'admin'  => $this->when($this->admin, true),
-                'profile' => $this->when($this->type === 10, function () {
-                    return new DriverResource($this->driver);
+                'profile' => $this->when($this->type === 10 || $this->type === 20, function () {
+                    return  $this->type === 10 ?
+                        new DriverResource($this->driver) :
+                        new ShipperResource($this->shipper);
                 }),
             ],
         ];

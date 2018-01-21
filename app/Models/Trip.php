@@ -31,4 +31,9 @@ class Trip extends BaseModel
 
     }
 
+    public function scopePending($query)
+    {
+        return $query->where('status','pending');
+    }
+
 }

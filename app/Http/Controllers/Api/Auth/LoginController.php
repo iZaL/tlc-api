@@ -86,7 +86,9 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name'     => 'required|max:50',
+            'name_en'     => 'required|max:50',
+            'name_ar'     => 'max:50',
+            'name_hi'     => 'max:50',
             'email'    => 'email|required|unique:users,email',
             'password' => 'required|confirmed|min:6',
             'mobile'   => 'required|unique:users,mobile',
@@ -96,20 +98,27 @@ class LoginController extends Controller
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
-        $name = $request->name;
+        $nameEn = $request->name_en;
+        $nameAr = $request->name_ar;
+        $nameHi = $request->name_hi;
         $email = strtolower($request->email);
         $password = bcrypt($request->password);
         $mobile = $request->mobile;
         $apiToken = str_random(16);
+        $otp = rand(1000,9999);
         $isShipper = $request->has('isShipper') ? $request->isShipper : false;
 
         try {
             $user = $this->userRepo->create([
-                'name'      => $name,
+                'name_en'      => $nameEn,
+                'name_ar'      => $nameAr,
+                'name_hi'      => $nameHi,
                 'email'     => $email,
                 'password'  => $password,
                 'mobile'    => $mobile,
-                'api_token' => $apiToken
+                'api_token' => $apiToken,
+                'otp' => $otp,
+
             ]);
 
             if ($isShipper) {

@@ -8,9 +8,7 @@ class ShipperLocation extends BaseModel
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
-
     ];
-//    protected $appends = ['type'];
 
     public function country()
     {

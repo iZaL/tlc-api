@@ -85,10 +85,12 @@ class TripManagerTest extends TestCase
      */
     public function test_is_load_fleets_booked_throws_exception_if_fleet_counts_are_booked()
     {
-        $load = $this->_createLoad(['fleet_count'=>2]);
+        $load = $this->_createLoad(['fleet_count'=>4]);
         $driver = $this->_createDriver();
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'confirmed']);
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>111,'status' => 'confirmed']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>122,'status' => 'working']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>13311,'status' => 'completed']);
         $method = self::getMethod('isLoadFleetsBooked');
         $tripManager = new TripManager($trip,$driver);
         $method->invokeArgs($tripManager,[]);

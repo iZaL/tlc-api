@@ -14,4 +14,10 @@ class Country extends BaseModel
     {
         return $this->hasMany(Route::class,'destination_country_id');
     }
+
+    public function getNameAttribute()
+    {
+        $attribute = 'name';
+        return $this->{$attribute . '_' . app()->getLocale()} ? : $this->{$attribute . '_en'};
+    }
 }

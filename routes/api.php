@@ -16,8 +16,6 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
     Route::middleware(['auth:api'])->group(function () {
 
-
-
         /**
          * |--------------------------------------------------------------------------
          * | Truck Routes
@@ -31,6 +29,9 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
         Route::group(['prefix' => 'shipper','namespace' => 'Shipper','middleware' => 'shipper'], function () {
 
+            Route::get('profile','ProfileController@getProfile');
+            Route::post('profile/update','ProfileController@update');
+
             /**
              * |--------------------------------------------------------------------------
              * | Load Routes
@@ -40,6 +41,24 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads/create', 'LoadsController@createLoad')->name('loads.create');
             Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
+
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | Employees
+             * |--------------------------------------------------------------------------
+             */
+            Route::get('employees','EmployeesController@index');
+            Route::post('employees','EmployeesController@store');
+
+
+            /**
+             * |--------------------------------------------------------------------------
+             * | Locations
+             * |--------------------------------------------------------------------------
+             */
+            Route::get('locations','LocationsController@index');
+            Route::post('locations','LocationsController@store');
 
         });
 
@@ -71,9 +90,8 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
 
 //            Route::get('jobs','LoadsController@getLoadRequests');
-            Route::get('trips','TripsController@getUpcomingTrips');
+            Route::get('trips/upcoming','TripsController@getUpcomingTrips');
             Route::post('trips/{id}/confirm','TripsController@confirmTrip');
-
 
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
 

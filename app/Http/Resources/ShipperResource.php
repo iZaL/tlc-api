@@ -18,8 +18,17 @@ class ShipperResource extends Resource
     {
         return  [
             'id' => $this->id,
-            'origin' => new CountryResource($this->origin),
-            'destination' => new CountryResource($this->destination),
+            'schema' => 'shippers',
+            'mobile' => $this->mobile,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'address' => $this->address,
+            'book_direct' => $this->book_direct,
+            'available_credit' => $this->available_credit,
+            'cancellation_fee' => $this->cancellation_fee,
+            'active' => $this->active,
+            'employees' => EmployeeResource::collection($this->whenLoaded('employees')),
+            'locations' => LocationResource::collection($this->whenLoaded('locations')),
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class LoadsResource extends Resource
+class LoadResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -26,7 +26,7 @@ class LoadsResource extends Resource
             'fleet_count' => $this->fleet_count,
             'request_documents' => $this->request_documents,
             'request_pictures' => $this->request_pictures,
-            'created_at' => $this->created_at,
+//            'created_at' => $this->created_at,
             'shipper' => new ShipperResource($this->whenLoaded('shipper')),
             'origin' => new ShipperLocationResource($this->whenLoaded('origin')),
             'destination' => new ShipperLocationResource($this->whenLoaded('destination')),

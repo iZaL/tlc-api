@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LoadResourceCollection;
-use App\Http\Resources\LoadsResource;
+use App\Http\Resources\LoadResource;
 use App\Models\Country;
 use App\Models\Load;
 use Illuminate\Http\Request;
@@ -92,7 +92,7 @@ class LoadsController extends Controller
             'loads.trailer'
         ])->find($loadID);
 
-        return response()->json(['success'=>true,'data'=>new LoadsResource($load)]);
+        return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
 
     }
 

@@ -29,9 +29,9 @@ class DriverTripsTest extends TestCase
         $validTrip = $validLoad->trips()->create(['driver_id' => $driver->id]);
         $expiredTrip = $expiredLoad->trips()->create(['driver_id' => $driver->id]);
 
-        $response = $this->json('GET', '/api/driver/trips', [], $header);
+        $response = $this->json('GET', '/api/driver/trips/upcoming', [], $header);
 
-        $response->assertJson(['success'=>true,'data'=>[['id'=>$validTrip->id]]]);
+        $response->assertJson(['success'=>true,'data'=>['upcoming_trips'=>[['id'=>$validTrip->id]]]]);
 
         $missingJsonFragment = ['id'=>$expiredTrip->id];
 

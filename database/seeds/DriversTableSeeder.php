@@ -58,8 +58,8 @@ class DriversTableSeeder extends Seeder
 
         // create shipper
         $shipper = factory(\App\Models\Shipper::class)->create();
-        $shipperOrigin= $shipper->locations()->create(['country_id' => $kw->id,'type' => 'origin', 'latitude' => '29.3759', 'longitude' => '47.9774','city_en' => 'Jahra']);
-        $shipperDestination = $shipper->locations()->create(['country_id' => $sa->id,'type' => 'destination', 'latitude' => '23.8859', 'longitude' => '45.0792','city_en' => 'Jeddah']);
+        $shipperOrigin= $shipper->locations()->create(['country_id' => $kw->id,'type' => 'pick', 'latitude' => '29.3759', 'longitude' => '47.9774','city_en' => 'Jahra']);
+        $shipperDestination = $shipper->locations()->create(['country_id' => $sa->id,'type' => 'drop', 'latitude' => '23.8859', 'longitude' => '45.0792','city_en' => 'Jeddah']);
 
         $load = factory(\App\Models\Load::class)->create([
             'shipper_id' => $shipper->id,

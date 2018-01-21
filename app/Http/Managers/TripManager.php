@@ -123,6 +123,7 @@ class TripManager
         $load = $this->trip->booking;
         $fleetCount = $load->fleet_count;
 
+
         $loadTrips = $load->trips()
             ->where('status', 'confirmed')
             ->orWhere('status', 'working')
@@ -130,7 +131,7 @@ class TripManager
             ->count()
         ;
 
-        if ($loadTrips === $fleetCount) {
+        if ($loadTrips >= $fleetCount) {
             throw new FleetsBookedException('fleet_bookings_full');
         }
 
@@ -142,7 +143,7 @@ class TripManager
      * @throws BusyOnScheduleException
      * Checks whether the driver's available date doesn't match the load date
      */
-    public function driverHasAnotherTrip()
+    private function driverHasAnotherTrip()
     {
         $driver = $this->driver;
         $loadDate = $this->trip->booking->load_date;

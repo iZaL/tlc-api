@@ -19,4 +19,10 @@ class Shipper extends BaseModel
     {
         return $this->hasMany(ShipperLocation::class);
     }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
+
 }
