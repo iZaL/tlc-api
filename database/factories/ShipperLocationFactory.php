@@ -8,7 +8,7 @@ $factory->define(\App\Models\ShipperLocation::class, function (Faker $faker) {
         'country_id'  => \App\Models\Country::all()->count() ?  \App\Models\Country::all()->random()->first()->id : 1,
         "latitude" => mt_rand(29.10,29.90).'.'.mt_rand(10,100),
         "longitude" => mt_rand(47.10,47.90).'.'.mt_rand(10,100),
-        'type' => array_rand(['drop'=>'drop','pick' => 'pick']),
+        'type' => array_rand(['origin'=>'origin','destination' => 'destination']),
         'city_en' => $faker->city,
         'city_ar' => $faker->city,
         'state_ar' => $faker->city,

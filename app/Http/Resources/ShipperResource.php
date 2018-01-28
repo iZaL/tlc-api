@@ -29,6 +29,7 @@ class ShipperResource extends Resource
             'active' => $this->active,
             'employees' => EmployeeResource::collection($this->whenLoaded('employees')),
             'locations' => LocationResource::collection($this->whenLoaded('locations')),
+            'loads' => LoadResource::collection($this->whenLoaded('loads')),
         ];
     }
 }

@@ -28,7 +28,7 @@ class CreateShipperLocationsTable extends Migration
             $table->mediumText('address_en')->nullable();
             $table->mediumText('address_ar')->nullable();
             $table->mediumText('address_hi')->nullable();
-            $table->string('type'); // pick, drop
+            $table->string('type'); // origin, destination
             $table->timestamps();
         });
     }

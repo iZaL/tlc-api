@@ -5,6 +5,11 @@ namespace App\Models;
 class Shipper extends BaseModel
 {
 
+    public function loads()
+    {
+        return $this->hasMany(Load::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

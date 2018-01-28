@@ -38,9 +38,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
              * |--------------------------------------------------------------------------
              */
 
-            Route::get('loads/create', 'LoadsController@createLoad')->name('loads.create');
-            Route::post('loads', 'LoadsController@storeLoad')->name('loads.store');
-            Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
+            Route::get('loads/create', 'LoadsController@createLoad');
+            Route::post('loads', 'LoadsController@storeLoad');
+            Route::get('loads', 'LoadsController@getLoads');
+            Route::get('loads/add/data', 'LoadsController@getLoadAddData');
 
 
             /**

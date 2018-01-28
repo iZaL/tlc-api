@@ -8,15 +8,21 @@ class Load extends BaseModel
     protected $fillable = [
         'shipper_id',
         'trailer_id',
+        'packaging_id',
         'origin_location_id',
         'destination_location_id',
         'price',
         'request_documents',
         'request_pictures',
-        'fixed_rate',
         'load_date',
+        'load_time',
+        'receiver_name',
+        'receiver_email',
+        'receiver_phone',
+        'receiver_mobile',
         'status',
-        'distance'
+        'weight',
+        'use_own_truck',
     ];
 
     public function origin()

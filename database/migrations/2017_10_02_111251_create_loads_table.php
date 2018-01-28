@@ -32,6 +32,11 @@ class CreateLoadsTable extends Migration
             $table->string('load_time',10)->nullable();
             $table->date('unload_date')->nullable();
             $table->string('unload_time', 10)->nullable();
+            $table->string('receiver_name')->nullable();
+            $table->string('receiver_email')->nullable();
+            $table->string('receiver_mobile')->nullable();
+            $table->string('receiver_phone')->nullable();
+            $table->string('weight')->nullable();
             $table->string('status',10)->default('pending')->notes(
                 // default pending
                 // rejected (the load has been rejected )

@@ -20,6 +20,8 @@ class LoadResource extends Resource
             'invoice_id' => $this->invoice_id,
             'use_own_truck' => $this->use_own_truck,
             'scheduled_at' => $this->scheduled_at,
+            'date' => $this->load_date,
+            'time' => $this->load_time,
             'status' => $this->status,
             'fixed_rate' => $this->fixed_rate,
             'distance' => $this->distance,
