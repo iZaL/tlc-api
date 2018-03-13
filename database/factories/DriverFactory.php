@@ -7,7 +7,7 @@ $factory->define(\App\Models\Driver::class, function (Faker $faker) {
         'user_id'                => \App\Models\User::all()->count() ? \App\Models\User::first()->id : 1,
         'nationality_country_id' => \App\Models\Country::all()->count() ? \App\Models\Country::first()->id : 1,
         'truck_id'               => \App\Models\Truck::all()->count() ? \App\Models\Truck::all()->random()->first()->id : 1,
-        'shipper_id'             => \App\Models\Shipper::all()->count() ? \App\Models\Shipper::all()->random()->first()->id : 1,
+        'customer_id'             => \App\Models\Customer::all()->count() ? \App\Models\Customer::all()->random()->first()->id : 1,
         'mobile'                 => '99' . rand(111111, 999999),
         'offline'                => 0,
         'active'                 => 1,

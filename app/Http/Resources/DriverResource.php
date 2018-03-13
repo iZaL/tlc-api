@@ -31,7 +31,7 @@ class DriverResource extends Resource
             'routes' => RoutesResource::collection($this->whenLoaded('routes')),
             'visas' => LicenseVisaResource::collection($this->whenLoaded('visas')),
             'licenses' => LicenseVisaResource::collection($this->whenLoaded('licenses')),
-            'shipper' => new ShipperResource($this->whenLoaded('shipper')),
+            'customer' => new CustomerResource($this->whenLoaded('customer')),
             'loads' => LoadResource::collection($this->whenLoaded('loads'))
         ];
     }

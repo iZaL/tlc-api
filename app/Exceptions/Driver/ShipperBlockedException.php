@@ -9,7 +9,7 @@
 namespace App\Exceptions\Driver;
 
 
-class ShipperBlockedException extends \Exception
+class CustomerBlockedException extends \Exception
 {
 
 }

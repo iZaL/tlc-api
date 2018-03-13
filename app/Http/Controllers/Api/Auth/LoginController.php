@@ -106,7 +106,7 @@ class LoginController extends Controller
         $mobile = $request->mobile;
         $apiToken = str_random(16);
         $otp = rand(1000,9999);
-        $isShipper = $request->has('isShipper') ? $request->isShipper : false;
+        $isCustomer = $request->has('isCustomer') ? $request->isCustomer : false;
 
         try {
             $user = $this->userRepo->create([
@@ -121,8 +121,8 @@ class LoginController extends Controller
 
             ]);
 
-            if ($isShipper) {
-                $user->shipper()->create();
+            if ($isCustomer) {
+                $user->customer()->create();
             } else {
                 $user->driver()->create();
             }

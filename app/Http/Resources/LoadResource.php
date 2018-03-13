@@ -29,9 +29,9 @@ class LoadResource extends Resource
             'request_documents' => $this->request_documents,
             'request_pictures' => $this->request_pictures,
 //            'created_at' => $this->created_at,
-            'shipper' => new ShipperResource($this->whenLoaded('shipper')),
-            'origin' => new ShipperLocationResource($this->whenLoaded('origin')),
-            'destination' => new ShipperLocationResource($this->whenLoaded('destination')),
+            'customer' => new CustomerResource($this->whenLoaded('customer')),
+            'origin' => new CustomerLocationResource($this->whenLoaded('origin')),
+            'destination' => new CustomerLocationResource($this->whenLoaded('destination')),
             'trailer' => new TrailerResource($this->whenLoaded('trailer')),
         ];
     }

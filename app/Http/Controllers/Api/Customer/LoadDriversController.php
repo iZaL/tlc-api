@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Api\Shipper;
+namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DriverResource;
@@ -9,15 +9,15 @@ use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\PackagingResource;
 use App\Http\Resources\PassResource;
-use App\Http\Resources\ShipperLocationResource;
-use App\Http\Resources\ShipperResource;
+use App\Http\Resources\CustomerLocationResource;
+use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
 use App\Models\Country;
 use App\Models\Driver;
 use App\Models\Load;
 use App\Models\Packaging;
 use App\Models\Pass;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -28,9 +28,9 @@ use Illuminate\Support\Facades\Validator;
 class LoadDriversController extends Controller
 {
     /**
-     * @var Shipper
+     * @var Customer
      */
-    private $shipperModel;
+    private $customerModel;
     /**
      * @var Load
      */
@@ -58,7 +58,7 @@ class LoadDriversController extends Controller
 
     /**
      * LoadsController constructor.
-     * @param Shipper $shipperModel
+     * @param Customer $customerModel
      * @param Load $loadModel
      * @param Country $countryModel
      * @param Trailer $trailerModel
@@ -66,9 +66,9 @@ class LoadDriversController extends Controller
      * @param Pass $passModel
      * @param Driver $driverModel
      */
-    public function __construct(Shipper $shipperModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel, Driver $driverModel)
+    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel, Driver $driverModel)
     {
-        $this->shipperModel = $shipperModel;
+        $this->customerModel = $customerModel;
         $this->loadModel = $loadModel;
         $this->countryModel = $countryModel;
         $this->trailerModel = $trailerModel;
@@ -87,7 +87,7 @@ class LoadDriversController extends Controller
          * has eno
          */
 
-        /** check whether the shipper
+        /** check whether the customer
          * has enough credits
          * is active
          * is not blocked by tlc
@@ -118,10 +118,10 @@ class LoadDriversController extends Controller
 
 //        $loads =
 //            DB::table('loads')
-//                ->join('shipper_locations as sl', 'loads.origin_location_id', 'sl.id')
-//                ->join('shippers as s', 'loads.shipper_id', 's.id')
+//                ->join('customer_locations as sl', 'loads.origin_location_id', 'sl.id')
+//                ->join('customers as s', 'loads.customer_id', 's.id')
 //                ->leftJoin('load_passes as lp', 'loads.id', 'lp.load_id')
-//                ->leftJoin('drivers as d', 'd.shipper_id', 's.id')
+//                ->leftJoin('drivers as d', 'd.customer_id', 's.id')
 //                ->when($trailerID, function ($q) use ($trailerID) {
 //                    $q->where('trailer_id', $trailerID);
 //                })
@@ -138,12 +138,12 @@ class LoadDriversController extends Controller
 //                })
 //                ->where('loads.origin_location_id', $currentCountry->id)
 //                ->whereIn('loads.destination_location_id', $validCountries)
-//                ->whereNotIn('loads.shipper_id', $blockedShippers)
+//                ->whereNotIn('loads.customer_id', $blockedCustomers)
 //                ->select('loads.*')
 //                ->paginate(20);
 //        $driverValidVisaCountries = $driver->valid_visas->pluck('id');
 //        $driverValidLicenses = $driver->valid_licenses->pluck('id');
-//        $blockedShippers = $driver->blocked_list->pluck('id');
+//        $blockedCustomers = $driver->blocked_list->pluck('id');
 //        $driverValidPasses = $driver->passes->pluck('id');
 
 

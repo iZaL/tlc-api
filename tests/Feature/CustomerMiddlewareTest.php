@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class DriverMiddlewareTest extends TestCase
+class CustomerMiddlewareTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -20,19 +20,19 @@ class DriverMiddlewareTest extends TestCase
         parent::setUp();
     }
 
-    public function testDriverMiddlewareReturnsFalseForInvalidUser()
+    public function testCustomerMiddlewareReturnsFalseForInvalidUser()
     {
-        $driver = $this->_createDriver(['active' => 0]);
-        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-        $response = $this->json('POST', '/api/driver/profile/update', [], $header);
+        $customer = $this->_createCustomer(['active' => 0]);
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+        $response = $this->json('POST', '/api/customer/loads', [], $header);
         $response->assertStatus(403);
     }
 
     public function testCustomerMiddlewareReturnsTrueForValidUser()
     {
-        $driver = $this->_createDriver(['active' => 1]);
-        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-        $response = $this->json('POST', '/api/driver/profile/update', [], $header);
+        $customer = $this->_createCustomer(['active' => 1]);
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+        $response = $this->json('POST', '/api/customer/loads', [], $header);
         $response->assertStatus(422);
     }
 }

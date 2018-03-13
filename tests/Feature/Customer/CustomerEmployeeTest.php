@@ -10,7 +10,7 @@ use App\Models\Employee;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Pass;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use App\Models\Truck;
 use App\Models\User;
@@ -21,24 +21,24 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShipperEmployeeTest extends TestCase
+class CustomerEmployeeTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    public function test_shipper_gets_employees()
+    public function test_customer_gets_employees()
     {
-        $shipper = $this->_createShipper();
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $response = $this->json('GET', '/api/shipper/employees', [], $header);
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+        $response = $this->json('GET', '/api/customer/employees', [], $header);
         $response->assertJson(['success'=>true]);
     }
 
 
-    public function test_shipper_create_employee()
+    public function test_customer_create_employee()
     {
-        $shipper = $this->_createShipper();
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $employee = factory(Employee::class)->create();
 
@@ -51,7 +51,7 @@ class ShipperEmployeeTest extends TestCase
             'email' => 'z4ls@a.com',
         ];
 
-        $response = $this->json('POST', '/api/shipper/employees', $data, $header);
+        $response = $this->json('POST', '/api/customer/employees', $data, $header);
         $response->assertJson(['success'=>true]);
     }
 

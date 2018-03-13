@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Shipper extends BaseModel
+class Customer extends BaseModel
 {
 
     public function loads()
@@ -22,7 +22,7 @@ class Shipper extends BaseModel
 
     public function locations()
     {
-        return $this->hasMany(ShipperLocation::class);
+        return $this->hasMany(CustomerLocation::class);
     }
 
     public function employees()

@@ -5,13 +5,13 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class Shipper
+class Customer
 {
     public function handle($request, Closure $next)
     {
         $user = auth()->user();
 
-        if ($user->shipper && $user->shipper->active) {
+        if ($user->customer && $user->customer->active) {
             return $next($request);
         }
 

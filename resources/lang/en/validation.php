@@ -117,7 +117,7 @@ return [
     */
 
     'attributes' => [
-        'shipper_id'              => '',
+        'customer_id'              => '',
         'origin_location_id'      => '',
         'destination_location_id' => '',
         'price'                   => '',

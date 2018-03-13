@@ -11,8 +11,8 @@ use App\Models\Load;
 use App\Models\Location;
 use App\Models\Packaging;
 use App\Models\Pass;
-use App\Models\Shipper;
-use App\Models\ShipperLocation;
+use App\Models\Customer;
+use App\Models\CustomerLocation;
 use App\Models\Trailer;
 use App\Models\Truck;
 use App\Models\User;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShipperDriverSelectionTest extends TestCase
+class CustomerDriverSelectionTest extends TestCase
 {
 
     use RefreshDatabase;

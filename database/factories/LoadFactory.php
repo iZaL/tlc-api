@@ -4,10 +4,10 @@ use Faker\Generator as Faker;
 
 $factory->define(\App\Models\Load::class, function (Faker $faker) {
     $load = [
-        'shipper_id' => \App\Models\Shipper::all()->count() > 0 ? \App\Models\Shipper::all()->random()->first()->id : 1,
+        'customer_id' => \App\Models\Customer::all()->count() > 0 ? \App\Models\Customer::all()->random()->first()->id : 1,
         'trailer_id' =>  \App\Models\Trailer::all()->count() > 0 ? \App\Models\Trailer::all()->random()->first()->id : 1,
-        'origin_location_id' => \App\Models\ShipperLocation::all()->count() > 0 ? \App\Models\ShipperLocation::all()->random()->first()->id : 1,
-        'destination_location_id' => \App\Models\ShipperLocation::all()->count() > 0 ? \App\Models\ShipperLocation::all()->random()->first()->id : 1,
+        'origin_location_id' => \App\Models\CustomerLocation::all()->count() > 0 ? \App\Models\CustomerLocation::all()->random()->first()->id : 1,
+        'destination_location_id' => \App\Models\CustomerLocation::all()->count() > 0 ? \App\Models\CustomerLocation::all()->random()->first()->id : 1,
         'fleet_count' => rand(1,4),
         'price' => rand(100,1000),
         'distance' => rand(100,1000),

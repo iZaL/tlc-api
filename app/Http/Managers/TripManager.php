@@ -7,7 +7,7 @@ use App\Exceptions\Driver\BusyOnScheduleException;
 use App\Exceptions\Driver\DuplicateTripException;
 use App\Exceptions\Driver\FleetsBookedException;
 use App\Exceptions\Driver\LoadHasAlreadyConfirmed;
-use App\Exceptions\Driver\ShipperBlockedException;
+use App\Exceptions\Driver\CustomerBlockedException;
 use App\Exceptions\Driver\TLCBlockedException;
 use App\Exceptions\Load\LoadExpiredException;
 use App\Exceptions\TripConfirmationFailedException;
@@ -78,15 +78,15 @@ class TripManager
 
     /**
      * @return boolean
-     * @throws ShipperBlockedException
+     * @throws CustomerBlockedException
      */
-    private function isDriverBlockedByShipper()
+    private function isDriverBlockedByCustomer()
     {
-        $shipperID = $this->trip->booking->shipper_id;
+        $customerID = $this->trip->booking->customer_id;
 
         $driver = $this->driver;
-        if ($driver->blocked_list->contains($shipperID)) {
-            throw new ShipperBlockedException('driver_blocked');
+        if ($driver->blocked_list->contains($customerID)) {
+            throw new CustomerBlockedException('driver_blocked');
         }
 
         return false;
@@ -205,7 +205,7 @@ class TripManager
     {
         $this->isValidLoad();
         $this->isDriverBlocked();
-        $this->isDriverBlockedByShipper();
+        $this->isDriverBlockedByCustomer();
         $this->hasDuplicateTrip();
         $this->isLoadFleetsBooked();
         $this->driverHasAnotherTrip();

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Shipper;
+namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\Shipper;
-use App\Http\Resources\ShipperResource;
+use App\Http\Middleware\Customer;
+use App\Http\Resources\CustomerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,30 +12,30 @@ use Illuminate\Support\Facades\Validator;
 class ProfileController extends Controller
 {
 
-    private $shipperModel;
+    private $customerModel;
 
     /**
-     * @param Shipper $shipperModel
+     * @param Customer $customerModel
      */
-    public function __construct(Shipper $shipperModel)
+    public function __construct(Customer $customerModel)
     {
-        $this->shipperModel = $shipperModel;
+        $this->customerModel = $customerModel;
     }
 
     public function getProfile()
     {
         $user = Auth::guard('api')->user();
-        $shipper = $user->shipper;
+        $customer = $user->customer;
 
-        return (new ShipperResource($shipper))->additional([
+        return (new CustomerResource($customer))->additional([
             'success' => true,
             'meta'    => [
                 'name_en'    => $user->name_en,
                 'name_ar'    => $user->name_ar,
                 'name_hi'    => $user->name_hi,
-                'address_en' => $shipper->address_en,
-                'address_ar' => $shipper->address_ar,
-                'address_hi' => $shipper->address_hi,
+                'address_en' => $customer->address_en,
+                'address_ar' => $customer->address_ar,
+                'address_hi' => $customer->address_hi,
             ]
         ]);
 
@@ -46,12 +46,12 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::guard('api')->user();
-        $shipper = $user->shipper;
+        $customer = $user->customer;
 
         $validation = Validator::make($request->all(), [
-            'mobile' => 'required|unique:shippers,mobile,' . $shipper->id,
-            'phone' => 'required|unique:shippers,phone,' . $shipper->id,
-            'email' => 'required|unique:shippers,email,' .$shipper->id,
+            'mobile' => 'required|unique:customers,mobile,' . $customer->id,
+            'phone' => 'required|unique:customers,phone,' . $customer->id,
+            'email' => 'required|unique:customers,email,' .$customer->id,
             'address_en' => 'max:255',
             'address_ar' => 'max:255',
             'user' => 'array',
@@ -61,7 +61,7 @@ class ProfileController extends Controller
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
-        $shipper->update([
+        $customer->update([
             'mobile' => $request->mobile,
             'phone' => $request->phone,
             'email' => $request->email,
@@ -71,15 +71,15 @@ class ProfileController extends Controller
 
         $user->update($request->user);
 
-        return (new ShipperResource($shipper))->additional([
+        return (new CustomerResource($customer))->additional([
             'success' => true,
             'meta'    => [
                 'name_en'    => $user->name_en,
                 'name_ar'    => $user->name_ar,
                 'name_hi'    => $user->name_hi,
-                'address_en' => $shipper->address_en,
-                'address_ar' => $shipper->address_ar,
-                'address_hi' => $shipper->address_hi,
+                'address_en' => $customer->address_en,
+                'address_ar' => $customer->address_ar,
+                'address_hi' => $customer->address_hi,
             ]
         ]);
 

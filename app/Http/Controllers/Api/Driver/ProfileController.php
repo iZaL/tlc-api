@@ -47,7 +47,7 @@ class ProfileController extends Controller
             'truck.make',
             'passes',
             'blocked_list',
-            'shipper.user'
+            'customer.user'
         ]);
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);

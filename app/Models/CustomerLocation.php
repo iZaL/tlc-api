@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class ShipperLocation extends BaseModel
+class CustomerLocation extends BaseModel
 {
 
     protected $casts = [

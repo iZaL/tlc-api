@@ -54,15 +54,15 @@ class DriversTableSeeder extends Seeder
 
         // loads
 
-        // create shipper
-        $shipper = factory(\App\Models\Shipper::class)->create();
-        $shipperOrigin= $shipper->locations()->create(['country_id' => $kw->id,'type' => 'pick', 'latitude' => '29.3759', 'longitude' => '47.9774','city_en' => 'Jahra']);
-        $shipperDestination = $shipper->locations()->create(['country_id' => $sa->id,'type' => 'drop', 'latitude' => '23.8859', 'longitude' => '45.0792','city_en' => 'Jeddah']);
+        // create customer
+        $customer = factory(\App\Models\Customer::class)->create();
+        $customerOrigin= $customer->locations()->create(['country_id' => $kw->id,'type' => 'pick', 'latitude' => '29.3759', 'longitude' => '47.9774','city_en' => 'Jahra']);
+        $customerDestination = $customer->locations()->create(['country_id' => $sa->id,'type' => 'drop', 'latitude' => '23.8859', 'longitude' => '45.0792','city_en' => 'Jeddah']);
 
         $load = factory(\App\Models\Load::class)->create([
-            'shipper_id' => $shipper->id,
-            'origin_location_id' => $shipperOrigin->id,
-            'destination_location_id' => $shipperDestination->id
+            'customer_id' => $customer->id,
+            'origin_location_id' => $customerOrigin->id,
+            'destination_location_id' => $customerDestination->id
         ]);
 
         $load->trips()->create(['driver_id'=>$driver->id]);

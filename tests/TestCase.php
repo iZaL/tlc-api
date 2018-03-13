@@ -7,7 +7,7 @@ use App\Models\Driver;
 use App\Models\DriverLicense;
 use App\Models\DriverVisas;
 use App\Models\Load;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -26,7 +26,7 @@ abstract class TestCase extends BaseTestCase
     public function _createLoadPostData($array = [])
     {
         $postData = [
-            'shipper_id'              => 1,
+            'customer_id'              => 1,
             'trailer_id'              => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1,
@@ -73,15 +73,15 @@ abstract class TestCase extends BaseTestCase
             ]);
     }
 
-    public function _createShipper($array = [])
+    public function _createCustomer($array = [])
     {
-        $shipper = factory(Shipper::class)->create(array_merge([
+        $customer = factory(Customer::class)->create(array_merge([
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
         ], $array));
 
-        return $shipper;
+        return $customer;
     }
 
     public function _createDriver($array = [])
@@ -98,7 +98,7 @@ abstract class TestCase extends BaseTestCase
     public function _createLoad($array = [])
     {
         $load = factory(Load::class)->create(array_merge([
-            'shipper_id'              => 1,
+            'customer_id'              => 1,
             'trailer_id'              => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1

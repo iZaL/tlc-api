@@ -31,7 +31,7 @@ class UserResource extends Resource
                 'profile' => $this->when($this->type === 10 || $this->type === 20, function () {
                     return  $this->type === 10 ?
                         new DriverResource($this->driver) :
-                        new ShipperResource($this->shipper);
+                        new CustomerResource($this->customer);
                 }),
             ],
         ];

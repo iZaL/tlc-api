@@ -1,21 +1,21 @@
 <?php
 
 
-namespace App\Http\Controllers\Api\Shipper;
+namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\PackagingResource;
 use App\Http\Resources\PassResource;
-use App\Http\Resources\ShipperLocationResource;
-use App\Http\Resources\ShipperResource;
+use App\Http\Resources\CustomerLocationResource;
+use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
 use App\Models\Country;
 use App\Models\Load;
 use App\Models\Packaging;
 use App\Models\Pass;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,9 +26,9 @@ use Illuminate\Support\Facades\Validator;
 class LoadsController extends Controller
 {
     /**
-     * @var Shipper
+     * @var Customer
      */
-    private $shipperModel;
+    private $customerModel;
     /**
      * @var Load
      */
@@ -52,18 +52,18 @@ class LoadsController extends Controller
 
     /**
      * LoadsController constructor.
-     * @param Shipper $shipperModel
+     * @param Customer $customerModel
      * @param Load $loadModel
      * @param Country $countryModel
      * @param Trailer $trailerModel
      * @param Packaging $packagingModel
      * @param Pass $passModel
      */
-    public function __construct(Shipper $shipperModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel)
+    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel)
     {
-        $this->middleware('shipper')->only(['bookLoad']);
+        $this->middleware('customer')->only(['bookLoad']);
         $this->middleware('driver')->only(['getLoads']);
-        $this->shipperModel = $shipperModel;
+        $this->customerModel = $customerModel;
         $this->loadModel = $loadModel;
         $this->countryModel = $countryModel;
         $this->trailerModel = $trailerModel;
@@ -73,9 +73,9 @@ class LoadsController extends Controller
 
     public function getLoadsByStatus($status, Request $request)
     {
-        $shipper = Auth::guard('api')->user()->shipper;
+        $customer = Auth::guard('api')->user()->customer;
         $loads = $this->loadModel->with([
-            'shipper',
+            'customer',
             'origin.country',
             'destination.country',
             'trailer',
@@ -88,22 +88,22 @@ class LoadsController extends Controller
     {
         // get trailers
         // get packaging
-        $shipper = Auth::guard('api')->user()->shipper;
+        $customer = Auth::guard('api')->user()->customer;
 
         $trailers = $this->trailerModel->active()->get();
         $packaging = $this->packagingModel->active()->get();
         $passes = $this->passModel->with(['country'])->active()->get();
-        $locations = $shipper->locations;
+        $locations = $customer->locations;
 
         $locations->load('country');
 
-        $shipper->locations = ShipperLocationResource::collection($locations);
+        $customer->locations = CustomerLocationResource::collection($locations);
 
         return response()->json(['success' => true, 'data' => [
             'trailers'  => TrailerResource::collection($trailers),
             'packaging' => PackagingResource::collection($packaging),
             'passes'    => PassResource::collection($passes),
-            'shipper'   => new ShipperResource($shipper)
+            'customer'   => new CustomerResource($customer)
         ]]);
 
     }
@@ -131,17 +131,17 @@ class LoadsController extends Controller
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
-        $shipper = Auth::guard('api')->user()->shipper;
+        $customer = Auth::guard('api')->user()->customer;
 
         $data = $request->all();
 
         $data['load_date'] = Carbon::parse($request->load_date)->toDateString();
 
-        if ($shipper->canBookDirect()) {
+        if ($customer->canBookDirect()) {
             $data['status'] = 'approved';
         }
 
-        $loadData = array_merge($data, ['shipper_id' => $shipper->id]);
+        $loadData = array_merge($data, ['customer_id' => $customer->id]);
 
         $load = $this->loadModel->create($loadData);
 
@@ -150,9 +150,9 @@ class LoadsController extends Controller
             $load->passes()->sync($request->passes);
         }
 
-        $shipper->load('loads.passes');
+        $customer->load('loads.passes');
 
-        return response()->json(['success' => true, 'data' => new ShipperResource($shipper), 'type' => 'created', 'message' => trans('general.load_created')]);
+        return response()->json(['success' => true, 'data' => new CustomerResource($customer), 'type' => 'created', 'message' => trans('general.load_created')]);
 
     }
 

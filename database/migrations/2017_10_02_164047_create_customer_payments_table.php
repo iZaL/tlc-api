@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShipperPaymentsTable extends Migration
+class CreateCustomerPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateShipperPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shipper_payments', function (Blueprint $table) {
+        Schema::create('customer_payments', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
         });
@@ -26,7 +26,7 @@ class CreateShipperPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipper_payments');
+        Schema::dropIfExists('customer_payments');
     }
 
 }

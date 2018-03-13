@@ -15,7 +15,7 @@ class CreateLoadsTable extends Migration
     {
         Schema::create('loads', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('shipper_id');
+            $table->integer('customer_id');
             $table->integer('origin_location_id');
             $table->integer('destination_location_id');
             $table->decimal('price')->nullable();

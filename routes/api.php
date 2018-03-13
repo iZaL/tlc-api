@@ -29,7 +29,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
         Route::get('trailers/makes','TrucksController@getTrailerMakes');
 
 
-        Route::group(['prefix' => 'shipper','namespace' => 'Shipper','middleware' => 'shipper'], function () {
+        Route::group(['prefix' => 'customer','namespace' => 'Customer','middleware' => 'customer'], function () {
 
             Route::get('profile','ProfileController@getProfile');
             Route::post('profile/update','ProfileController@update');

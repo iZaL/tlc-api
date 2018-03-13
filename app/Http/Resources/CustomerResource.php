@@ -6,7 +6,7 @@ use App\Models\Driver;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ShipperResource extends Resource
+class CustomerResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -18,7 +18,7 @@ class ShipperResource extends Resource
     {
         return  [
             'id' => $this->id,
-            'schema' => 'shippers',
+            'schema' => 'customers',
             'mobile' => $this->mobile,
             'phone' => $this->phone,
             'email' => $this->email,

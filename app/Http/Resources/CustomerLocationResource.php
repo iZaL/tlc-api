@@ -6,7 +6,7 @@ use App\Models\Truck;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ShipperLocationResource extends Resource
+class CustomerLocationResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -24,7 +24,7 @@ class ShipperLocationResource extends Resource
             'state' => $this->state,
             'address' => $this->address,
             'type' => $this->type,
-            'shipper' => new ShipperResource($this->whenLoaded('shipper')),
+            'customer' => new CustomerResource($this->whenLoaded('customer')),
             'country' => new CountryResource($this->whenLoaded('country')),
         ];
     }

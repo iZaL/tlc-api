@@ -25,7 +25,7 @@ class LocationResource extends Resource
             'state'     => $this->state,
             'address'   => $this->address,
             'type'      => $this->type,
-            'shipper'   => new ShipperResource($this->whenLoaded('shipper')),
+            'customer'   => new CustomerResource($this->whenLoaded('customer')),
             'country'   => new CountryResource($this->whenLoaded('country')),
         ];
     }

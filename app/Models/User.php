@@ -29,14 +29,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'otp', 'api_token', 'driver', 'shipper', 'updated_at'
+        'password', 'remember_token', 'otp', 'api_token', 'driver', 'customer', 'updated_at'
     ];
 
     protected $appends = ['type'];
 
-    public function shipper()
+    public function customer()
     {
-        return $this->hasOne(Shipper::class);
+        return $this->hasOne(Customer::class);
     }
 
     public function driver()
@@ -60,7 +60,7 @@ class User extends Authenticatable
             return self::DRIVER_CODE;
         }
 
-        if($this->shipper) {
+        if($this->customer) {
             return self::SHIPPER_CODE;
         }
 

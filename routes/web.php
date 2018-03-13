@@ -4,4 +4,4 @@
 Route::get('/', function () {
 });
 
-Route::get('loads/{id}/drivers','Api\Shipper\LoadDriversController@getDriversForLoad');
+Route::get('loads/{id}/drivers','Api\Customer\LoadDriversController@getDriversForLoad');

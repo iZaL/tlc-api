@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ShippersTableSeeder extends Seeder
+class CustomerLocationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,6 @@ class ShippersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Shipper::class,5)->create();
-        factory(\App\Models\Employee::class,5)->create();
+        factory(\App\Models\CustomerLocation::class,5)->create();
     }
 }

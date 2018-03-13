@@ -24,12 +24,12 @@ class UserTest extends TestCase
         $admin = factory(User::class)->create(['admin'=>self::ADMIN_CODE]);
         $this->assertEquals($admin->type,self::ADMIN_CODE);
 
-        $shipper = factory(User::class)->create();
-        $shipper->shipper()->create();
-        $this->assertEquals($shipper->type,self::SHIPPER_CODE);
-        $this->assertNotEquals($shipper->type,self::DRIVER_CODE);
-        $this->assertNotEquals($shipper->type,self::ADMIN_CODE);
-        $this->assertNotEquals($shipper->type,self::GUEST_CODE);
+        $customer = factory(User::class)->create();
+        $customer->customer()->create();
+        $this->assertEquals($customer->type,self::SHIPPER_CODE);
+        $this->assertNotEquals($customer->type,self::DRIVER_CODE);
+        $this->assertNotEquals($customer->type,self::ADMIN_CODE);
+        $this->assertNotEquals($customer->type,self::GUEST_CODE);
 
         $driver = factory(User::class)->create();
         $driver->driver()->create();

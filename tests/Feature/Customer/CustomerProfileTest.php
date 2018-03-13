@@ -10,7 +10,7 @@ use App\Models\Employee;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Pass;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use App\Models\Truck;
 use App\Models\User;
@@ -21,16 +21,16 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShipperProfileTest extends TestCase
+class CustomerProfileTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    public function test_shipper_gets_profile()
+    public function test_customer_gets_profile()
     {
-        $shipper = $this->_createShipper();
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
-        $response = $this->json('GET', '/api/shipper/profile', [], $header);
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+        $response = $this->json('GET', '/api/customer/profile', [], $header);
         $response->assertJson(['success'=>true]);
     }
 

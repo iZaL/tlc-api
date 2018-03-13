@@ -6,7 +6,7 @@ namespace App\Http\Managers;
 use App\Exceptions\Driver\BusyOnScheduleException;
 use App\Exceptions\Driver\DuplicateTripException;
 use App\Exceptions\Driver\FleetsBookedException;
-use App\Exceptions\Driver\ShipperBlockedException;
+use App\Exceptions\Driver\CustomerBlockedException;
 use App\Exceptions\Driver\TLCBlockedException;
 use App\Exceptions\Load\LoadExpiredException;
 use App\Exceptions\TripConfirmationFailedException;

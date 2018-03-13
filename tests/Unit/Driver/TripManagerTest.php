@@ -52,16 +52,16 @@ class TripManagerTest extends TestCase
     }
 
     /**
-     * @expectedException \App\Exceptions\Driver\ShipperBlockedException
+     * @expectedException \App\Exceptions\Driver\CustomerBlockedException
      */
-    public function test_is_driver_blocked_by_shipper()
+    public function test_is_driver_blocked_by_customer()
     {
-        $shipper = $this->_createShipper();
-        $load = $this->_createLoad(['shipper_id'=>$shipper->id]);
+        $customer = $this->_createCustomer();
+        $load = $this->_createLoad(['customer_id'=>$customer->id]);
         $driver = $this->_createDriver();
-        $driver->blocked_list()->sync([$shipper->id]);
+        $driver->blocked_list()->sync([$customer->id]);
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver->id]);
-        $method = self::getMethod('isDriverBlockedByShipper');
+        $method = self::getMethod('isDriverBlockedByCustomer');
         $tripManager = new TripManager($trip,$driver);
         $method->invokeArgs($tripManager,[]);
     }

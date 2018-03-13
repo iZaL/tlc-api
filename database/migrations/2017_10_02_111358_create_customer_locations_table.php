@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShipperLocationsTable extends Migration
+class CreateCustomerLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateShipperLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shipper_locations', function (Blueprint $table) {
+        Schema::create('customer_locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('shipper_id');
+            $table->integer('customer_id');
             $table->integer('country_id');
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
@@ -40,6 +40,6 @@ class CreateShipperLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shipper_locations');
+        Schema::dropIfExists('customer_locations');
     }
 }

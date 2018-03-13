@@ -38,9 +38,9 @@ class LoadsController extends Controller
 
     public function getLoadsByStatus($status, Request $request)
     {
-        $shipper = Auth::guard('api')->user()->shipper;
+        $customer = Auth::guard('api')->user()->customer;
         $loads = $this->loadModel->with([
-            'shipper',
+            'customer',
             'origin.country',
             'destination.country',
             'trailer',
@@ -62,17 +62,17 @@ class LoadsController extends Controller
 
         $driverValidVisaCountries = $driver->valid_visas->pluck('id');
         $driverValidLicenses = $driver->valid_licenses->pluck('id');
-        $blockedShippers = $driver->blocked_list->pluck('id');
+        $blockedCustomers = $driver->blocked_list->pluck('id');
         $driverValidPasses = $driver->passes->pluck('id');
 
         $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
 
         $loads =
             DB::table('loads')
-                ->join('shipper_locations as sl', 'loads.origin_location_id', 'sl.id')
-                ->join('shippers as s', 'loads.shipper_id', 's.id')
+                ->join('customer_locations as sl', 'loads.origin_location_id', 'sl.id')
+                ->join('customers as s', 'loads.customer_id', 's.id')
                 ->leftJoin('load_passes as lp', 'loads.id', 'lp.load_id')
-                ->leftJoin('drivers as d', 'd.shipper_id', 's.id')
+                ->leftJoin('drivers as d', 'd.customer_id', 's.id')
                 ->when($trailerID, function ($q) use ($trailerID) {
                     $q->where('trailer_id', $trailerID);
                 })
@@ -89,7 +89,7 @@ class LoadsController extends Controller
                 })
                 ->where('loads.origin_location_id', $currentCountry->id)
                 ->whereIn('loads.destination_location_id', $validCountries)
-                ->whereNotIn('loads.shipper_id', $blockedShippers)
+                ->whereNotIn('loads.customer_id', $blockedCustomers)
                 ->select('loads.*')
                 ->paginate(20);
 

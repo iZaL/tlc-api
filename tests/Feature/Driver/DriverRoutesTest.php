@@ -9,7 +9,7 @@ use App\Models\DriverVisas;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Pass;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use App\Models\Truck;
 use App\Models\User;

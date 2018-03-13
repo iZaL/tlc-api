@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Models\Shipper::class, function (Faker $faker) {
+$factory->define(\App\Models\Customer::class, function (Faker $faker) {
     return [
         'user_id' => \App\Models\User::all()->count() > 0 ? \App\Models\User::all()->random()->first()->id : 1,
         'address_en' => $faker->address,

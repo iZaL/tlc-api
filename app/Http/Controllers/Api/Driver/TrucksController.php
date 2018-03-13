@@ -9,7 +9,7 @@ use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\UserResource;
 use App\Models\Country;
 use App\Models\Load;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use App\Models\TrailerMake;
 use App\Models\Truck;

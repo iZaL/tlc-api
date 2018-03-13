@@ -29,7 +29,7 @@ class EmployeeResource extends Resource
             'image'              => $this->image,
             'active'             => $this->active,
             'driver_interaction' => $this->driver_interaction,
-            'shipper'            => new ShipperResource($this->whenLoaded('shipper')),
+            'customer'            => new CustomerResource($this->whenLoaded('customer')),
         ];
     }
 }

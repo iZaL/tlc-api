@@ -7,7 +7,7 @@ use App\Models\Driver;
 use App\Models\DriverVisas;
 use App\Models\Load;
 use App\Models\Location;
-use App\Models\Shipper;
+use App\Models\Customer;
 use App\Models\Trailer;
 use App\Models\User;
 use Carbon\Carbon;
@@ -17,30 +17,30 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShipperTest extends TestCase
+class CustomerTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    public function test_shipper_is_a_user()
+    public function test_customer_is_a_user()
     {
-        $shipper = factory(Shipper::class)->create([
+        $customer = factory(Customer::class)->create([
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ]);
-        $this->assertInstanceOf(User::class, $shipper->user);
+        $this->assertInstanceOf(User::class, $customer->user);
     }
 
-    public function test_shipper_can_book_load()
+    public function test_customer_can_book_load()
     {
-        $shipper = $this->_createShipper();
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
         $loadData = $this->_createLoadPostData();
         $others = [];
         $postData = array_merge($loadData, $others);
 
-        $response = $this->json('POST', '/api/shipper/loads', $postData, $header);
+        $response = $this->json('POST', '/api/customer/loads', $postData, $header);
         $response
             ->assertStatus(200)
             ->assertJson([
@@ -51,25 +51,25 @@ class ShipperTest extends TestCase
 
     }
 
-    public function test_load_has_status_pending_if_shipper_cannot_book_direct()
+    public function test_load_has_status_pending_if_customer_cannot_book_direct()
     {
-        $shipper = $this->_createShipper(['book_direct' => 0]);
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
+        $customer = $this->_createCustomer(['book_direct' => 0]);
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
         $loadData = $this->_createLoadPostData();
         $others = ['status' => 'pending'];
         $postData = array_merge($loadData, $others);
-        $this->json('POST', '/api/shipper/loads', $loadData, $header);
+        $this->json('POST', '/api/customer/loads', $loadData, $header);
         $this->assertDatabaseHas('loads', $postData);
     }
 
-    public function test_load_has_status_approved_if_shipper_can_book_direct()
+    public function test_load_has_status_approved_if_customer_can_book_direct()
     {
-        $shipper = $this->_createShipper(['book_direct' => 1]);
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
+        $customer = $this->_createCustomer(['book_direct' => 1]);
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
         $loadData = $this->_createLoadPostData();
         $others = ['status' => 'approved'];
         $postData = array_merge($loadData, $others);
-        $this->json('POST', '/api/shipper/loads', $loadData, $header);
+        $this->json('POST', '/api/customer/loads', $loadData, $header);
         $this->assertDatabaseHas('loads', $postData);
     }
 
@@ -77,7 +77,7 @@ class ShipperTest extends TestCase
     /**
      * Status of Loads
      *
-     * 1- Shipper Books a Load, Status = Pending
+     * 1- Customer Books a Load, Status = Pending
      * 2- If Can Book Direct, Then Status = Waiting or Once Admin Approves, Status = Waiting
      * 3- If Admin Cancels, Status = Cancelled
      * 4- Driver Confirms the Booking, Status = Confirmed

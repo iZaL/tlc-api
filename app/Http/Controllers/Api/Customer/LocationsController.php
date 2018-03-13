@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Shipper;
+namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\Shipper;
-use App\Http\Resources\ShipperResource;
+use App\Http\Middleware\Customer;
+use App\Http\Resources\CustomerResource;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,29 +13,29 @@ use Illuminate\Support\Facades\Validator;
 class LocationsController extends Controller
 {
 
-    private $shipperModel;
+    private $customerModel;
     /**
      * @var Employee
      */
     private $employee;
 
     /**
-     * @param Shipper $shipperModel
+     * @param Customer $customerModel
      * @param Employee $employee
      */
-    public function __construct(Shipper $shipperModel, Employee $employee)
+    public function __construct(Customer $customerModel, Employee $employee)
     {
-        $this->shipperModel = $shipperModel;
+        $this->customerModel = $customerModel;
         $this->employee = $employee;
     }
 
     public function index()
     {
         $user = Auth::guard('api')->user();
-        $shipper = $user->shipper;
-        $shipper->load('locations.country');
+        $customer = $user->customer;
+        $customer->load('locations.country');
 
-        return (new ShipperResource($shipper))->additional([
+        return (new CustomerResource($customer))->additional([
             'success' => true,
         ]);
     }
@@ -43,7 +43,7 @@ class LocationsController extends Controller
     public function store(Request $request)
     {
         $user = Auth::guard('api')->user();
-        $shipper = $user->shipper;
+        $customer = $user->customer;
 
         $employee = null;
 
@@ -85,12 +85,12 @@ class LocationsController extends Controller
         if($request->has('id')) {
              $employee->update($data);
         } else {
-            $shipper->employees()->create();
+            $customer->employees()->create();
         }
 
-        $shipper->load('employees');
+        $customer->load('employees');
 
-        return (new ShipperResource($shipper))->additional([
+        return (new CustomerResource($customer))->additional([
             'success' => true,
         ]);
 
@@ -98,12 +98,12 @@ class LocationsController extends Controller
 //    public function update(Request $request)
 //    {
 //        $user = Auth::guard('api')->user();
-//        $shipper = $user->shipper;
+//        $customer = $user->customer;
 //
 //        $validation = Validator::make($request->all(), [
-//            'mobile' => 'required|unique:shippers,mobile,' . $shipper->id,
-//            'phone' => 'required|unique:shippers,phone,' . $shipper->id,
-//            'email' => 'required|unique:shippers,email,' .$shipper->id,
+//            'mobile' => 'required|unique:customers,mobile,' . $customer->id,
+//            'phone' => 'required|unique:customers,phone,' . $customer->id,
+//            'email' => 'required|unique:customers,email,' .$customer->id,
 //            'address_en' => 'max:255',
 //            'address_ar' => 'max:255',
 //            'user' => 'array',
@@ -113,7 +113,7 @@ class LocationsController extends Controller
 //            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
 //        }
 //
-//        $shipper->update([
+//        $customer->update([
 //            'mobile' => $request->mobile,
 //            'phone' => $request->phone,
 //            'email' => $request->email,
@@ -123,15 +123,15 @@ class LocationsController extends Controller
 //
 //        $user->update($request->user);
 //
-//        return (new ShipperResource($shipper))->additional([
+//        return (new CustomerResource($customer))->additional([
 //            'success' => true,
 //            'meta'    => [
 //                'name_en'    => $user->name_en,
 //                'name_ar'    => $user->name_ar,
 //                'name_hi'    => $user->name_hi,
-//                'address_en' => $shipper->address_en,
-//                'address_ar' => $shipper->address_ar,
-//                'address_hi' => $shipper->address_hi,
+//                'address_en' => $customer->address_en,
+//                'address_ar' => $customer->address_ar,
+//                'address_hi' => $customer->address_hi,
 //            ]
 //        ]);
 //

@@ -6,7 +6,7 @@ class Load extends BaseModel
 {
 
     protected $fillable = [
-        'shipper_id',
+        'customer_id',
         'trailer_id',
         'packaging_id',
         'origin_location_id',
@@ -27,12 +27,12 @@ class Load extends BaseModel
 
     public function origin()
     {
-        return $this->belongsTo(ShipperLocation::class,'origin_location_id');
+        return $this->belongsTo(CustomerLocation::class,'origin_location_id');
     }
 
     public function destination()
     {
-        return $this->belongsTo(ShipperLocation::class,'destination_location_id');
+        return $this->belongsTo(CustomerLocation::class,'destination_location_id');
     }
 
     public function trailer()
@@ -45,9 +45,9 @@ class Load extends BaseModel
         return $this->belongsTo(Packaging::class);
     }
 
-    public function shipper()
+    public function customer()
     {
-        return $this->belongsTo(Shipper::class);
+        return $this->belongsTo(Customer::class);
     }
 
     /**

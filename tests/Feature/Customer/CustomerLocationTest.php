@@ -10,8 +10,8 @@ use App\Models\Employee;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Pass;
-use App\Models\Shipper;
-use App\Models\ShipperLocation;
+use App\Models\Customer;
+use App\Models\CustomerLocation;
 use App\Models\Trailer;
 use App\Models\Truck;
 use App\Models\User;
@@ -22,25 +22,25 @@ use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShipperLocationTest extends TestCase
+class CustomerLocationTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    public function test_shipper_gets_locations()
+    public function test_customer_gets_locations()
     {
-        $shipper = $this->_createShipper();
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
-        $location = factory(ShipperLocation::class)->create(['shipper_id'=>$shipper->id]);
-        $response = $this->json('GET', '/api/shipper/locations', [], $header);
+        $location = factory(CustomerLocation::class)->create(['customer_id'=>$customer->id]);
+        $response = $this->json('GET', '/api/customer/locations', [], $header);
         $response->assertJson(['success'=>true,'data'=>['locations'=>[['id'=>$location->id]]]]);
     }
 
-    public function test_shipper_creates_location()
+    public function test_customer_creates_location()
     {
-        $shipper = $this->_createShipper();
-        $header = $this->_createHeader(['api_token' => $shipper->user->api_token]);
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $employee = factory(Employee::class)->create();
 
@@ -53,7 +53,7 @@ class ShipperLocationTest extends TestCase
             'email' => 'z4ls@a.com',
         ];
 
-        $response = $this->json('POST', '/api/shipper/employees', $data, $header);
+        $response = $this->json('POST', '/api/customer/employees', $data, $header);
         $response->assertJson(['success'=>true]);
     }
 
