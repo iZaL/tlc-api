@@ -26,11 +26,9 @@ class DriversTableSeeder extends Seeder
         $pass2 = factory(\App\Models\Pass::class)->create(['country_id' => $kw->id,'name_en'=>'KNPC','name_ar'=>'KNPC']);
 
         $driver->update([
-            'residence_country_id'=>$kw->id,
             'nationality_country_id'=>$in->id
         ]);
 
-//        ['origin_country_id'=>$kw->id,'destination_country_id'=>$sa->id]
         $routeKWSA = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$sa->id)->first();
         $routeKWOM = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$om->id)->first();
 

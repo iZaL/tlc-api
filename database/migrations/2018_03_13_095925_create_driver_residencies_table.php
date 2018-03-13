@@ -13,7 +13,7 @@ class CreateDriverResidenciesTable extends Migration
      */
     public function up()
     {
-        Schema::table('driver_residencies', function (Blueprint $table) {
+        Schema::create('driver_residencies', function (Blueprint $table) {
             //
             $table->increments('id');
             $table->integer('country_id');
