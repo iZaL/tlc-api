@@ -26,6 +26,7 @@ class CreateShippersTable extends Migration
             $table->decimal('available_credit')->nullable(); //credits available
             $table->decimal('cancellation_fee')->nullable(); //fee for cancelling the booked load
             $table->boolean('active')->default(0); //fee for cancelling the booked load
+            $table->boolean('blocked')->default(0); //fee for cancelling the booked load
             $table->timestamps();
         });
     }

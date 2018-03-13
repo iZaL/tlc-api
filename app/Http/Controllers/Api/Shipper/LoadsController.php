@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\Shipper;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\PackagingResource;
 use App\Http\Resources\PassResource;
@@ -16,6 +17,7 @@ use App\Models\Packaging;
 use App\Models\Pass;
 use App\Models\Shipper;
 use App\Models\Trailer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +71,19 @@ class LoadsController extends Controller
         $this->passModel = $passModel;
     }
 
+    public function getLoadsByStatus($status, Request $request)
+    {
+        $shipper = Auth::guard('api')->user()->shipper;
+        $loads = $this->loadModel->with([
+            'shipper',
+            'origin.country',
+            'destination.country',
+            'trailer',
+            'packaging',
+        ])->where('status', $status)->paginate(10);
+        return response()->json(['success' => true, 'data' => LoadResource::collection($loads)]);
+    }
+
     public function getLoadAddData(Request $request)
     {
         // get trailers
@@ -93,28 +108,9 @@ class LoadsController extends Controller
 
     }
 
-    public function createLoad(Request $request)
-    {
-
-        // get trailer types
-        // get packing types
-        // get customer's saved origins and destinations
-        //
-
-        $loads = $this->loadModel->query();
-
-
-        return response()->json(['success' => true, 'data' => [
-            ''
-        ]]);
-
-    }
-
     public function storeLoad(Request $request)
     {
-
         $validation = Validator::make($request->all(), [
-            'shipper_id'              => 'required',
             'trailer_id'              => 'required',
             'packaging_id'            => 'required',
             'origin_location_id'      => 'required',
@@ -139,19 +135,22 @@ class LoadsController extends Controller
 
         $data = $request->all();
 
+        $data['load_date'] = Carbon::parse($request->load_date)->toDateString();
+
         if ($shipper->canBookDirect()) {
             $data['status'] = 'approved';
         }
 
+        $loadData = array_merge($data, ['shipper_id' => $shipper->id]);
 
-        $load = $this->loadModel->create($data);
+        $load = $this->loadModel->create($loadData);
 
         //passes
         if ($request->passes) {
             $load->passes()->sync($request->passes);
         }
 
-        $shipper->load('loads');
+        $shipper->load('loads.passes');
 
         return response()->json(['success' => true, 'data' => new ShipperResource($shipper), 'type' => 'created', 'message' => trans('general.load_created')]);
 

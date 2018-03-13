@@ -39,6 +39,7 @@ class CreateLoadsTable extends Migration
             $table->string('weight')->nullable();
             $table->string('status',10)->default('pending')->notes(
                 // default pending
+                // approved (approved by tlc)
                 // rejected (the load has been rejected )
                 // confirmed (all fleets has been confirmed by drivers) once this status is set, after this no more trip booking allowed
                 // working (all fleets has dispatched)

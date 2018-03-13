@@ -8,6 +8,8 @@
 Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
 
+    Route::post('trips/{id}/location/update','\App\Http\Controllers\Api\Driver\TripsController@updateLocation');
+
     /**
      * |--------------------------------------------------------------------------
      * | Authenticated Routes
@@ -41,8 +43,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads/create', 'LoadsController@createLoad');
             Route::post('loads', 'LoadsController@storeLoad');
             Route::get('loads', 'LoadsController@getLoads');
+            Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
             Route::get('loads/add/data', 'LoadsController@getLoadAddData');
 
+            Route::get('loads/{id}/drivers','LoadDriversController@getDriversForLoad');
 
             /**
              * |--------------------------------------------------------------------------
@@ -92,12 +96,12 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
 //            Route::get('jobs','LoadsController@getLoadRequests');
             Route::get('trips/upcoming','TripsController@getUpcomingTrips');
+            Route::get('trips/{id}/details','TripsController@getTripDetails');
             Route::post('trips/{id}/confirm','TripsController@confirmTrip');
 
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
-
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
-
+            Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
 
 //            Route::get('jobs','JobsController@getUpcomingJobs');
 //            Route::get('loads/{id}/details','LoadsController@getLoadDetails');

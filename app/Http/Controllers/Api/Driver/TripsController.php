@@ -3,10 +3,14 @@
 
 namespace App\Http\Controllers\Api\Driver;
 
+use App\Events\DriversLocationUpdated;
+use App\Events\DriverStartedJob;
 use App\Http\Controllers\Controller;
 use App\Http\Managers\LoadManager;
 use App\Http\Managers\TripManager;
+use App\Http\Resources\LoadResource;
 use App\Http\Resources\TripResource;
+use App\Jobs\SendPushNotificationsToAllDevice;
 use App\Models\Trip;
 use App\Models\Load;
 use App\Models\User;
@@ -27,6 +31,14 @@ class TripsController extends Controller
         $this->tripModel = $tripModel;
     }
 
+    public function getTripDetails($id)
+    {
+        $trip = $this->tripModel->find($id);
+
+        return response()->json(['success'=>true,'data'=>$trip]);
+
+    }
+
     public function getUpcomingTrips()
     {
         $driver = Auth::guard('api')->user()->driver;
@@ -38,7 +50,7 @@ class TripsController extends Controller
             ->whereHas('booking',function($q) use ($today) {
                 $q
                     ->whereDate('load_date','>=',$today)
-                    ->orderBy('load_date','desc')
+                    ->loadBy('load_date','desc')
                 ;
             })
             ->ofStatus('pending')
@@ -81,5 +93,52 @@ class TripsController extends Controller
 
         return response()->json(['success'=>false,'message' => __('general.unknown_error')]);
 
+    }
+
+    public function startJob($id)
+    {
+        $trip = $this->tripModel->with(['load.user'])->find($id);
+//        $trip->startJob();
+
+//        $customer = $trip->load->user;
+
+//        $pushTokens = $this->pushTokenModel->where('user_id',$customer->id)->pluck('token')->toArray();
+
+//        $pushTokens = ['714dbc9d4ea47c1896651efedaa3c208ae5735bf3c426a40b3c71499112da6db'];
+
+//        event(new DriverStartedJob($trip));
+
+//        $trip = (new SendPushNotificationsToAllDevice($pushTokens,'Job Started'));
+
+//        $this->dispatch($trip);
+
+        $load = $trip->booking;
+
+        return response()->json(['success'=>true,'data'=> new LoadResource($load)]);
+    }
+
+    public function finishJob($id)
+    {
+        $trip = $this->tripModel->with(['booking'])->find($id);
+//        $trip->completeJob();
+
+//        event(new DriverStartedJob($trip));
+
+        $load = $trip->booking;
+
+        return response()->json(['success'=>true,'data'=> new LoadResource($load)]);
+    }
+
+    public function updateLocation($tripID,Request $request)
+    {
+        $coords = $request->location['coords'];
+        $payload = [
+            'latitude' => $coords['latitude'],
+            'longitude' => $coords['longitude'],
+            'heading' => $coords['heading']
+        ];
+
+        event(new DriversLocationUpdated($tripID,$payload));
+        return response()->json(['success'=>true,'data'=>$payload]);
     }
 }

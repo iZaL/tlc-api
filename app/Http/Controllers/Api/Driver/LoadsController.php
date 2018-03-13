@@ -36,6 +36,19 @@ class LoadsController extends Controller
         $this->countryModel = $countryModel;
     }
 
+    public function getLoadsByStatus($status, Request $request)
+    {
+        $shipper = Auth::guard('api')->user()->shipper;
+        $loads = $this->loadModel->with([
+            'shipper',
+            'origin.country',
+            'destination.country',
+            'trailer',
+            'packaging',
+        ])->where('status', $status)->paginate(10);
+        return response()->json(['success' => true, 'data' => LoadResource::collection($loads)]);
+    }
+
     public function getLoads(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -89,7 +102,7 @@ class LoadsController extends Controller
         $load = $this->loadModel->with([
             'origin.country',
             'destination.country',
-            'loads.trailer'
+            'trailer'
         ])->find($loadID);
 
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
