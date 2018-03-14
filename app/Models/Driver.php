@@ -5,9 +5,9 @@ namespace App\Models;
 class Driver extends BaseModel
 {
 
-    protected $fillable = ['mobile','residence_country_id','nationality_country_id','user_id','customer_id'];
+    protected $fillable = ['mobile','nationality_country_id','user_id','customer_id'];
 
-    protected $hidden = ['nationality_country_id','residence_country_id','customer_id','user_id'];
+    protected $hidden = ['nationality_country_id','customer_id','user_id'];
 
     public function user()
     {

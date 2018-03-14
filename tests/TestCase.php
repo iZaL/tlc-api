@@ -107,4 +107,11 @@ abstract class TestCase extends BaseTestCase
         return $load;
     }
 
+    public function _makeDriverBusy($driver)
+    {
+        $bookedFrom = Carbon::now()->addDays(3)->toDateString();
+        $bookedUntil = Carbon::now()->addDays(6)->toDateString();
+        $driver->blocked_dates()->create(['from' => $bookedFrom,'to'=>$bookedUntil]);
+    }
+
 }

@@ -150,7 +150,7 @@ class TripManager
 
         $driverBlockedDates = $driver->blocked_dates()
             ->whereDate('driver_blocked_dates.from', '<=', $loadDate)
-            ->where('driver_blocked_dates.to', '>=', $loadDate)
+            ->whereDate('driver_blocked_dates.to', '>=', $loadDate)
             ->count();
 
         if ($driverBlockedDates > 0) {

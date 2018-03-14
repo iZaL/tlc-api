@@ -4,6 +4,8 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Managers\DriverManager;
+use App\Http\Managers\LoadManager;
 use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
@@ -77,44 +79,44 @@ class LoadDriversController extends Controller
         $this->driverModel = $driverModel;
     }
 
-    public function getDriversForLoad($loadID)
+    /** @todo
+     *
+     * check whether the load is valid
+     * is not expired
+     * no of fleets are not booked
+     * has eno
+     *
+     * ============================
+     * check whether the customer
+     * has enough credits
+     * is active
+     * is not blocked by tlc
+     * is
+     *
+     */
+
+    /**
+     * @param $loadID
+     * @return \Illuminate\Http\JsonResponse
+     * After Posting a Load, Hit this method to fetch Drivers Who are ready to load
+     */
+    public function searchDriversForLoad($loadID)
     {
-        $load = $this->loadModel->find($loadID);
+        $load = $this->loadModel->with(['customer'])->find($loadID);
 
-        /** check whether the load is valid
-         * is not expired
-         * no of fleets are not booked
-         * has eno
-         */
+        $driverManager = new DriverManager($this->driverModel);
 
-        /** check whether the customer
-         * has enough credits
-         * is active
-         * is not blocked by tlc
-         * is
-         */
-
-        /** get drivers
-         * who are active
-         * who are not offline
-         * who are not blocked by customer
-         * who are not blocked by tlc
-         * who are not on other trips
-         * who has valid visas (not expired) to destination country and transit country
-         * who has valid licenses (not expired)
-         * who has valid truck, trailer (length,width,height,capacity) depending on the load dimension
-         * who has truck registered on same country as load origin country
-         * who has added the load route in their route list
-         * who has valid gate passes to the load destination if required
-         */
+        $availableDrivers = $driverManager->getAvailableDrivers();
+        $driversWhoHasTrips = $driverManager->getDriversWhoHasTrips($load->load_date);
+        $driversWhoAreBlockedByCustomer = $driverManager->getDriversWhoAreBlockedByCustomer($load->customer->id);
 
 
+        $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten();
 
-        $drivers = DB::table('drivers')
-            ->join('');
+        $drivers = $availableDrivers->diff($excludingDrivers);
+        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
 
-        return response()->json(['success' => true, 'data' => DriverResource::collection($drivers)]);
-
+        return response()->json(['success' => true, 'data' => $drivers]);
 
 //        $loads =
 //            DB::table('loads')

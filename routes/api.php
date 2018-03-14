@@ -46,7 +46,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
             Route::get('loads/add/data', 'LoadsController@getLoadAddData');
 
-            Route::get('loads/{id}/drivers','LoadDriversController@getDriversForLoad');
+            Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
 
             /**
              * |--------------------------------------------------------------------------

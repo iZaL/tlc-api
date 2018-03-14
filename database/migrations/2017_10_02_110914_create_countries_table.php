@@ -26,6 +26,7 @@ class CreateCountriesTable extends Migration
             $table->decimal('max_weight')->nullable()->notes('in kg');
             $table->decimal('transit_hours')->nullable()->notes('Time usually takes in border');
             $table->boolean('active')->default(1);
+            $table->boolean('gcc')->default(0);
             $table->timestamps();
 //            $table->softDeletes();
         });

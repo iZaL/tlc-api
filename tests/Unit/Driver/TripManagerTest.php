@@ -126,10 +126,7 @@ class TripManagerTest extends TestCase
         $load = $this->_createLoad(['load_date' => $loadDate ]);
 
         $driver = $this->_createDriver();
-        $bookedFrom = Carbon::now()->addDays(3)->toDateString();
-        $bookedUntil = Carbon::now()->addDays(6)->toDateString();
-
-        $driver->blocked_dates()->create(['from' => $bookedFrom,'to'=>$bookedUntil]);
+        $this->_makeDriverBusy($driver);
 
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver]);
         $method = self::getMethod('driverHasAnotherTrip');
@@ -143,10 +140,7 @@ class TripManagerTest extends TestCase
         $load = $this->_createLoad(['load_date' => $loadDate ]);
 
         $driver = $this->_createDriver();
-        $bookedFrom = Carbon::now()->addDays(3)->toDateString();
-        $bookedUntil = Carbon::now()->addDays(6)->toDateString();
-
-        $driver->blocked_dates()->create(['from' => $bookedFrom,'to'=>$bookedUntil]);
+        $this->_makeDriverBusy($driver);
 
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver]);
         $method = self::getMethod('driverHasAnotherTrip');

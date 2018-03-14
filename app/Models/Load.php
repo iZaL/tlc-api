@@ -64,5 +64,6 @@ class Load extends BaseModel
         return $this->hasMany(Trip::class);
     }
 
+
 }
 

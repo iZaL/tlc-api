@@ -14,6 +14,7 @@ use App\Models\Driver;
 use App\Models\Load;
 use App\Models\Trip;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class LoadManager
 {
@@ -30,7 +31,6 @@ class LoadManager
     {
         $this->load = $load;
     }
-
 
     private function confirm()
     {
@@ -77,5 +77,6 @@ class LoadManager
         return $this;
 
     }
+
 
 }
