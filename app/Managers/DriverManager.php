@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Managers;
+namespace App\Managers;
 
 
 use App\Exceptions\Driver\BusyOnScheduleException;
@@ -94,7 +94,7 @@ class DriverManager
      * who has valid gate passes to the load destination if required
      * who works for same customer if customer prefers their own driver
      */
-    public function getAvailableDrivers()
+    public function getValidDrivers()
     {
         $drivers = DB::table('drivers')
             ->where('drivers.active', 1)
@@ -124,10 +124,25 @@ class DriverManager
         $drivers = DB::table('drivers')
             ->join('blocked_drivers as bd', function ($join) use ($customerID) {
                 $join->on('drivers.id', '=', 'bd.driver_id')
-                    ->where('bd.customer_id', '=', $customerID)
-                ;
+                    ->where('bd.customer_id', '=', $customerID);
             })
             ->select('drivers.id')
+            ->pluck('id');
+
+        return $drivers;
+    }
+
+    public function getDriversWhoHasValidVisas($countries = [], $loadDate)
+    {
+        $drivers = DB::table('driver_visas as dv')
+            ->join('drivers', function ($join) use ($countries) {
+                $join->on('drivers.id', '=', 'dv.driver_id');
+            })
+            ->whereIn('dv.country_id', $countries)
+            ->having(DB::raw('count(*)'), '=', count($countries))
+            ->whereDate('dv.expiry_date', '>', $loadDate)
+            ->select('drivers.id')
+            ->groupBy('drivers.id')
             ->pluck('id');
 
         return $drivers;

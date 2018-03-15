@@ -51,7 +51,7 @@ class LoadDriversTest extends TestCase
     /** get drivers
      * who are active === done
      * who are not offline === done
-     * who are not blocked by customer
+     * who are not blocked by customer === done
      * who are not blocked by tlc === done
      * who are not on other trips === done
      * who has valid visas (not expired) to destination country and transit country
@@ -183,7 +183,56 @@ class LoadDriversTest extends TestCase
 
         $loadDate = Carbon::now()->addDays(5)->toDateString();
 
-        $load = $this->_createValidLoad(['customer_id' => $customer->id,'load_date' => $loadDate]);
+        $load = $this->_createValidLoad(['customer_id' => $customer->id, 'load_date' => $loadDate]);
+
+        $response = $this->json('GET', '/api/customer/loads/' . $load->id . '/drivers/search', [], $header);
+
+        $response->assertJson(['data' => [['id' => $validDriver1->id], ['id' => $validDriver2->id]]]);
+        $response->assertJsonMissing(['id' => $invalidDriver1->id]);
+        $response->assertJsonMissing(['id' => $invalidDriver2->id]);
+        $response->assertJsonMissing(['id' => $invalidDriver3->id]);
+
+    }
+
+    public function test_drivers_need_visas_to_travel_to_destination_route()
+    {
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+
+        $invalidDriver1 = $this->_createValidDriver();
+        $invalidDriver2 = $this->_createValidDriver();
+        $invalidDriver3 = $this->_createValidDriver();
+
+        $validDriver1 = $this->_createValidDriver();
+        $validDriver2 = $this->_createValidDriver();
+
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $bh = $this->_createCountry('BH');
+
+        $route  = $this->_createRoute($kw,$bh,['transit1'=>$sa->id]);
+        $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
+        $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
+
+        $this->_createVisa($validDriver1->id, $kw->id);
+        $this->_createVisa($validDriver1->id, $sa->id);
+        $this->_createVisa($validDriver1->id, $bh->id);
+
+        $this->_createVisa($validDriver2->id, $kw->id);
+        $this->_createVisa($validDriver2->id, $sa->id);
+        $this->_createVisa($validDriver2->id, $bh->id);
+
+//        $this->_createVisa($invalidDriver1->id, $kw->id);
+        $this->_createVisa($invalidDriver1->id, $sa->id, false);
+
+
+        $load = $this->_createValidLoad(
+            [
+                'customer_id'             => $customer->id,
+                'origin_location_id'      => $origin->id,
+                'destination_location_id' => $destination->id,
+            ]
+        );
 
         $response = $this->json('GET', '/api/customer/loads/' . $load->id . '/drivers/search', [], $header);
 

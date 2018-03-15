@@ -27,7 +27,7 @@ class Route extends BaseModel
 
     public function transits()
     {
-        return $this->belongsToMany(Country::class, 'route_transits')->orderBy('order','asc');
+        return $this->belongsToMany(Country::class, 'route_transits')->orderBy('order', 'asc');
     }
 
     /**
@@ -44,5 +44,6 @@ class Route extends BaseModel
 
         return false;
     }
+
 
 }

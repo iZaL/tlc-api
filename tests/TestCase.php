@@ -8,6 +8,7 @@ use App\Models\DriverLicense;
 use App\Models\DriverVisas;
 use App\Models\Load;
 use App\Models\Customer;
+use App\Models\Route;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -51,6 +52,21 @@ abstract class TestCase extends BaseTestCase
     {
         $country = array_merge($array, ['abbr' => $abbr]);
         return factory(Country::class)->create($country);
+    }
+
+    public function _createRoute($origin, $destination, $array = [])
+    {
+        $route = factory(Route::class)->create(['origin_country_id'=>$origin->id,'destination_country_id'=>$destination->id]);
+
+        if(array_key_exists('transit1',$array)) {
+            $route->transits()->syncWithoutDetaching(['country_id' => $array['transit1']]);
+        }
+
+        if(array_key_exists('transit2',$array)) {
+            $route->transits()->syncWithoutDetaching(['country_id' => $array['transit2']]);
+        }
+
+
     }
 
     public function _createVisa($driverID, $countryID, $valid = true)

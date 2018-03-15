@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Driver;
 
-use App\Http\Managers\TripManager;
+use App\Managers\TripManager;
 use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,7 +15,7 @@ class TripManagerTest extends TestCase
     use RefreshDatabase;
 
     protected static function getMethod($name) {
-        $class = new ReflectionClass('\App\Http\Managers\TripManager');
+        $class = new ReflectionClass('\App\Managers\TripManager');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;

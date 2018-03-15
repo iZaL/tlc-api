@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Managers;
+namespace App\Managers;
 
 
 use App\Exceptions\Driver\BusyOnScheduleException;

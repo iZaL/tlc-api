@@ -4,8 +4,9 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Managers\DriverManager;
-use App\Http\Managers\LoadManager;
+use App\Managers\DriverManager;
+use App\Managers\LoadManager;
+use App\Managers\RouteManager;
 use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
@@ -16,10 +17,12 @@ use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
 use App\Models\Country;
 use App\Models\Driver;
+use App\Models\DriverVisas;
 use App\Models\Load;
 use App\Models\Packaging;
 use App\Models\Pass;
 use App\Models\Customer;
+use App\Models\Route;
 use App\Models\Trailer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -57,6 +60,10 @@ class LoadDriversController extends Controller
      * @var Driver
      */
     private $driverModel;
+    /**
+     * @var Route
+     */
+    private $routeModel;
 
     /**
      * LoadsController constructor.
@@ -67,8 +74,9 @@ class LoadDriversController extends Controller
      * @param Packaging $packagingModel
      * @param Pass $passModel
      * @param Driver $driverModel
+     * @param Route $routeModel
      */
-    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel, Driver $driverModel)
+    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel, Driver $driverModel,Route $routeModel)
     {
         $this->customerModel = $customerModel;
         $this->loadModel = $loadModel;
@@ -77,6 +85,7 @@ class LoadDriversController extends Controller
         $this->packagingModel = $packagingModel;
         $this->passModel = $passModel;
         $this->driverModel = $driverModel;
+        $this->routeModel = $routeModel;
     }
 
     /** @todo
@@ -102,18 +111,26 @@ class LoadDriversController extends Controller
      */
     public function searchDriversForLoad($loadID)
     {
-        $load = $this->loadModel->with(['customer'])->find($loadID);
+        $load = $this->loadModel->with(['customer','origin','destination'])->find($loadID);
 
         $driverManager = new DriverManager($this->driverModel);
+        $routeManager = new RouteManager($this->routeModel);
 
-        $availableDrivers = $driverManager->getAvailableDrivers();
+        $availableDrivers = $driverManager->getValidDrivers();
         $driversWhoHasTrips = $driverManager->getDriversWhoHasTrips($load->load_date);
         $driversWhoAreBlockedByCustomer = $driverManager->getDriversWhoAreBlockedByCustomer($load->customer->id);
+        $routeTransitCountries = $routeManager->getRouteCountries($load->origin->country->id,$load->destination->country->id);
 
+        $driversWhoHasValidVisas = $driverManager->getDriversWhoHasValidVisas($routeTransitCountries,$load->load_date);
 
-        $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten();
+        // Drivers Who shouldn't be included on the list
+        $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten()->unique();
 
-        $drivers = $availableDrivers->diff($excludingDrivers);
+        // Drivers Who should be included on the list
+        $includingDrivers = $availableDrivers->intersect($driversWhoHasValidVisas);
+
+        $drivers = $includingDrivers->diff($excludingDrivers);
+
         $drivers = $this->driverModel->whereIn('id',$drivers)->get();
 
         return response()->json(['success' => true, 'data' => $drivers]);

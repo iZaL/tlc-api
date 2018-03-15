@@ -87,11 +87,12 @@ class LoadsController extends Controller
                         ->where('d.id', $driver->id)
                         ->orWhere('loads.use_own_truck', 0);
                 })
-                ->where('loads.origin_location_id', $currentCountry->id)
+                ->where('loads.origin_location_id', $currentCountry->id) //@todo : fix to truck registration country
                 ->whereIn('loads.destination_location_id', $validCountries)
                 ->whereNotIn('loads.customer_id', $blockedCustomers)
                 ->select('loads.*')
-                ->paginate(20);
+                ->paginate(20)
+        ;
 
         return new LoadResourceCollection($loads);
     }
