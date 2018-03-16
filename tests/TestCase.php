@@ -66,6 +66,7 @@ abstract class TestCase extends BaseTestCase
             $route->transits()->syncWithoutDetaching(['country_id' => $array['transit2']]);
         }
 
+        return $route;
 
     }
 
@@ -97,6 +98,7 @@ abstract class TestCase extends BaseTestCase
             },
         ], $array));
 
+
         return $customer;
     }
 
@@ -123,11 +125,11 @@ abstract class TestCase extends BaseTestCase
         return $load;
     }
 
-    public function _makeDriverBusy($driver)
+    public function _makeDriverBusy($driver,$array = [])
     {
         $bookedFrom = Carbon::now()->addDays(3)->toDateString();
         $bookedUntil = Carbon::now()->addDays(6)->toDateString();
-        $driver->blocked_dates()->create(['from' => $bookedFrom,'to'=>$bookedUntil]);
+        $driver->blocked_dates()->create(['from' => isset($array['from']) ? : $bookedFrom,'to'=>isset($array['to']) ? : $bookedUntil]);
     }
 
 }

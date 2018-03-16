@@ -113,58 +113,48 @@ class LoadDriversController extends Controller
     {
         $load = $this->loadModel->with(['customer','origin','destination'])->find($loadID);
 
-        $driverManager = new DriverManager($this->driverModel);
-        $routeManager = new RouteManager($this->routeModel);
+        $driverManager = new DriverManager();
+        $routeManager = new RouteManager();
 
+        // Drivers Who Are Online, Active, and Not on Blocked List
         $availableDrivers = $driverManager->getValidDrivers();
+
+        // Drivers Who Has Trip on Load Date
         $driversWhoHasTrips = $driverManager->getDriversWhoHasTrips($load->load_date);
+
+        // Drivers Who are Blocked By The Customer
         $driversWhoAreBlockedByCustomer = $driverManager->getDriversWhoAreBlockedByCustomer($load->customer->id);
+
+        // Get Countries Involved in the Trip
         $routeTransitCountries = $routeManager->getRouteCountries($load->origin->country->id,$load->destination->country->id);
 
+        // Drivers Who Prefers Driving Through the Trip Route
+        $driversWhoHasValidRoute = $routeManager->getRouteDrivers($load->origin->country->id,$load->destination->country->id);
+
+        // Drivers Who Has Valid Visa
         $driversWhoHasValidVisas = $driverManager->getDriversWhoHasValidVisas($routeTransitCountries,$load->load_date);
+
+        // Drivers Who has Valid Licenses
+        $driversWhoHasValidLicenses = $driverManager->getDriversWhoHasValidLicenses($routeTransitCountries,$load->load_date);
 
         // Drivers Who shouldn't be included on the list
         $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten()->unique();
 
         // Drivers Who should be included on the list
-        $includingDrivers = $availableDrivers->intersect($driversWhoHasValidVisas);
+        $includingDrivers = $availableDrivers->intersect($driversWhoHasValidRoute);
+        $includingDrivers = $includingDrivers->intersect($driversWhoHasValidVisas);
+        $includingDrivers = $includingDrivers->intersect($driversWhoHasValidLicenses);
+
+        if($load->passes->count()) {
+            $driversWhoHasValidPasses = $driverManager->getDriversWhoHasValidPasses($load->passes->pluck('id'));
+            $includingDrivers = $includingDrivers->intersect($driversWhoHasValidPasses);
+        }
 
         $drivers = $includingDrivers->diff($excludingDrivers);
 
         $drivers = $this->driverModel->whereIn('id',$drivers)->get();
 
         return response()->json(['success' => true, 'data' => $drivers]);
-
-//        $loads =
-//            DB::table('loads')
-//                ->join('customer_locations as sl', 'loads.origin_location_id', 'sl.id')
-//                ->join('customers as s', 'loads.customer_id', 's.id')
-//                ->leftJoin('load_passes as lp', 'loads.id', 'lp.load_id')
-//                ->leftJoin('drivers as d', 'd.customer_id', 's.id')
-//                ->when($trailerID, function ($q) use ($trailerID) {
-//                    $q->where('trailer_id', $trailerID);
-//                })
-//                ->where('loads.status', 'waiting')
-//                ->where(function ($query) use ($driverValidPasses) {
-//                    $query
-//                        ->whereIn('lp.pass_id', $driverValidPasses)
-//                        ->orWhere('lp.pass_id', null);
-//                })
-//                ->where(function ($query) use ($driver) {
-//                    $query
-//                        ->where('d.id', $driver->id)
-//                        ->orWhere('loads.use_own_truck', 0);
-//                })
-//                ->where('loads.origin_location_id', $currentCountry->id)
-//                ->whereIn('loads.destination_location_id', $validCountries)
-//                ->whereNotIn('loads.customer_id', $blockedCustomers)
-//                ->select('loads.*')
-//                ->paginate(20);
-//        $driverValidVisaCountries = $driver->valid_visas->pluck('id');
-//        $driverValidLicenses = $driver->valid_licenses->pluck('id');
-//        $blockedCustomers = $driver->blocked_list->pluck('id');
-//        $driverValidPasses = $driver->passes->pluck('id');
-
 
     }
 

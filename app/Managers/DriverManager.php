@@ -26,11 +26,10 @@ class DriverManager
 
     /**
      * DriverManager constructor.
-     * @param Driver $driverModel
      */
-    public function __construct(Driver $driverModel)
+    public function __construct()
     {
-        $this->driverModel = $driverModel;
+        $this->driverModel = new Driver();
     }
 
 //    public function getLoads(Request $request)
@@ -141,11 +140,42 @@ class DriverManager
             ->whereIn('dv.country_id', $countries)
             ->having(DB::raw('count(*)'), '=', count($countries))
             ->whereDate('dv.expiry_date', '>', $loadDate)
-            ->select('drivers.id')
-            ->groupBy('drivers.id')
-            ->pluck('id');
+            ->select('dv.driver_id')
+            ->groupBy('dv.driver_id')
+            ->pluck('dv.driver_id');
 
         return $drivers;
     }
+
+    public function getDriversWhoHasValidLicenses($countries = [], $loadDate)
+    {
+        $drivers = DB::table('driver_licenses as dl')
+            ->join('drivers', function ($join) use ($countries) {
+                $join->on('drivers.id', '=', 'dl.driver_id');
+            })
+            ->whereIn('dl.country_id', $countries)
+            ->having(DB::raw('count(*)'), '=', count($countries))
+            ->whereDate('dl.expiry_date', '>', $loadDate)
+            ->select('dl.driver_id')
+            ->groupBy('dl.driver_id')
+            ->pluck('dl.driver_id');
+
+        return $drivers;
+    }
+    public function getDriversWhoHasValidPasses($passes = [])
+    {
+        $drivers = DB::table('driver_passes as dp')
+            ->join('passes', function ($join) use ($passes) {
+                $join->on('passes.id', '=', 'dp.pass_id');
+            })
+            ->whereIn('passes.id', $passes)
+            ->having(DB::raw('count(*)'), '=', count($passes))
+            ->select('dp.driver_id')
+            ->groupBy('dp.driver_id')
+            ->pluck('dp.driver_id');
+
+        return $drivers;
+    }
+
 
 }

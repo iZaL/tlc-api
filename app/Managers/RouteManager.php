@@ -15,6 +15,7 @@ use App\Models\Driver;
 use App\Models\Route;
 use App\Models\Trip;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RouteManager
 {
@@ -25,11 +26,10 @@ class RouteManager
 
     /**
      * RouteManager constructor.
-     * @param Route $route
      */
-    public function __construct(Route $route)
+    public function __construct()
     {
-        $this->route = $route;
+        $this->route = new Route();
     }
 
     /**
@@ -37,7 +37,7 @@ class RouteManager
      * @param $destinationCountryID
      * @return array|null
      */
-    public function getRouteCountries($originCountryID, $destinationCountryID) :array
+    public function getRouteCountries($originCountryID, $destinationCountryID): array
     {
         $route = $this->getRoute($originCountryID, $destinationCountryID);
         if (!$route) {
@@ -56,5 +56,22 @@ class RouteManager
 
         return $route;
     }
+
+    public function getRouteDrivers($originCountryID, $destinationCountryID)
+    {
+        $drivers = DB::table('driver_routes as dr')
+            ->join('routes', function ($join) {
+                $join->on('dr.route_id', '=', 'routes.id')
+                    ->where('dr.active', 1);
+            })
+            ->where('routes.origin_country_id', $originCountryID)
+            ->where('routes.destination_country_id', $destinationCountryID)
+            ->select('dr.driver_id')
+            ->groupBy('dr.driver_id')
+            ->pluck('dr.driver_id')
+        ;
+        return $drivers;
+    }
+
 
 }
