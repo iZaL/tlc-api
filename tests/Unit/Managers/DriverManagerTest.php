@@ -191,5 +191,54 @@ class DriverManagerTest extends TestCase
 
     }
 
+    public function test_drivers_need_licenses_to_travel_to_destination_route()
+    {
+        $customer = $this->_createCustomer();
+        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+
+        $invalidDriver1 = $this->_createDriver();
+        $invalidDriver2 = $this->_createDriver();
+        $invalidDriver3 = $this->_createDriver();
+
+        $validDriver1 = $this->_createDriver();
+        $validDriver2 = $this->_createDriver();
+
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $bh = $this->_createCountry('BH');
+
+        $route  = $this->_createRoute($kw,$bh,['transit1'=>$sa->id]);
+        $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
+        $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
+
+        $this->_createLicense($validDriver1->id, $kw->id);
+        $this->_createLicense($validDriver1->id, $sa->id);
+        $this->_createLicense($validDriver1->id, $bh->id);
+
+        $this->_createLicense($validDriver2->id, $kw->id);
+        $this->_createLicense($validDriver2->id, $sa->id);
+        $this->_createLicense($validDriver2->id, $bh->id);
+
+        $this->_createLicense($invalidDriver1->id, $sa->id, false);
+
+        $load = $this->_createLoad(
+            [
+                'customer_id'             => $customer->id,
+                'origin_location_id'      => $origin->id,
+                'destination_location_id' => $destination->id,
+            ]
+        );
+
+        $driverManager = new DriverManager();
+        $drivers = $driverManager->getDriversWhoHasValidLicenses([$kw->id,$sa->id,$bh->id],$load->load_date);
+
+        $this->assertContains($validDriver1->id, $drivers);
+        $this->assertContains($validDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver1->id, $drivers);
+        $this->assertNotContains($invalidDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver3->id, $drivers);
+
+    }
+
 
 }
