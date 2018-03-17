@@ -112,6 +112,9 @@ class LoadDriversController extends Controller
     public function searchDriversForLoad($loadID)
     {
         $load = $this->loadModel->with(['customer','origin','destination'])->find($loadID);
+        $originCountryID = $load->origin->country->id;
+        $destinationCountryCountryID = $load->destination->country->id;
+        $loadDate = $load->load_date;
 
         $driverManager = new DriverManager();
         $routeManager = new RouteManager();
@@ -120,22 +123,28 @@ class LoadDriversController extends Controller
         $availableDrivers = $driverManager->getValidDrivers();
 
         // Drivers Who Has Trip on Load Date
-        $driversWhoHasTrips = $driverManager->getDriversWhoHasTrips($load->load_date);
+        $driversWhoHasTrips = $driverManager->getDriversWhoHasTrips($loadDate);
 
         // Drivers Who are Blocked By The Customer
         $driversWhoAreBlockedByCustomer = $driverManager->getDriversWhoAreBlockedByCustomer($load->customer->id);
 
         // Get Countries Involved in the Trip
-        $routeTransitCountries = $routeManager->getRouteCountries($load->origin->country->id,$load->destination->country->id);
+        $routeTransitCountries = $routeManager->getRouteCountries($originCountryID,$destinationCountryCountryID);
 
         // Drivers Who Prefers Driving Through the Trip Route
-        $driversWhoHasValidRoute = $routeManager->getRouteDrivers($load->origin->country->id,$load->destination->country->id);
+        $driversWhoHasValidRoute = $routeManager->getRouteDrivers($originCountryID,$destinationCountryCountryID);
 
         // Drivers Who Has Valid Visa
-        $driversWhoHasValidVisas = $driverManager->getDriversWhoHasValidVisas($routeTransitCountries,$load->load_date);
+        $driversWhoHasValidVisas = $driverManager->getDriversWhoHasValidVisas($routeTransitCountries,$loadDate);
 
         // Drivers Who has Valid Licenses
-        $driversWhoHasValidLicenses = $driverManager->getDriversWhoHasValidLicenses($routeTransitCountries,$load->load_date);
+        $driversWhoHasValidLicenses = $driverManager->getDriversWhoHasValidLicenses($routeTransitCountries,$loadDate);
+
+        // Drivers Who has their Truck Registered on same country as load origin
+        $truckDrivers = $driverManager->getDriversForLoadCountry($originCountryID);
+
+        // Driver With Valid Trailer
+        $trailerDrivers = $driverManager->getDriversForTrailer($load->trailer_id);
 
         // Drivers Who shouldn't be included on the list
         $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten()->unique();
@@ -144,6 +153,8 @@ class LoadDriversController extends Controller
         $includingDrivers = $availableDrivers->intersect($driversWhoHasValidRoute);
         $includingDrivers = $includingDrivers->intersect($driversWhoHasValidVisas);
         $includingDrivers = $includingDrivers->intersect($driversWhoHasValidLicenses);
+        $includingDrivers = $includingDrivers->intersect($truckDrivers);
+        $includingDrivers = $includingDrivers->intersect($trailerDrivers);
 
         if($load->passes->count()) {
             $driversWhoHasValidPasses = $driverManager->getDriversWhoHasValidPasses($load->passes->pluck('id'));

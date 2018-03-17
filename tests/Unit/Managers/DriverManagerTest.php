@@ -6,7 +6,9 @@ use App\Managers\DriverManager;
 use App\Managers\TripManager;
 use App\Models\CustomerLocation;
 use App\Models\Pass;
+use App\Models\Trailer;
 use App\Models\Trip;
+use App\Models\Truck;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use ReflectionClass;
@@ -281,6 +283,103 @@ class DriverManagerTest extends TestCase
 
         $driverManager = new DriverManager();
         $drivers = $driverManager->getDriversWhoHasValidPasses($load->passes->pluck('id'));
+
+        $this->assertContains($validDriver1->id, $drivers);
+        $this->assertContains($validDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver1->id, $drivers);
+        $this->assertNotContains($invalidDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver3->id, $drivers);
+
+    }
+
+    //Drivers Who has their Truck Registered on same country as load origin
+    public function test_drivers_who_has_truck_registered_on_same_country_as_load_origin()
+    {
+        $customer = $this->_createCustomer();
+
+
+        $sa = $this->_createCountry('SA');
+        $om = $this->_createCountry('OM');
+        $kw = $this->_createCountry('KW');
+        $bh = $this->_createCountry('BH');
+
+
+        $invalidDriver1 = $this->_createDriver();
+        $invalidDriver2 = $this->_createDriver();
+        $invalidDriver3 = $this->_createDriver();
+
+
+        $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
+        $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
+
+        $trailer1 = factory(Trailer::class)->create();
+        $trailer2 = factory(Trailer::class)->create();
+        $trailer3 = factory(Trailer::class)->create();
+
+        $truck3 = factory(Truck::class)->create(['registration_country_id'=>$om->id,'trailer_id'=>$trailer1->id]);
+        $truck1 = factory(Truck::class)->create(['registration_country_id'=>$kw->id,'trailer_id'=>$trailer3->id]);
+        $truck2 = factory(Truck::class)->create(['registration_country_id'=>$kw->id,'trailer_id'=>$trailer2->id]);
+
+        $validDriver1 = $this->_createDriver(['truck_id'=>$truck1->id]);
+        $validDriver2 = $this->_createDriver(['truck_id' => $truck1->id]);
+
+
+        $load = $this->_createLoad(
+            [
+                'customer_id'             => $customer->id,
+                'origin_location_id'      => $origin->id,
+                'destination_location_id' => $destination->id,
+                'trailer_id' => $trailer3->id
+            ]
+        );
+
+        $driverManager = new DriverManager();
+
+        $drivers = $driverManager->getDriversForTrailer($load->trailer_id);
+
+        $this->assertContains($validDriver1->id, $drivers);
+        $this->assertContains($validDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver1->id, $drivers);
+        $this->assertNotContains($invalidDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver3->id, $drivers);
+
+    }
+  public function test_drivers_who_has_trailer_type_required_for_the_load()
+    {
+        $customer = $this->_createCustomer();
+
+
+        $sa = $this->_createCountry('SA');
+        $om = $this->_createCountry('OM');
+        $kw = $this->_createCountry('KW');
+        $bh = $this->_createCountry('BH');
+
+        $truck1 = factory(Truck::class)->create(['registration_country_id'=>$om->id]);
+        $truck1 = factory(Truck::class)->create(['registration_country_id'=>$kw->id]);
+        $truck2 = factory(Truck::class)->create(['registration_country_id'=>$kw->id]);
+
+        $invalidDriver1 = $this->_createDriver();
+        $invalidDriver2 = $this->_createDriver();
+        $invalidDriver3 = $this->_createDriver();
+
+        $validDriver1 = $this->_createDriver(['truck_id'=>$truck1->id]);
+        $validDriver2 = $this->_createDriver(['truck_id' => $truck2->id]);
+
+        $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
+        $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
+
+        $load = $this->_createLoad(
+            [
+                'customer_id'             => $customer->id,
+                'origin_location_id'      => $origin->id,
+                'destination_location_id' => $destination->id,
+            ]
+        );
+
+        $driverManager = new DriverManager();
+
+
+        $drivers = $driverManager->getDriversForLoadCountry($load->origin->country->id);
 
         $this->assertContains($validDriver1->id, $drivers);
         $this->assertContains($validDriver2->id, $drivers);

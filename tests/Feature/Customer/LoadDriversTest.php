@@ -5,6 +5,8 @@ namespace Tests\Feature\Driver;
 use App\Models\Country;
 use App\Models\CustomerLocation;
 use App\Models\Pass;
+use App\Models\Trailer;
+use App\Models\Truck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -22,8 +24,8 @@ class LoadDriversTest extends TestCase
      * who are not on other trips === done
      * who has valid visas (not expired) to destination country and transit country === done
      * who has valid licenses (not expired) === done
-     * who has valid truck, trailer (length,width,height,capacity) depending on the load dimension
-     * who has truck registered on same country as load origin country
+     * who has valid trailer === done
+     * who has truck registered on same country as load origin country === done
      * who has added the load route in their route list === done
      * who has valid gate passes to the load destination if required === done
      * who works for same customer if customer prefers their own driver
@@ -38,20 +40,22 @@ class LoadDriversTest extends TestCase
      * not blocked by tlc
      * not blocked by customer
      * not on other trips
-     * valid truck, trailer
+     * valid trailer
      * valid route
      */
     public function test_customer_gets_list_of_drivers()
     {
         $customer = $this->_createCustomer();
 
-        $kw = $this->_createCountry('KW',['gcc' => 1]);
         $sa = $this->_createCountry('SA',['gcc' => 1]);
         $bh = $this->_createCountry('BH',['gcc' => 1]);
         $in = $this->_createCountry('IN');
+        $kw = $this->_createCountry('KW',['gcc' => 1]);
 
         $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
         $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
+
+        $trailer = factory(Trailer::class)->create();
 
         // Load
         $load = $this->_createLoad(
@@ -59,19 +63,27 @@ class LoadDriversTest extends TestCase
                 'customer_id'             => $customer->id,
                 'origin_location_id'      => $origin->id,
                 'destination_location_id' => $destination->id,
+                'trailer_id'              => $trailer->id
             ]
         );
 
         // Route
         $route = $this->_createRoute($origin->country,$destination->country,['transit1'=>$sa->id]);
 
+        // Truck
+        $truck1= factory(Truck::class)->create(['registration_country_id'=>$kw->id,'trailer_id'=>$trailer->id]);
+
+        $truck2= factory(Truck::class)->create(['registration_country_id'=>$kw->id,'trailer_id'=>$trailer->id]);
+
         // Driver
         $driver1 = $this->_createDriver([
             'nationality_country_id' => $in->id,
+            'truck_id' => $truck1->id
         ]);
 
         $driver2 = $this->_createDriver([
-            'nationality_country_id' => $kw->id
+            'nationality_country_id' => $kw->id,
+            'truck_id' => $truck2->id
         ]);
 
         // Residencies
@@ -112,7 +124,6 @@ class LoadDriversTest extends TestCase
 
         $driver1->passes()->sync([$pass2->id]);
         $driver2->passes()->sync([$pass2->id]);
-
 
         // Request
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);

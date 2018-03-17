@@ -14,6 +14,7 @@ use App\Http\Resources\DriverResource;
 use App\Models\Driver;
 use App\Models\Load;
 use App\Models\Trip;
+use App\Models\Truck;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -177,6 +178,27 @@ class DriverManager
 
         return $drivers;
     }
+
+
+    public function getDriversForLoadCountry($originCountryID)
+    {
+//        dd(Truck::all()->toArray());
+        $drivers = $this->driverModel->whereHas('truck',function($q) use ($originCountryID) {
+            $q->where('registration_country_id',$originCountryID);
+        })->pluck('id');
+
+        return $drivers;
+    }
+
+    public function getDriversForTrailer($trailerID)
+    {
+        $drivers = $this->driverModel->whereHas('truck.trailer',function($q) use ($trailerID) {
+            $q->where('trailers.id',$trailerID);
+        })->pluck('id');
+
+        return $drivers;
+    }
+
 
 
 }
