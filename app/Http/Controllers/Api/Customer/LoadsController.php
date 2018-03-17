@@ -127,17 +127,17 @@ class LoadsController extends Controller
             'passes'                  => 'array'
         ]);
 
-//        array:10 [
-//  "trailer_id" => 1
-//  "origin_location_id" => 1
-//  "destination_location_id" => 1
-//  "price" => "200.00"
-//  "distance" => "100"
-//  "request_documents" => 0
-//  "request_pictures" => 0
-//  "fixed_rate" => 1
-//  "load_date" => "2017-10-19"
-//]
+        //        array:10 [
+        //  "trailer_id" => 1
+        //  "origin_location_id" => 1
+        //  "destination_location_id" => 1
+        //  "price" => "200.00"
+        //  "distance" => "100"
+        //  "request_documents" => 0
+        //  "request_pictures" => 0
+        //  "fixed_rate" => 1
+        //  "load_date" => "2017-10-19"
+        //]
 
 
         if ($validation->fails()) {

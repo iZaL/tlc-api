@@ -27,6 +27,11 @@ class Driver extends BaseModel
         return $this->belongsTo(Country::class, 'nationality_country_id');
     }
 
+//    public function residence()
+//    {
+//        return $this->belongsTo(Country::class,'residence_country_id');
+//    }
+
     public function residencies()
     {
         return $this->belongsToMany(Country::class, 'driver_residencies')

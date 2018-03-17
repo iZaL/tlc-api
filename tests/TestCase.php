@@ -9,6 +9,8 @@ use App\Models\DriverVisas;
 use App\Models\Load;
 use App\Models\Customer;
 use App\Models\Route;
+use App\Models\Truck;
+use App\Models\TruckMake;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -93,6 +95,19 @@ abstract class TestCase extends BaseTestCase
                 'country_id'  => $countryID,
                 'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()
             ]);
+    }
+
+    public function _createTruck($countryID,$array = [])
+    {
+
+        $truck = factory(Truck::class)->create(array_merge([
+            'make_id' => function () {
+                return factory(TruckMake::class)->create()->id;
+            },
+            'registration_country_id' => $countryID
+        ], $array));
+
+        return $truck;
     }
 
     public function _createCustomer($array = [])

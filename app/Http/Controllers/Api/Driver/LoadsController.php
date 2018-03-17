@@ -91,10 +91,12 @@ class LoadsController extends Controller
                 ->whereIn('loads.destination_location_id', $validCountries)
                 ->whereNotIn('loads.customer_id', $blockedCustomers)
                 ->select('loads.*')
-                ->paginate(20)
+            ->get()
+//                ->paginate(20)
         ;
 
-        return new LoadResourceCollection($loads);
+        return response()->json(['success'=>true,'data'=>$loads]);
+//        return new LoadResourceCollection($loads);
     }
 
 

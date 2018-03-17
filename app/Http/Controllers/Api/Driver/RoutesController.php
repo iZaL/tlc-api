@@ -52,9 +52,10 @@ class RoutesController extends Controller
 
         $driver = Auth::guard('api')->user()->driver;
 
-        $driver->routes()->toggle([$request->route_id]);
+        $driver->routes()->sync([$request->route_id]);
 
-        $driver->load(['residence.loading_routes']);
+        //@todo:
+//        $driver->load(['truck.registration_country.loading_routes']);
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 

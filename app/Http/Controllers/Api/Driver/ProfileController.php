@@ -41,7 +41,7 @@ class ProfileController extends Controller
 
         $driver->load([
             'nationality',
-            'residence.loading_routes.drivers',
+//            'residence.loading_routes.drivers',
             'truck.trailer',
             'truck.model',
             'truck.make',
@@ -61,7 +61,7 @@ class ProfileController extends Controller
         $validation = Validator::make($request->all(), [
             'mobile'                 => 'required|unique:drivers,mobile,' . $driver->id,
             'nationality_country_id' => 'required',
-            'residence_country_id'   => 'required'
+//            'residence_country_id'   => 'required'
         ]);
 
         if ($validation->fails()) {
@@ -70,7 +70,8 @@ class ProfileController extends Controller
 
         $driver->update($request->all());
 
-        $driver->load('nationality', 'residence');
+//        $driver->load('nationality', 'residence');
+        $driver->load('nationality');
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 

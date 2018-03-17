@@ -30,6 +30,7 @@ class TruckResource extends Resource
             'plate_number'        => $this->plate_number,
             'registration_number' => $this->registration_number,
             'registration_expiry' => $this->registration_expiry,
+            'registration_country' => new CountryResource($this->whenLoaded('registration_country')),
             'max_weight'          => $this->max_weight,
             'year'                => $this->year,
             'image'               => $this->image,

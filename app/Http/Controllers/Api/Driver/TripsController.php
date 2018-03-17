@@ -50,7 +50,7 @@ class TripsController extends Controller
             ->whereHas('booking',function($q) use ($today) {
                 $q
                     ->whereDate('load_date','>=',$today)
-                    ->loadBy('load_date','desc')
+                    ->orderBy('load_date','desc')
                 ;
             })
             ->ofStatus('pending')
@@ -67,7 +67,7 @@ class TripsController extends Controller
         $trip = $this->tripModel->with(['booking.trips'])->find($tripID);
         $driver = Auth::guard('api')->user()->driver;
 
-        if(!$driver->available) {
+        if($driver->offline) {
             return response()->json(['success'=>false,'message' => __('general.driver_offline')]);
         }
 

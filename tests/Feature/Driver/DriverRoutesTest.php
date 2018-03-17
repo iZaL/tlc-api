@@ -41,8 +41,10 @@ class DriverRoutesTestTest extends TestCase
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
-            'residence_country_id' => $kw->id
+//            'residence_country_id' => $kw->id
         ]);
+
+        $truck = $this->_createTruck($kw->id);
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
 
@@ -61,18 +63,25 @@ class DriverRoutesTestTest extends TestCase
         $routeOMKW->drivers()->save($driver);
         $routeBHKW->drivers()->save($driver);
 
-        $driverLoadingCountries = $driver->residence->loading_routes;
+        $driverLoadingCountries = $driver->truck->registration_country->loading_routes;
 
         $this->assertEquals([$routeKWSA->id,$routeKWQA->id,$routeKWOM->id],$driverLoadingCountries->pluck('id')->toArray());
 
     }
+
     public function test_driver_can_add_route()
     {
+
         $driver = factory(Driver::class)->create([
             'user_id' => function () {
                 return factory(User::class)->create()->id;
-            }
+            },
+//            'truck_id' => $truck->id
         ]);
+
+        $kw = $this->_createCountry('KW');
+
+        $truck = $this->_createTruck($kw->id);
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
 
@@ -99,7 +108,7 @@ class DriverRoutesTestTest extends TestCase
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
-            'residence_country_id' => $kw->id
+//            'residence_country_id' => $kw->id
         ]);
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
@@ -107,7 +116,6 @@ class DriverRoutesTestTest extends TestCase
         $routeKWSA = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $sa]);
         $routeKWQA = factory(\App\Models\Route::class)->create(['origin_country_id' => $kw, 'destination_country_id' => $qa]);
         $routeOMSA = factory(\App\Models\Route::class)->create(['origin_country_id' => $om, 'destination_country_id' => $sa]);
-
 
         $routeKWSA->drivers()->save($driver);
         $routeKWQA->drivers()->save($driver);

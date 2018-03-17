@@ -29,7 +29,7 @@ class RoutesTestTest extends TestCase
             'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
-            'residence_country_id' => $kw->id
+//            'residence_country_id' => $kw->id
         ]);
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);

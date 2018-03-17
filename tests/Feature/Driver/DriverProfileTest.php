@@ -53,7 +53,7 @@ class DriverProfileTest extends TestCase
         $body = [
             'mobile'                 => str_random(8),
             'nationality_country_id' => 1,
-            'residence_country_id'   => 1
+//            'residence_country_id'   => 1
         ];
 
         $response = $this->json('POST', '/api/driver/profile/update', $body, $header);
