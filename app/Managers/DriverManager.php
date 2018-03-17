@@ -162,6 +162,7 @@ class DriverManager
 
         return $drivers;
     }
+
     public function getDriversWhoHasValidPasses($passes = [])
     {
         $drivers = DB::table('driver_passes as dp')

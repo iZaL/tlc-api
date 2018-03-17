@@ -27,16 +27,21 @@ abstract class TestCase extends BaseTestCase
     public function _createLoadPostData($array = [])
     {
         $postData = [
-            'customer_id'              => 1,
             'trailer_id'              => 1,
+            'packaging_id'              => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1,
             'price'                   => '200.00',
-            'distance'                => '100',
             'request_documents'       => 0,
             'request_pictures'        => 0,
             'fixed_rate'              => 1,
-            'load_date'            => '2017-10-19'
+            'load_date'            => '2017-10-19',
+            'load_time' => '8am',
+            'receiver_name' => 'zal',
+            'receiver_email' => 'z4ls@live.com',
+            'receiver_phone' => '9992192299',
+            'receiver_mobile' => '9992192299',
+            'weight' => 100,
         ];
 
         return array_merge($postData, $array);
@@ -97,7 +102,6 @@ abstract class TestCase extends BaseTestCase
                 return factory(User::class)->create()->id;
             },
         ], $array));
-
 
         return $customer;
     }

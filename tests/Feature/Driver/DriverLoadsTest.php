@@ -15,9 +15,9 @@ class DriverLoadsTest extends TestCase
 
     use RefreshDatabase;
 
-
     public function test_driver_can_only_see_loads_for_his_customer_if_use_own_truck_option_selected()
     {
+
         // get loads where origin is country id
         // get destination where id is in valid_visas
 
@@ -99,6 +99,7 @@ class DriverLoadsTest extends TestCase
             'data' => [['id' => $loadKWKW1->id], ['id' => $loadKWKW3->id]]
         ]);
 
+        // lara23x
     }
 
     public function test_driver_can_only_see_loads_for_the_customers_who_hasnt_put_him_on_blocked_list()
@@ -234,6 +235,7 @@ class DriverLoadsTest extends TestCase
                 return factory(User::class)->create()->id;
             }
         ]);
+
         $customer1 = $this->_createCustomer();
 
         $this->_createLicense($driver->id, $kw->id);

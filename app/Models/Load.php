@@ -14,6 +14,7 @@ class Load extends BaseModel
         'price',
         'request_documents',
         'request_pictures',
+        'fixed_rate',
         'load_date',
         'load_time',
         'receiver_name',

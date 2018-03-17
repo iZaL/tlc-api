@@ -5,6 +5,7 @@ namespace Tests\Feature\Driver;
 use App\Managers\DriverManager;
 use App\Managers\TripManager;
 use App\Models\CustomerLocation;
+use App\Models\Pass;
 use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -82,7 +83,7 @@ class DriverManagerTest extends TestCase
         $this->assertNotContains($invalidDriver2->id, $drivers);
     }
 
-        public function test_drivers_who_are_on_other_trips_are_excluded_from_the_list()
+    public function test_drivers_who_are_on_other_trips_are_excluded_from_the_list()
     {
         $customer = $this->_createCustomer();
 
@@ -111,7 +112,6 @@ class DriverManagerTest extends TestCase
     public function test_drivers_who_are_blocked_by_customer_are_excluded_from_the_list()
     {
         $customer = $this->_createCustomer();
-        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $invalidDriver1 = $this->_createDriver();
         $invalidDriver2 = $this->_createDriver();
@@ -145,7 +145,6 @@ class DriverManagerTest extends TestCase
     public function test_drivers_need_visas_to_travel_to_destination_route()
     {
         $customer = $this->_createCustomer();
-        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $invalidDriver1 = $this->_createDriver();
         $invalidDriver2 = $this->_createDriver();
@@ -158,7 +157,7 @@ class DriverManagerTest extends TestCase
         $sa = $this->_createCountry('SA');
         $bh = $this->_createCountry('BH');
 
-        $route  = $this->_createRoute($kw,$bh,['transit1'=>$sa->id]);
+        $route = $this->_createRoute($kw, $bh, ['transit1' => $sa->id]);
         $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
         $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
 
@@ -181,7 +180,7 @@ class DriverManagerTest extends TestCase
         );
 
         $driverManager = new DriverManager();
-        $drivers = $driverManager->getDriversWhoHasValidVisas([$kw->id,$sa->id,$bh->id],$load->load_date);
+        $drivers = $driverManager->getDriversWhoHasValidVisas([$kw->id, $sa->id, $bh->id], $load->load_date);
 
         $this->assertContains($validDriver1->id, $drivers);
         $this->assertContains($validDriver2->id, $drivers);
@@ -194,7 +193,6 @@ class DriverManagerTest extends TestCase
     public function test_drivers_need_licenses_to_travel_to_destination_route()
     {
         $customer = $this->_createCustomer();
-        $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $invalidDriver1 = $this->_createDriver();
         $invalidDriver2 = $this->_createDriver();
@@ -207,7 +205,7 @@ class DriverManagerTest extends TestCase
         $sa = $this->_createCountry('SA');
         $bh = $this->_createCountry('BH');
 
-        $route  = $this->_createRoute($kw,$bh,['transit1'=>$sa->id]);
+        $route = $this->_createRoute($kw, $bh, ['transit1' => $sa->id]);
         $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
         $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
 
@@ -230,7 +228,59 @@ class DriverManagerTest extends TestCase
         );
 
         $driverManager = new DriverManager();
-        $drivers = $driverManager->getDriversWhoHasValidLicenses([$kw->id,$sa->id,$bh->id],$load->load_date);
+        $drivers = $driverManager->getDriversWhoHasValidLicenses([$kw->id, $sa->id, $bh->id], $load->load_date);
+
+        $this->assertContains($validDriver1->id, $drivers);
+        $this->assertContains($validDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver1->id, $drivers);
+        $this->assertNotContains($invalidDriver2->id, $drivers);
+        $this->assertNotContains($invalidDriver3->id, $drivers);
+
+    }
+
+    public function test_drivers_need_passes_to_travel_to_destination_route()
+    {
+        $customer = $this->_createCustomer();
+
+        $invalidDriver1 = $this->_createDriver();
+        $invalidDriver2 = $this->_createDriver();
+        $invalidDriver3 = $this->_createDriver();
+
+        $validDriver1 = $this->_createDriver();
+        $validDriver2 = $this->_createDriver();
+
+        $kw = $this->_createCountry('KW');
+        $sa = $this->_createCountry('SA');
+        $bh = $this->_createCountry('BH');
+
+        $route = $this->_createRoute($kw, $bh, ['transit1' => $sa->id]);
+        $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
+        $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
+
+        $pass1 = factory(Pass::class)->create(['country_id'=>$destination->country->id]);
+        $pass2 = factory(Pass::class)->create(['country_id'=>$destination->country->id]);
+
+        $load = $this->_createLoad(
+            [
+                'customer_id'             => $customer->id,
+                'origin_location_id'      => $origin->id,
+                'destination_location_id' => $destination->id,
+            ]
+        );
+
+        $load->passes()->sync([$pass1->id]);
+        $load->passes()->sync([$pass2->id]);
+
+        $validDriver1->passes()->sync([$pass1->id]);
+        $validDriver2->passes()->sync([$pass1->id]);
+
+        $validDriver1->passes()->sync([$pass2->id]);
+        $validDriver2->passes()->sync([$pass2->id]);
+
+        $invalidDriver1->passes()->sync([$pass1->id]);
+
+        $driverManager = new DriverManager();
+        $drivers = $driverManager->getDriversWhoHasValidPasses($load->passes->pluck('id'));
 
         $this->assertContains($validDriver1->id, $drivers);
         $this->assertContains($validDriver2->id, $drivers);

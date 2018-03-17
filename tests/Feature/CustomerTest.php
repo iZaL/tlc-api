@@ -36,6 +36,7 @@ class CustomerTest extends TestCase
     {
         $customer = $this->_createCustomer();
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
+
         $loadData = $this->_createLoadPostData();
         $others = [];
         $postData = array_merge($loadData, $others);

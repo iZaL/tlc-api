@@ -105,22 +105,22 @@ class CustomerLoadTest extends TestCase
 
     }
 
-
-    /**
-     * @todo
-     */
-
-    public function test_customer_needs_enough_credits_to_post_a_load()
-    {
-
-    }
-
-
-    public function test_trailer_selected_by_customer_can_load_the_cargo()
-    {
-        // does it violate the rules of destination and transit countries
-        // RULES : Dimensions, Load Capacity
-    }
+//
+//    /**
+//     * @todo
+//     */
+//
+//    public function test_customer_needs_enough_credits_to_post_a_load()
+//    {
+//
+//    }
+//
+//
+//    public function test_trailer_selected_by_customer_can_load_the_cargo()
+//    {
+//        // does it violate the rules of destination and transit countries
+//        // RULES : Dimensions, Load Capacity
+//    }
 
 
 
