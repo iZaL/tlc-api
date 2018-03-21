@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Route;
 use App\Models\Truck;
 use App\Models\TruckMake;
+use App\Models\TruckModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -101,8 +102,8 @@ abstract class TestCase extends BaseTestCase
     {
 
         $truck = factory(Truck::class)->create(array_merge([
-            'make_id' => function () {
-                return factory(TruckMake::class)->create()->id;
+            'model_id' => function () {
+                return factory(TruckModel::class)->create()->id;
             },
             'registration_country_id' => $countryID
         ], $array));

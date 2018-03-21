@@ -42,7 +42,7 @@ class DriverTrucksTest extends TestCase
         $truckModel = factory(TruckModel::class)->create();
 
         $body = [
-            'make_id'  => $truckMake->id,
+//            'make_id'  => $truckMake->id,
             'model_id' => $truckModel->id,
             'registration_number' => '21212',
             'registration_expiry' => '2017-09-17',
@@ -75,7 +75,7 @@ class DriverTrucksTest extends TestCase
         $truckModel = factory(TruckModel::class)->create();
 
         $body = [
-            'make_id'  => $truckMake->id,
+//            'make_id'  => $truckMake->id,
             'model_id' => $truckModel->id,
             'registration_number' => '21212',
             'registration_expiry' => '2017-09-17',

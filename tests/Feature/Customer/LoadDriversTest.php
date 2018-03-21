@@ -86,10 +86,10 @@ class LoadDriversTest extends TestCase
             'truck_id' => $truck2->id
         ]);
 
-        $driver3 = $this->_createDriver([
-            'nationality_country_id' => $kw->id,
-            'truck_id' => $truck2->id
-        ]);
+//        $driver3 = $this->_createDriver([
+//            'nationality_country_id' => $kw->id,
+//            'truck_id' => $truck2->id
+//        ]);
 
         // Residencies
         $driver1->residencies()->sync([$kw->id]);
@@ -141,7 +141,7 @@ class LoadDriversTest extends TestCase
                  [
                      ['id' => $driver1->id],
                      ['id' => $driver2->id],
-                     ['id' => $driver3->id],
+//                     ['id' => $driver3->id],
                  ]
             ]);
 

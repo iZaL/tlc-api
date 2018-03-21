@@ -18,10 +18,10 @@ class TruckResource extends Resource
     {
         return [
             'id'                  => $this->id,
-            'make'                => [
-                'id' => $this->make->id,
-                'name' => $this->make->name,
-            ],
+//            'make'                => [
+//                'id' => $this->make->id,
+//                'name' => $this->make->name,
+//            ],
             'model'               => [
                 'id' => $this->model->id,
                 'name' => $this->model->name,

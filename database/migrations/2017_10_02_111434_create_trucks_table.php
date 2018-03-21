@@ -15,8 +15,8 @@ class CreateTrucksTable extends Migration
     {
         Schema::create('trucks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('make_id')->nullable();
             $table->integer('model_id')->nullable();
+            $table->integer('type_id')->nullable();
             $table->integer('trailer_id')->nullable();
             $table->integer('registration_country_id')->nullable();
             $table->string('plate_number')->nullable();

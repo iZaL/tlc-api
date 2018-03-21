@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrailerTypesTable extends Migration
+class CreateTrailerCargosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateTrailerTypesTable extends Migration
      */
     public function up()
     {
-        // Reefer, Utility, Covered etc
-        Schema::create('trailer_types', function (Blueprint $table) {
+        // Pelletized, Loose, Bulk, Refrigerated
+        Schema::create('trailer_cargos', function (Blueprint $table) {
             $table->increments('id');
-//            $table->integer('make_id')->nullable();
-            $table->string('name_en')->nullable();
-            $table->string('name_ar')->nullable();
-            $table->string('name_hi')->nullable();
-            $table->boolean('active')->default(1);
+            $table->integer('trailer_id');
+            $table->integer('cargo_id');
             $table->timestamps();
 //            $table->softDeletes();
         });
@@ -33,6 +30,6 @@ class CreateTrailerTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trailer_types');
+        Schema::dropIfExists('trailer_cargos');
     }
 }

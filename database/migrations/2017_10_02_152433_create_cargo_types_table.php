@@ -13,6 +13,7 @@ class CreateCargoTypesTable extends Migration
      */
     public function up()
     {
+        // Pelletized, Loose, Bulk, Refrigerated
         Schema::create('cargo_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name_en')->nullable();
