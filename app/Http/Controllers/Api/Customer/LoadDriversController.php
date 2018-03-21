@@ -135,7 +135,8 @@ class LoadDriversController extends Controller
         $driversWhoHasValidRoute = $routeManager->getRouteDrivers($originCountryID,$destinationCountryCountryID);
 
         // Drivers Who Has Valid Visa
-        //@todo: take into account the GCC countries and Border Visas
+        //@todo: take into account the GCC countries and Border Visas .. Is it really necessary to do that here ?
+
         $driversWhoHasValidVisas = $driverManager->getDriversWhoHasValidVisas($routeTransitCountries,$loadDate);
 
         // Drivers Who has Valid Licenses

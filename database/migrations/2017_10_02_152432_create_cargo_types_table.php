@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTruckModelsTable extends Migration
+class CreateCargoTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateTruckModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('truck_models', function (Blueprint $table) {
+        Schema::create('cargo_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('make_id');
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
-            $table->string('image')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
 //            $table->softDeletes();
@@ -33,6 +31,6 @@ class CreateTruckModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('truck_models');
+        Schema::dropIfExists('cargo_types');
     }
 }

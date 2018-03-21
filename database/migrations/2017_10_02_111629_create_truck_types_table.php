@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrailersTable extends Migration
+class CreateTruckTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,13 @@ class CreateTrailersTable extends Migration
      */
     public function up()
     {
-        Schema::create('trailers', function (Blueprint $table) {
+        Schema::create('truck_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('make_id')->nullable();
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
-            $table->integer('max_weight')->nullable();
-            $table->integer('length')->nullable();
-            $table->integer('width')->nullable();
-            $table->integer('height')->nullable();
-            $table->string('axles')->nullable();
-            $table->integer('year')->nullable();
             $table->string('image')->nullable();
-            $table->boolean('active')->default(1);
+            $table->float('max_weight')->nullable()->notes('single axel truck can pull upto 30 tons');
             $table->timestamps();
 //            $table->softDeletes();
         });
@@ -39,6 +32,6 @@ class CreateTrailersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trailers');
+        Schema::dropIfExists('truck_types');
     }
 }
