@@ -20,7 +20,9 @@ $factory->define(\App\Models\DriverVisas::class, function (Faker $faker) {
     return [
         'driver_id'   => \App\Models\Driver::first()->id,
         'country_id'  => \App\Models\Country::first()->id,
-        'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString()
+        'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
+        'number'      => str_random(15),
+        'image'      =>  'https://source.unsplash.com/800x400/?files'
     ];
 });
 
@@ -28,6 +30,9 @@ $factory->define(\App\Models\DriverPass::class, function (Faker $faker) {
     return [
         'driver_id' => \App\Models\Driver::first()->id,
         'pass_id'   => \App\Models\Pass::first()->id,
+        'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
+        'number'      => str_random(15),
+        'image'      =>  'https://source.unsplash.com/800x400/?files'
     ];
 });
 
@@ -40,11 +45,20 @@ $factory->define(\App\Models\DriverLanguage::class, function (Faker $faker) {
 //
 $factory->define(\App\Models\DriverLicense::class, function (Faker $faker) {
     return [
-        'driver_id'   => \App\Models\Driver::all()->count() ? \App\Models\Driver::first()->id : 1,
-        'country_id'  => \App\Models\Country::all()->count() ? \App\Models\Country::first()->id : 1,
+        'driver_id'   => \App\Models\Driver::first()->id,
+        'country_id'  => \App\Models\Country::first()->id,
         'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
-        'number'      => str_random(10)
-
+        'number'      => str_random(15),
+        'image'      =>  'https://source.unsplash.com/800x400/?files'
+    ];
+});
+$factory->define(\App\Models\DriverResidency::class, function (Faker $faker) {
+    return [
+        'driver_id'   => \App\Models\Driver::first()->id,
+        'country_id'  => \App\Models\Country::first()->id,
+        'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
+        'number'      => str_random(15),
+        'image'      =>  'https://source.unsplash.com/800x400/?files'
     ];
 });
 //

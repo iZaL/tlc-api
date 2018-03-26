@@ -43,7 +43,6 @@ class CustomerLocationTest extends TestCase
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $employee = factory(Employee::class)->create();
-
         $data = [
             'id' => $employee->id,
             'name_en' => 'wa',

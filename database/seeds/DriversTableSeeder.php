@@ -51,6 +51,8 @@ class DriversTableSeeder extends Seeder
         $driver->visas()->attach($ae->id,['expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
         $driver->visas()->attach($om->id,['expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
 
+        $driver->residencies()->save(factory(\App\Models\DriverResidency::class)->create(['country_id'=>$kw->id]));
+        $driver->residencies()->save(factory(\App\Models\DriverResidency::class)->create(['country_id'=>$kw->id]));
 
         // loads
 

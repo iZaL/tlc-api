@@ -14,6 +14,11 @@ class Driver extends BaseModel
         return $this->belongsTo(User::class);
     }
 
+    public function documents()
+    {
+        return $this->belongsToMany(Country::class,'driver_documents');
+    }
+
     /**
      * @todo:for now allow only has one
      */
@@ -34,8 +39,7 @@ class Driver extends BaseModel
 
     public function residencies()
     {
-        return $this->belongsToMany(Country::class, 'driver_residencies')
-            ->withPivot(['expiry_date', 'number', 'image']);
+        return $this->hasMany(DriverResidency::class);
     }
 
     public function visas()

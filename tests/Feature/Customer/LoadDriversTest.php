@@ -15,7 +15,6 @@ class LoadDriversTest extends TestCase
 
     use RefreshDatabase;
 
-
     /** get drivers
      * who are active === done
      * who are not offline === done
