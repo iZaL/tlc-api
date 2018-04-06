@@ -98,8 +98,6 @@ class DriverLoadsTest extends TestCase
         $response->assertJson([
             'data' => [['id' => $loadKWKW1->id], ['id' => $loadKWKW3->id]]
         ]);
-
-        // lara23x
     }
 
     public function test_driver_can_only_see_loads_for_the_customers_who_hasnt_put_him_on_blocked_list()
