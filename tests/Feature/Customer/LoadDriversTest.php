@@ -76,23 +76,16 @@ class LoadDriversTest extends TestCase
 
         // Driver
         $driver1 = $this->_createDriver([
-            'nationality_country_id' => $in->id,
             'truck_id' => $truck1->id
         ]);
 
         $driver2 = $this->_createDriver([
-            'nationality_country_id' => $kw->id,
             'truck_id' => $truck2->id
         ]);
 
-//        $driver3 = $this->_createDriver([
-//            'nationality_country_id' => $kw->id,
-//            'truck_id' => $truck2->id
-//        ]);
-
         // Residencies
-        $driver1->residencies()->sync([$kw->id]);
-        $driver1->residencies()->sync([$kw->id,$sa->id]);
+        $driver1->documents()->create(['type'=>'residency','country_id'=>$kw->id]);
+        $driver1->documents()->create(['type'=>'residency','country_id'=>$sa->id]);
 
         //Routes
         $driver1->routes()->sync([$route->id]);

@@ -5,7 +5,7 @@ namespace Tests;
 use App\Models\Country;
 use App\Models\Driver;
 use App\Models\DriverLicense;
-use App\Models\DriverVisas;
+use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Customer;
 use App\Models\Route;
@@ -80,8 +80,9 @@ abstract class TestCase extends BaseTestCase
 
     public function _createVisa($driverID, $countryID, $valid = true)
     {
-        factory(DriverVisas::class)->create(
+        factory(DriverDocument::class)->create(
             [
+                'type'  => 'visa',
                 'driver_id'   => $driverID,
                 'country_id'  => $countryID,
                 'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()
@@ -90,8 +91,9 @@ abstract class TestCase extends BaseTestCase
 
     public function _createLicense($driverID, $countryID, $valid = true)
     {
-        factory(DriverLicense::class)->create(
+        factory(DriverDocument::class)->create(
             [
+                'type'  => 'license',
                 'driver_id'   => $driverID,
                 'country_id'  => $countryID,
                 'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()

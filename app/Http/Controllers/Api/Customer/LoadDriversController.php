@@ -17,7 +17,7 @@ use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
 use App\Models\Country;
 use App\Models\Driver;
-use App\Models\DriverVisas;
+use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Packaging;
 use App\Models\Pass;

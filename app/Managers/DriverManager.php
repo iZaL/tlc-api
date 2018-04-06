@@ -134,9 +134,11 @@ class DriverManager
 
     public function getDriversWhoHasValidVisas($countries = [], $loadDate)
     {
-        $drivers = DB::table('driver_visas as dv')
+        $drivers = DB::table('driver_documents as dv')
             ->join('drivers', function ($join) use ($countries) {
-                $join->on('drivers.id', '=', 'dv.driver_id');
+                $join->on('drivers.id', '=', 'dv.driver_id')
+                    ->where('dv.type','visa')
+                ;
             })
             ->whereIn('dv.country_id', $countries)
             ->having(DB::raw('count(*)'), '=', count($countries))
@@ -150,16 +152,19 @@ class DriverManager
 
     public function getDriversWhoHasValidLicenses($countries = [], $loadDate)
     {
-        $drivers = DB::table('driver_licenses as dl')
+        $drivers = DB::table('driver_documents as dl')
             ->join('drivers', function ($join) use ($countries) {
-                $join->on('drivers.id', '=', 'dl.driver_id');
+                $join->on('drivers.id', '=', 'dl.driver_id')
+                    ->where('dl.type','license')
+                ;
             })
             ->whereIn('dl.country_id', $countries)
             ->having(DB::raw('count(*)'), '=', count($countries))
             ->whereDate('dl.expiry_date', '>', $loadDate)
             ->select('dl.driver_id')
             ->groupBy('dl.driver_id')
-            ->pluck('dl.driver_id');
+            ->pluck('dl.driver_id')
+        ;
 
         return $drivers;
     }

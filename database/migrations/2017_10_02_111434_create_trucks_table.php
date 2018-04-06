@@ -21,6 +21,7 @@ class CreateTrucksTable extends Migration
             $table->string('plate_number')->nullable();
             $table->string('registration_number')->nullable();
             $table->date('registration_expiry')->nullable();
+            $table->string('registration_image')->nullable();
             $table->string('max_weight')->nullable();
             $table->string('year')->nullable();
             $table->string('image')->nullable();

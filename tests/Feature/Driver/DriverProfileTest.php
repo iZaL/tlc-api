@@ -5,7 +5,7 @@ namespace Tests\Feature\Driver;
 use App\Models\Country;
 use App\Models\Driver;
 use App\Models\DriverLicense;
-use App\Models\DriverVisas;
+use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Pass;
@@ -52,8 +52,6 @@ class DriverProfileTest extends TestCase
 
         $body = [
             'mobile'                 => str_random(8),
-            'nationality_country_id' => 1,
-//            'residence_country_id'   => 1
         ];
 
         $response = $this->json('POST', '/api/driver/profile/update', $body, $header);

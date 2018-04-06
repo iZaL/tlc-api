@@ -17,22 +17,23 @@ class DriverResource extends Resource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'schema' => 'drivers',
-            'mobile' => $this->mobile,
-            'phone' => $this->phone,
-            'book_direct' => $this->book_direct,
-            'active' => $this->active,
-            'offline' => $this->offline,
-            'blocked' => $this->blocked,
-            'nationality' => new CountryResource($this->whenLoaded('nationality')),
-            'residencies' => DocumentResource::collection($this->whenLoaded('residencies')),
-            'truck' => new TruckResource($this->whenLoaded('truck')),
-            'routes' => RoutesResource::collection($this->whenLoaded('routes')),
-            'visas' => LicenseVisaResource::collection($this->whenLoaded('visas')),
-            'licenses' => LicenseVisaResource::collection($this->whenLoaded('licenses')),
-            'customer' => new CustomerResource($this->whenLoaded('customer')),
-            'loads' => LoadResource::collection($this->whenLoaded('loads'))
+            'id'            => $this->id,
+            'schema'        => 'drivers',
+            'mobile'        => $this->mobile,
+            'phone'         => $this->phone,
+            'book_direct'   => $this->book_direct,
+            'active'        => $this->active,
+            'offline'       => $this->offline,
+            'blocked'       => $this->blocked,
+//            'nationality'   => new CountryResource($this->whenLoaded('nationality')),
+            'truck'         => new TruckResource($this->whenLoaded('truck')),
+            'customer'      => new CustomerResource($this->whenLoaded('customer')),
+            'routes'        => RoutesResource::collection($this->whenLoaded('routes')),
+            'loads'         => LoadResource::collection($this->whenLoaded('loads')),
+            'nationalities' => DocumentResource::collection($this->whenLoaded('nationalities')),
+            'residencies'   => DocumentResource::collection($this->whenLoaded('residencies')),
+            'visas'         => DocumentResource::collection($this->whenLoaded('visas')),
+            'licenses'      => DocumentResource::collection($this->whenLoaded('licenses')),
         ];
     }
 }

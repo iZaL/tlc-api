@@ -20,6 +20,7 @@ class CreateDriverDocumentsTable extends Migration
             $table->string('number')->nullable();
             $table->date('expiry_date')->nullable();
             $table->string('image')->nullable();
+            $table->string('type')->nullable()->notes('visa,license,residence,nationality');
             $table->timestamps();
         });
     }

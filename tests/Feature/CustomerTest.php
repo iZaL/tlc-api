@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Country;
 use App\Models\Driver;
-use App\Models\DriverVisas;
+use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Customer;

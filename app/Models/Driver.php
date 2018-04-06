@@ -5,19 +5,19 @@ namespace App\Models;
 class Driver extends BaseModel
 {
 
-    protected $fillable = ['mobile', 'nationality_country_id', 'user_id', 'customer_id'];
+    protected $fillable = ['mobile', 'user_id', 'customer_id'];
 
-    protected $hidden = ['nationality_country_id', 'customer_id', 'user_id'];
+    protected $hidden = ['customer_id', 'user_id'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function documents()
-    {
-        return $this->belongsToMany(Country::class,'driver_documents');
-    }
+//    public function documents()
+//    {
+//        return $this->belongsToMany(Country::class,'driver_documents')->withPivot(['expiry_date', 'number', 'image']);
+//    }
 
     /**
      * @todo:for now allow only has one
@@ -27,41 +27,39 @@ class Driver extends BaseModel
         return $this->belongsTo(Truck::class);
     }
 
-    public function nationality()
+    public function documents()
     {
-        return $this->belongsTo(Country::class, 'nationality_country_id');
+        return $this->hasMany(DriverDocument::class);
     }
 
-//    public function residence()
-//    {
-//        return $this->belongsTo(Country::class,'residence_country_id');
-//    }
+    public function nationalities()
+    {
+        return $this->documents()->where('type','nationality');
+    }
 
     public function residencies()
     {
-        return $this->hasMany(DriverResidency::class);
+        return $this->documents()->where('type','residency');
     }
 
     public function visas()
     {
-        return $this->belongsToMany(Country::class, 'driver_visas')
-            ->withPivot(['expiry_date', 'number', 'image']);
+        return $this->documents()->where('type','visa');
     }
 
     public function licenses()
     {
-        return $this->belongsToMany(Country::class, 'driver_licenses')
-            ->withPivot(['expiry_date', 'number', 'image']);
+        return $this->documents()->where('type','license');
     }
 
     public function valid_visas()
     {
-        return $this->visas()->wherePivot('expiry_date', '>', date('Y-m-d'));
+        return $this->visas()->where('expiry_date', '>', date('Y-m-d'));
     }
 
     public function valid_licenses()
     {
-        return $this->licenses()->wherePivot('expiry_date', '>', date('Y-m-d'));
+        return $this->licenses()->where('expiry_date', '>', date('Y-m-d'));
     }
 
     public function passes()
@@ -83,11 +81,6 @@ class Driver extends BaseModel
     {
         return $this->belongsToMany(Route::class, 'driver_routes');
     }
-
-//    public function loads()
-//    {
-//        return $this->belongsToMany(Load::class, 'jobs');
-//    }
 
     public function trips()
     {

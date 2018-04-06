@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-class DriverResidency extends BaseModel
+class DriverDocument extends BaseModel
 {
-
-    protected $with = ['country'];
-
     public function country()
     {
         return $this->belongsTo(Country::class);
@@ -16,5 +13,4 @@ class DriverResidency extends BaseModel
     {
         return $this->belongsTo(Driver::class);
     }
-
 }

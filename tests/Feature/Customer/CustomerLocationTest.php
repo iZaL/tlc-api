@@ -5,7 +5,7 @@ namespace Tests\Feature\Driver;
 use App\Models\Country;
 use App\Models\Driver;
 use App\Models\DriverLicense;
-use App\Models\DriverVisas;
+use App\Models\DriverDocument;
 use App\Models\Employee;
 use App\Models\Load;
 use App\Models\Location;
