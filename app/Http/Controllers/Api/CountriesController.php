@@ -30,14 +30,19 @@ class CountriesController extends Controller
      */
     public function getAll()
     {
-        $countries = $this->countryModel->with(['loading_routes'])->get();
+        $countries = $this->countryModel->with(['loading_routes','locations'])->active()->get();
+        return [
+            'success' => true,
+            'data'    => CountryResource::collection($countries)
+        ];
 
-        return new CountryCollection($countries);
     }
 
     public function getRoutesForCountry($countryID)
     {
-        $country = $this->countryModel->with(['loading_routes'])->find($countryID);
+        $country = $this->countryModel->with(['loading_routes'=>function($q){
+            $q->active();
+        }])->find($countryID);
         return response()->json(['success'=>true,'data'=>new CountryResource($country)]);
 
     }

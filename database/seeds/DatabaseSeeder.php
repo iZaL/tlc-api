@@ -18,18 +18,17 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UsersTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
-        $this->call(GatespassesTableSeeder::class);
+        $this->call(SecurityPassesTableSeeder::class);
         $this->call(CustomersTableSeeder::class);
         $this->call(CustomerLocationsTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(TrucksTableSeeder::class);
-        $this->call(TrailersTableSeeder::class);
+//        $this->call(TrailersTableSeeder::class);
 //        $this->call(RoutesTableSeeder::class);
 //        $this->call(PassesTableSeeder::class);
         $this->call(PackagingTableSeeder::class);
         $this->call(DriversTableSeeder::class);
         $this->call(LoadsTableSeeder::class);
-        $this->call(PassesTableSeeder::class);
     }
 
     public function truncateTables()

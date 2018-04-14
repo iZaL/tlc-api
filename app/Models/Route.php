@@ -45,5 +45,10 @@ class Route extends BaseModel
         return false;
     }
 
+    public function locations()
+    {
+//        return $this->
+    }
+
 
 }

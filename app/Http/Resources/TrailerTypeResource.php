@@ -6,7 +6,7 @@ use App\Models\Driver;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RoutesResource extends Resource
+class TrailerTypeResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -18,10 +18,7 @@ class RoutesResource extends Resource
     {
         return  [
             'id' => $this->id,
-            'origin' => new CountryResource($this->origin),
-            'destination' => new CountryResource($this->destination),
-            'transits' => CountryResource::collection($this->whenLoaded('transits')),
-            'has_added' => $this->has_added,
+            'name' => $this->name,
             'active' => $this->active
         ];
     }

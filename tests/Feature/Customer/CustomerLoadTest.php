@@ -10,7 +10,7 @@ use App\Models\Employee;
 use App\Models\Load;
 use App\Models\Location;
 use App\Models\Packaging;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\CustomerLocation;
 use App\Models\Trailer;
@@ -44,9 +44,9 @@ class CustomerLoadTest extends TestCase
         $receiverMobile = 97978833;
         $receiverPhone = 97978833;
         $weight = '200';
-        $pass1 = factory(Pass::class)->create();
-        $pass2 = factory(Pass::class)->create();
-        $pass3 = factory(Pass::class)->create();
+        $pass1 = factory(SecurityPass::class)->create();
+        $pass2 = factory(SecurityPass::class)->create();
+        $pass3 = factory(SecurityPass::class)->create();
 
         $loadPostData = [
             'trailer_id'              => $trailer1->id,
@@ -65,7 +65,7 @@ class CustomerLoadTest extends TestCase
         ];
 
         $loadPasses = [
-            'passes' => [$pass1->id, $pass2->id, $pass3->id],
+            'security_passes' => [$pass1->id, $pass2->id, $pass3->id],
         ];
 
         $loadData = array_merge($loadPostData,$loadPasses);
@@ -76,9 +76,9 @@ class CustomerLoadTest extends TestCase
 
         $this->assertDatabaseHas('loads',$responseData);
 
-        $this->assertDatabaseHas('passes',['id'=>$pass1->id]);
-        $this->assertDatabaseHas('passes',['id'=>$pass2->id]);
-        $this->assertDatabaseHas('passes',['id'=>$pass3->id]);
+        $this->assertDatabaseHas('security_passes',['id'=>$pass1->id]);
+        $this->assertDatabaseHas('security_passes',['id'=>$pass2->id]);
+        $this->assertDatabaseHas('security_passes',['id'=>$pass3->id]);
 
         $response->assertJson(['success' => true]);
 

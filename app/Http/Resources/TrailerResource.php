@@ -18,11 +18,9 @@ class TrailerResource extends Resource
     {
         return [
             'id'                  => $this->id,
-            'make' => [
-                'id' => optional($this->make)->id,
-                'name' => optional($this->make)->name
-            ],
-            'name' => $this->name,
+            'make' => new TrailerMakeResource($this->whenLoaded('make')),
+            'type' => new TrailerTypeResource($this->whenLoaded('type')),
+//            'name' => $this->name,
             'max_weight' => $this->max_weight,
             'length' => $this->length,
             'width' => $this->width,

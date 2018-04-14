@@ -4,7 +4,7 @@ namespace Tests\Feature\Driver;
 
 use App\Models\Driver;
 use App\Models\Load;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\CustomerLocation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -443,19 +443,19 @@ class DriverLoadsTest extends TestCase
             'destination_location_id' => $kw->id,
         ]);
 
-        $pass1 = factory(Pass::class)->create(['country_id' => $kw->id]);
-        $pass2 = factory(Pass::class)->create(['country_id' => $kw->id]);
-        $pass3 = factory(Pass::class)->create(['country_id' => $kw->id]);
+        $pass1 = factory(SecurityPass::class)->create(['country_id' => $kw->id]);
+        $pass2 = factory(SecurityPass::class)->create(['country_id' => $kw->id]);
+        $pass3 = factory(SecurityPass::class)->create(['country_id' => $kw->id]);
 
-        $loadKWKW1->passes()->attach($pass1->id);
+        $loadKWKW1->security_passes()->attach($pass1->id);
 
-        $loadKWKW1->passes()->attach($pass2->id);
-        $loadKWKW2->passes()->attach($pass2->id);
+        $loadKWKW1->security_passes()->attach($pass2->id);
+        $loadKWKW2->security_passes()->attach($pass2->id);
 
-        $loadKWKW3->passes()->attach($pass3->id);
+        $loadKWKW3->security_passes()->attach($pass3->id);
 
         $driver = $this->_createDriver();
-        $driver->passes()->attach($pass2->id);
+        $driver->security_passes()->attach($pass2->id);
 
         $customer1 = $this->_createCustomer();
 

@@ -22,13 +22,13 @@ class DriversTableSeeder extends Seeder
         $ae = \App\Models\Country::where('abbr','AE')->first();
         $in = \App\Models\Country::where('abbr','IN')->first();
 
-        $pass1 = factory(\App\Models\Pass::class)->create(['country_id' => $kw->id,'name_en'=>'KOC','name_ar'=>'KOC']);
-        $pass2 = factory(\App\Models\Pass::class)->create(['country_id' => $kw->id,'name_en'=>'KNPC','name_ar'=>'KNPC']);
+        $pass1 = factory(\App\Models\SecurityPass::class)->create(['country_id' => $kw->id, 'name_en' =>'KOC', 'name_ar' =>'KOC']);
+        $pass2 = factory(\App\Models\SecurityPass::class)->create(['country_id' => $kw->id, 'name_en' =>'KNPC', 'name_ar' =>'KNPC']);
 
         $routeKWSA = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$sa->id)->first();
         $routeKWOM = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$om->id)->first();
 
-        $driver->passes()->sync([$pass1->id,$pass2->id]);
+        $driver->security_passes()->sync([$pass1->id,$pass2->id]);
 
         //[ KW->Sa ],  [ KW->OM = KW->SA->AE->OM ]
         $driver->routes()->sync([$routeKWSA->id,$routeKWOM->id]);

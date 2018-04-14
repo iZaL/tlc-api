@@ -9,7 +9,7 @@ use App\Models\DriverDocument;
 use App\Models\Employee;
 use App\Models\Load;
 use App\Models\Location;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\CustomerLocation;
 use App\Models\Trailer;

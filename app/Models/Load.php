@@ -55,9 +55,9 @@ class Load extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      * Requires Passes
      */
-    public function passes()
+    public function security_passes()
     {
-        return $this->belongsToMany(Pass::class,'load_passes');
+        return $this->belongsToMany(SecurityPass::class,'load_security_passes');
     }
 
     public function trips()

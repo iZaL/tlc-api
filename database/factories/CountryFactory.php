@@ -8,6 +8,7 @@ $factory->define(\App\Models\Country::class, function (Faker $faker) {
         'name_en' => $country,
         'name_ar' => $country,
         'name_hi' => $country,
-        'abbr' => $faker->countryCode
+        'abbr' => $faker->countryCode,
+        'show_route_locations' => $faker->boolean(90)
     ];
 });

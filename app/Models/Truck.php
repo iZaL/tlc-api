@@ -13,16 +13,6 @@ class Truck extends BaseModel
         return $this->belongsTo(TruckModel::class);
     }
 
-    public function make()
-    {
-        return $this->belongsTo(TruckMake::class);
-    }
-
-//    public function driver()
-//    {
-//        return $this->belongsTo(Driver::class);
-//    }
-
     public function registration_country()
     {
         return $this->belongsTo(Country::class,'registration_country_id');

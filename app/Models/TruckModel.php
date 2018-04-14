@@ -8,4 +8,9 @@ class TruckModel extends BaseModel
 
     protected $appends = ['name'];
 
+    public function make()
+    {
+        return $this->belongsTo(TruckMake::class);
+    }
+
 }

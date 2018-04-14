@@ -11,7 +11,7 @@ use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\PackagingResource;
-use App\Http\Resources\PassResource;
+use App\Http\Resources\SecurityPassResource;
 use App\Http\Resources\CustomerLocationResource;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
@@ -20,7 +20,7 @@ use App\Models\Driver;
 use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Packaging;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\Route;
 use App\Models\Trailer;
@@ -53,7 +53,7 @@ class LoadDriversController extends Controller
      */
     private $packagingModel;
     /**
-     * @var Pass
+     * @var SecurityPass
      */
     private $passModel;
     /**
@@ -72,11 +72,11 @@ class LoadDriversController extends Controller
      * @param Country $countryModel
      * @param Trailer $trailerModel
      * @param Packaging $packagingModel
-     * @param Pass $passModel
+     * @param SecurityPass $passModel
      * @param Driver $driverModel
      * @param Route $routeModel
      */
-    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel, Driver $driverModel,Route $routeModel)
+    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, SecurityPass $passModel, Driver $driverModel, Route $routeModel)
     {
         $this->customerModel = $customerModel;
         $this->loadModel = $loadModel;
@@ -158,8 +158,8 @@ class LoadDriversController extends Controller
         $includingDrivers = $includingDrivers->intersect($truckDrivers);
         $includingDrivers = $includingDrivers->intersect($trailerDrivers);
 
-        if($load->passes->count()) {
-            $driversWhoHasValidPasses = $driverManager->getDriversWhoHasValidPasses($load->passes->pluck('id'));
+        if($load->security_passes->count()) {
+            $driversWhoHasValidPasses = $driverManager->getDriversWhoHasValidPasses($load->security_passes->pluck('id'));
             $includingDrivers = $includingDrivers->intersect($driversWhoHasValidPasses);
         }
 

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Pass extends BaseModel
+class SecurityPass extends BaseModel
 {
 
     public function country()

@@ -28,7 +28,7 @@ class EmployeeResource extends Resource
             'phone'              => $this->phone,
             'image'              => $this->image,
             'active'             => $this->active,
-            'driver_interaction' => $this->driver_interaction,
+            'driver_interaction' => (bool) $this->driver_interaction,
             'customer'            => new CustomerResource($this->whenLoaded('customer')),
         ];
     }

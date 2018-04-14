@@ -10,6 +10,16 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
     Route::post('trips/{id}/location/update','\App\Http\Controllers\Api\Driver\TripsController@updateLocation');
 
+    Route::get('security_passes','\App\Http\Controllers\Api\RoutesController@getSecurityPasses');
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | Country Routes
+     * |--------------------------------------------------------------------------
+     */
+
+    Route::get('countries','CountriesController@getAll');
+
     /**
      * |--------------------------------------------------------------------------
      * | Authenticated Routes
@@ -27,6 +37,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
         Route::get('trucks/makes','TrucksController@getMakesModels');
         Route::get('trailers','TrucksController@getTrailers');
         Route::get('trailers/makes','TrucksController@getTrailerMakes');
+        Route::get('trailers/types','TrucksController@getTrailerTypes');
 
 
         Route::group(['prefix' => 'customer','namespace' => 'Customer','middleware' => 'customer'], function () {
@@ -67,13 +78,6 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
         });
 
-        /**
-         * |--------------------------------------------------------------------------
-         * | Country Routes
-         * |--------------------------------------------------------------------------
-         */
-
-        Route::get('countries','CountriesController@getAll');
 
         /**
          * |--------------------------------------------------------------------------
@@ -85,6 +89,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
             Route::get('profile','ProfileController@getProfile');
             Route::post('profile/update','ProfileController@update');
+            Route::get('security_passes', 'ProfileController@getSecurityPasses');
 
 
             Route::post('trucks','TrucksController@saveTruck');
@@ -102,6 +107,8 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
+
+
 
 //            Route::get('jobs','JobsController@getUpcomingJobs');
 //            Route::get('loads/{id}/details','LoadsController@getLoadDetails');

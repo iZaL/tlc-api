@@ -40,12 +40,11 @@ class ProfileController extends Controller
         $driver = $user->driver;
 
         $driver->load([
-//            'nationality',
-            'truck.trailer',
-            'truck.model',
-            'truck.make',
+            'truck.trailer.type',
+            'truck.trailer.make',
+            'truck.model.make',
             'truck.registration_country.loading_routes',
-            'passes',
+            'security_passes.country',
             'blocked_list',
             'customer.user',
             'residencies.country',
@@ -77,4 +76,11 @@ class ProfileController extends Controller
     }
 
 
+    public function getSecurityPasses(Request $request)
+    {
+        $driver = Auth::guard('api')->user()->driver;
+        $driver->load('security_passes');
+
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+    }
 }

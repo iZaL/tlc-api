@@ -6,7 +6,7 @@ use App\Models\Driver;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PassResource extends Resource
+class TrailerMakeResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -16,10 +16,10 @@ class PassResource extends Resource
      */
     public function toArray($request)
     {
-        return [
+        return  [
             'id' => $this->id,
             'name' => $this->name,
-            'country' =>  new CountryResource($this->whenLoaded('country')),
+            'active' => $this->active
         ];
     }
 }

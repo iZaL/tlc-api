@@ -4,7 +4,7 @@ namespace Tests\Feature\Driver;
 
 use App\Models\Country;
 use App\Models\CustomerLocation;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Trailer;
 use App\Models\Truck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -110,17 +110,17 @@ class LoadDriversTest extends TestCase
         $this->_createLicense($driver2->id,$bh->id);
 
         // Passes
-        $pass1 = factory(Pass::class)->create(['country_id'=>$destination->country->id]);
-        $pass2 = factory(Pass::class)->create(['country_id'=>$destination->country->id]);
+        $pass1 = factory(SecurityPass::class)->create(['country_id' =>$destination->country->id]);
+        $pass2 = factory(SecurityPass::class)->create(['country_id' =>$destination->country->id]);
 
-        $load->passes()->sync([$pass1->id]);
-        $load->passes()->sync([$pass2->id]);
+        $load->security_passes()->sync([$pass1->id]);
+        $load->security_passes()->sync([$pass2->id]);
 
-        $driver1->passes()->sync([$pass1->id]);
-        $driver2->passes()->sync([$pass1->id]);
+        $driver1->security_passes()->sync([$pass1->id]);
+        $driver2->security_passes()->sync([$pass1->id]);
 
-        $driver1->passes()->sync([$pass2->id]);
-        $driver2->passes()->sync([$pass2->id]);
+        $driver1->security_passes()->sync([$pass2->id]);
+        $driver2->security_passes()->sync([$pass2->id]);
 
         // Request
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);

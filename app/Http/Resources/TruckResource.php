@@ -17,26 +17,19 @@ class TruckResource extends Resource
     public function toArray($request)
     {
         return [
-            'id'                  => $this->id,
-//            'make'                => [
-//                'id' => $this->make->id,
-//                'name' => $this->make->name,
-//            ],
-            'model'               => [
-                'id' => $this->model->id,
-                'name' => $this->model->name,
-            ],
-            'trailer'             => new TrailerResource($this->whenLoaded('trailer')),
-            'plate_number'        => $this->plate_number,
-//            'registration_country' => new CountryResource($this->whenLoaded('registration_country')),
-            'registration_number' => $this->registration_number,
-            'registration_expiry' => $this->registration_expiry,
-            'registration_country' => new CountryResource($this->whenLoaded('registration_country')),
-            'max_weight'          => $this->max_weight,
-            'year'                => $this->year,
-            'image'               => $this->image,
-            'latitude'            => $this->latitude,
-            'longitude'           => $this->longitude,
+            'id'                       => $this->id,
+            'model'                    => new TruckModelResource($this->whenLoaded('model')),
+            'trailer'                  => new TrailerResource($this->whenLoaded('trailer')),
+            'plate_number'             => $this->plate_number,
+            'registration_number'      => $this->registration_number,
+            'registration_expiry_date' => $this->registration_expiry_date,
+            'registration_country'     => new CountryResource($this->whenLoaded('registration_country')),
+            'registration_image'       => $this->registration_image,
+            'max_weight'               => $this->max_weight,
+            'year'                     => $this->year,
+            'image'                    => $this->image,
+            'latitude'                 => $this->latitude,
+            'longitude'                => $this->longitude,
         ];
     }
 }

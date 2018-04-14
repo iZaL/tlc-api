@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePassesTable extends Migration
+class CreateDriverRouteLocations extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreatePassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('passes', function (Blueprint $table) {
+        Schema::create('driver_route_locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('country_id');
-            $table->string('name_en')->nullable();
-            $table->string('name_ar')->nullable();
-            $table->string('name_hi')->nullable();
+            $table->integer('driver_id');
+            $table->integer('route_id');
+            $table->integer('location_id');
+            $table->decimal('price')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ class CreatePassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('passes');
+        Schema::dropIfExists('driver_route_locations');
     }
 }

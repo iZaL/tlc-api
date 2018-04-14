@@ -47,7 +47,7 @@ class DriverManager
 //        $driverValidVisaCountries = $driver->valid_visas->pluck('id');
 //        $driverValidLicenses = $driver->valid_licenses->pluck('id');
 //        $blockedCustomers = $driver->blocked_list->pluck('id');
-//        $driverValidPasses = $driver->passes->pluck('id');
+//        $driverValidPasses = $driver->security_passes->pluck('id');
 //
 //        $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
 //
@@ -55,7 +55,7 @@ class DriverManager
 //            DB::table('loads')
 //                ->join('customer_locations as sl', 'loads.origin_location_id', 'sl.id')
 //                ->join('customers as s', 'loads.customer_id', 's.id')
-//                ->leftJoin('load_passes as lp', 'loads.id', 'lp.load_id')
+//                ->leftJoin('load_security_passes as lp', 'loads.id', 'lp.load_id')
 //                ->leftJoin('drivers as d', 'd.customer_id', 's.id')
 //                ->when($trailerID, function ($q) use ($trailerID) {
 //                    $q->where('trailer_id', $trailerID);
@@ -63,8 +63,8 @@ class DriverManager
 //                ->where('loads.status', 'waiting')
 //                ->where(function ($query) use ($driverValidPasses) {
 //                    $query
-//                        ->whereIn('lp.pass_id', $driverValidPasses)
-//                        ->orWhere('lp.pass_id', null);
+//                        ->whereIn('lp.security_pass_id', $driverValidPasses)
+//                        ->orWhere('lp.security_pass_id', null);
 //                })
 //                ->where(function ($query) use ($driver) {
 //                    $query
@@ -91,7 +91,7 @@ class DriverManager
      * who has valid truck, trailer (length,width,height,capacity) depending on the load dimension
      * who has truck registered on same country as load origin country
      * who has added the load route in their route list
-     * who has valid gate passes to the load destination if required
+     * who has valid security passes to the load destination if required
      * who works for same customer if customer prefers their own driver
      */
     public function getValidDrivers()
@@ -171,11 +171,11 @@ class DriverManager
 
     public function getDriversWhoHasValidPasses($passes = [])
     {
-        $drivers = DB::table('driver_passes as dp')
-            ->join('passes', function ($join) use ($passes) {
-                $join->on('passes.id', '=', 'dp.pass_id');
+        $drivers = DB::table('driver_security_passes as dp')
+            ->join('security_passes', function ($join) use ($passes) {
+                $join->on('security_passes.id', '=', 'dp.security_pass_id');
             })
-            ->whereIn('passes.id', $passes)
+            ->whereIn('security_passes.id', $passes)
             ->having(DB::raw('count(*)'), '=', count($passes))
             ->select('dp.driver_id')
             ->groupBy('dp.driver_id')

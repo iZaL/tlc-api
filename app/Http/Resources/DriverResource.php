@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\DriverSecurityPass;
 use App\Models\Truck;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -25,7 +26,6 @@ class DriverResource extends Resource
             'active'        => $this->active,
             'offline'       => $this->offline,
             'blocked'       => $this->blocked,
-//            'nationality'   => new CountryResource($this->whenLoaded('nationality')),
             'truck'         => new TruckResource($this->whenLoaded('truck')),
             'customer'      => new CustomerResource($this->whenLoaded('customer')),
             'routes'        => RoutesResource::collection($this->whenLoaded('routes')),
@@ -34,6 +34,7 @@ class DriverResource extends Resource
             'residencies'   => DocumentResource::collection($this->whenLoaded('residencies')),
             'visas'         => DocumentResource::collection($this->whenLoaded('visas')),
             'licenses'      => DocumentResource::collection($this->whenLoaded('licenses')),
+            'security_passes' => DriverSecurityPassResource::collection($this->whenLoaded('security_passes'))
         ];
     }
 }

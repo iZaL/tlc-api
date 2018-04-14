@@ -7,14 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\PackagingResource;
-use App\Http\Resources\PassResource;
+use App\Http\Resources\SecurityPassResource;
 use App\Http\Resources\CustomerLocationResource;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
 use App\Models\Country;
 use App\Models\Load;
 use App\Models\Packaging;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\Trailer;
 use Carbon\Carbon;
@@ -46,7 +46,7 @@ class LoadsController extends Controller
      */
     private $packagingModel;
     /**
-     * @var Pass
+     * @var SecurityPass
      */
     private $passModel;
 
@@ -57,9 +57,9 @@ class LoadsController extends Controller
      * @param Country $countryModel
      * @param Trailer $trailerModel
      * @param Packaging $packagingModel
-     * @param Pass $passModel
+     * @param SecurityPass $passModel
      */
-    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, Pass $passModel)
+    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, SecurityPass $passModel)
     {
         $this->middleware('customer')->only(['bookLoad']);
         $this->middleware('driver')->only(['getLoads']);
@@ -102,7 +102,7 @@ class LoadsController extends Controller
         return response()->json(['success' => true, 'data' => [
             'trailers'  => TrailerResource::collection($trailers),
             'packaging' => PackagingResource::collection($packaging),
-            'passes'    => PassResource::collection($passes),
+            'security_passes'    => SecurityPassResource::collection($passes),
             'customer'   => new CustomerResource($customer)
         ]]);
 
@@ -124,7 +124,7 @@ class LoadsController extends Controller
             'receiver_phone'          => 'required',
             'receiver_mobile'         => 'required',
             'weight'                  => 'required',
-            'passes'                  => 'array'
+            'security_passes'                  => 'array'
         ]);
 
         //        array:10 [
@@ -159,11 +159,11 @@ class LoadsController extends Controller
         $load = $this->loadModel->create($loadData);
 
         //passes
-        if ($request->passes) {
-            $load->passes()->sync($request->passes);
+        if ($request->security_passes) {
+            $load->security_passes()->sync($request->security_passes);
         }
 
-        $customer->load('loads.passes');
+        $customer->load('loads.security_passes');
 
         return response()->json(['success' => true, 'data' => new CustomerResource($customer), 'type' => 'created', 'message' => trans('general.load_created')]);
 

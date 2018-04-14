@@ -63,7 +63,7 @@ class LoadsController extends Controller
         $driverValidVisaCountries = $driver->valid_visas->pluck('id');
         $driverValidLicenses = $driver->valid_licenses->pluck('id');
         $blockedCustomers = $driver->blocked_list->pluck('id');
-        $driverValidPasses = $driver->passes->pluck('id');
+        $driverValidPasses = $driver->security_passes->pluck('id');
 
         $validCountries = $driverValidVisaCountries->intersect($driverValidLicenses);
 
@@ -71,7 +71,7 @@ class LoadsController extends Controller
             DB::table('loads')
                 ->join('customer_locations as sl', 'loads.origin_location_id', 'sl.id')
                 ->join('customers as s', 'loads.customer_id', 's.id')
-                ->leftJoin('load_passes as lp', 'loads.id', 'lp.load_id')
+                ->leftJoin('load_security_passes as lp', 'loads.id', 'lp.load_id')
                 ->leftJoin('drivers as d', 'd.customer_id', 's.id')
                 ->when($trailerID, function ($q) use ($trailerID) {
                     $q->where('trailer_id', $trailerID);
@@ -79,8 +79,8 @@ class LoadsController extends Controller
                 ->where('loads.status', 'waiting')
                 ->where(function ($query) use ($driverValidPasses) {
                     $query
-                        ->whereIn('lp.pass_id', $driverValidPasses)
-                        ->orWhere('lp.pass_id', null);
+                        ->whereIn('lp.security_pass_id', $driverValidPasses)
+                        ->orWhere('lp.security_pass_id', null);
                 })
                 ->where(function ($query) use ($driver) {
                     $query

@@ -8,7 +8,7 @@ use App\Models\DriverLicense;
 use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Location;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\Trailer;
 use App\Models\Truck;

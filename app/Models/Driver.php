@@ -62,9 +62,12 @@ class Driver extends BaseModel
         return $this->licenses()->where('expiry_date', '>', date('Y-m-d'));
     }
 
-    public function passes()
+    public function security_passes()
     {
-        return $this->belongsToMany(Pass::class, 'driver_passes');
+//        return $this->hasMany(DriverSecurityPass::class,'driver_id');
+        return $this->belongsToMany(SecurityPass::class,'driver_security_passes')->withPivot([
+            'id','image','expiry_date'
+        ]);
     }
 
     public function blocked_list()

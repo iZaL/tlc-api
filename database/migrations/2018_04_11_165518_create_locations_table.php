@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrailerTypesTable extends Migration
+class CreateLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateTrailerTypesTable extends Migration
      */
     public function up()
     {
-        // Reefer, Utility, Covered, Flatbed,Lowbed etc
-        Schema::create('trailer_types', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
-//            $table->integer('make_id')->nullable();
+            $table->integer('country_id')->nullable();
+            $table->integer('parent_id')->nullable();
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
+            $table->string('abbr')->nullable()->notes('AH, JA, i.e Ahmadi Jahra');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
-//            $table->softDeletes();
         });
     }
 
@@ -33,6 +35,6 @@ class CreateTrailerTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trailer_types');
+        Schema::dropIfExists('locations');
     }
 }

@@ -217,13 +217,13 @@ UNLOCK TABLES;
 -- Table structure for table `driver_gatepasses`
 --
 
-DROP TABLE IF EXISTS `driver_gatepasses`;
+DROP TABLE IF EXISTS `driver_security_passes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `driver_gatepasses` (
+CREATE TABLE `driver_security_passes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `driver_id` int(11) NOT NULL,
-  `gatepass_id` int(11) NOT NULL,
+  `security_pass_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -234,9 +234,9 @@ CREATE TABLE `driver_gatepasses` (
 -- Dumping data for table `driver_gatepasses`
 --
 
-LOCK TABLES `driver_gatepasses` WRITE;
-/*!40000 ALTER TABLE `driver_gatepasses` DISABLE KEYS */;
-/*!40000 ALTER TABLE `driver_gatepasses` ENABLE KEYS */;
+LOCK TABLES `driver_security_passes` WRITE;
+/*!40000 ALTER TABLE `driver_security_passes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `driver_security_passes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

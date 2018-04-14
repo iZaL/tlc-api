@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PassesTableSeeder extends Seeder
+class SecurityPassesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class PassesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Pass::class,5)->create();
+        factory(\App\Models\SecurityPass::class,5)->create();
     }
 }

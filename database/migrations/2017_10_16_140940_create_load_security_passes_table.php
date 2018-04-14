@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLoadPassesTable extends Migration
+class CreateLoadSecurityPassesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateLoadPassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('load_passes', function (Blueprint $table) {
+        Schema::create('load_security_passes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('load_id');
-            $table->integer('pass_id');
+            $table->integer('security_pass_id');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateLoadPassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('load_passes');
+        Schema::dropIfExists('load_security_passes');
     }
 }

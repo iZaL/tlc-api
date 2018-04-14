@@ -5,7 +5,7 @@ namespace Tests\Feature\Driver;
 use App\Managers\DriverManager;
 use App\Managers\TripManager;
 use App\Models\CustomerLocation;
-use App\Models\Pass;
+use App\Models\SecurityPass;
 use App\Models\Trailer;
 use App\Models\Trip;
 use App\Models\Truck;
@@ -259,8 +259,8 @@ class DriverManagerTest extends TestCase
         $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
         $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
 
-        $pass1 = factory(Pass::class)->create(['country_id'=>$destination->country->id]);
-        $pass2 = factory(Pass::class)->create(['country_id'=>$destination->country->id]);
+        $pass1 = factory(SecurityPass::class)->create(['country_id' =>$destination->country->id]);
+        $pass2 = factory(SecurityPass::class)->create(['country_id' =>$destination->country->id]);
 
         $load = $this->_createLoad(
             [
@@ -270,19 +270,19 @@ class DriverManagerTest extends TestCase
             ]
         );
 
-        $load->passes()->sync([$pass1->id]);
-        $load->passes()->sync([$pass2->id]);
+        $load->security_passes()->sync([$pass1->id]);
+        $load->security_passes()->sync([$pass2->id]);
 
-        $validDriver1->passes()->sync([$pass1->id]);
-        $validDriver2->passes()->sync([$pass1->id]);
+        $validDriver1->security_passes()->sync([$pass1->id]);
+        $validDriver2->security_passes()->sync([$pass1->id]);
 
-        $validDriver1->passes()->sync([$pass2->id]);
-        $validDriver2->passes()->sync([$pass2->id]);
+        $validDriver1->security_passes()->sync([$pass2->id]);
+        $validDriver2->security_passes()->sync([$pass2->id]);
 
-        $invalidDriver1->passes()->sync([$pass1->id]);
+        $invalidDriver1->security_passes()->sync([$pass1->id]);
 
         $driverManager = new DriverManager();
-        $drivers = $driverManager->getDriversWhoHasValidPasses($load->passes->pluck('id'));
+        $drivers = $driverManager->getDriversWhoHasValidPasses($load->security_passes->pluck('id'));
 
         $this->assertContains($validDriver1->id, $drivers);
         $this->assertContains($validDriver2->id, $drivers);

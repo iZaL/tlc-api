@@ -20,4 +20,10 @@ class Country extends BaseModel
         $attribute = 'name';
         return $this->{$attribute . '_' . app()->getLocale()} ? : $this->{$attribute . '_en'};
     }
+
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
+    }
+
 }

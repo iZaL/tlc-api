@@ -28,7 +28,7 @@ class CustomerResource extends Resource
             'cancellation_fee' => $this->cancellation_fee,
             'active' => $this->active,
             'employees' => EmployeeResource::collection($this->whenLoaded('employees')),
-            'locations' => LocationResource::collection($this->whenLoaded('locations')),
+            'locations' => CustomerLocationResource::collection($this->whenLoaded('locations')),
             'loads' => LoadResource::collection($this->whenLoaded('loads')),
         ];
     }

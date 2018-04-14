@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDriverPassesTable extends Migration
+class CreateDriverSecurityPassesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateDriverPassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('driver_passes', function (Blueprint $table) {
+        Schema::create('driver_security_passes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('driver_id');
-            $table->integer('pass_id');
+            $table->integer('security_pass_id');
             $table->string('image')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateDriverPassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('driver_passes');
+        Schema::dropIfExists('driver_security_passes');
     }
 }

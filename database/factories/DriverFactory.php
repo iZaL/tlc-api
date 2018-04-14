@@ -26,10 +26,10 @@ $factory->define(\App\Models\DriverDocument::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(\App\Models\DriverPass::class, function (Faker $faker) {
+$factory->define(\App\Models\DriverSecurityPass::class, function (Faker $faker) {
     return [
         'driver_id' => \App\Models\Driver::first()->id,
-        'pass_id'   => \App\Models\Pass::first()->id,
+        'security_pass_id'   => \App\Models\SecurityPass::first()->id,
         'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
         'number'      => str_random(15),
         'image'      =>  'https://source.unsplash.com/800x400/?files'
