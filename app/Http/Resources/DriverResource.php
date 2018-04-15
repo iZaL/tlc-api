@@ -18,23 +18,24 @@ class DriverResource extends Resource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'schema'        => 'drivers',
-            'mobile'        => $this->mobile,
-            'phone'         => $this->phone,
-            'book_direct'   => $this->book_direct,
-            'active'        => $this->active,
-            'offline'       => $this->offline,
-            'blocked'       => $this->blocked,
-            'truck'         => new TruckResource($this->whenLoaded('truck')),
-            'customer'      => new CustomerResource($this->whenLoaded('customer')),
-            'routes'        => RoutesResource::collection($this->whenLoaded('routes')),
-            'loads'         => LoadResource::collection($this->whenLoaded('loads')),
-            'nationalities' => DocumentResource::collection($this->whenLoaded('nationalities')),
-            'residencies'   => DocumentResource::collection($this->whenLoaded('residencies')),
-            'visas'         => DocumentResource::collection($this->whenLoaded('visas')),
-            'licenses'      => DocumentResource::collection($this->whenLoaded('licenses')),
-            'security_passes' => DriverSecurityPassResource::collection($this->whenLoaded('security_passes'))
+            'id'              => $this->id,
+            'schema'          => 'drivers',
+            'mobile'          => $this->mobile,
+            'phone'           => $this->phone,
+            'book_direct'     => $this->book_direct,
+            'active'          => $this->active,
+            'offline'         => $this->offline,
+            'blocked'         => $this->blocked,
+            'user'            => new UserResource($this->whenLoaded('user')),
+            'truck'           => new TruckResource($this->whenLoaded('truck')),
+            'customer'        => new CustomerResource($this->whenLoaded('customer')),
+            'routes'          => RoutesResource::collection($this->whenLoaded('routes')),
+            'loads'           => LoadResource::collection($this->whenLoaded('loads')),
+            'nationalities'   => DocumentResource::collection($this->whenLoaded('nationalities')),
+            'residencies'     => DocumentResource::collection($this->whenLoaded('residencies')),
+            'visas'           => DocumentResource::collection($this->whenLoaded('visas')),
+            'licenses'        => DocumentResource::collection($this->whenLoaded('licenses')),
+            'security_passes' => DriverSecurityPassResource::collection($this->whenLoaded('security_passes')),
         ];
     }
 }

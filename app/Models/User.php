@@ -68,4 +68,16 @@ class User extends Authenticatable
 
     }
 
+
+    public function localizeAttribute($attribute)
+    {
+        return $this->{$attribute . '_' . app()->getLocale()} ? : $this->{$attribute . '_' . config('app.fallback_locale')};
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->localizeAttribute('name');
+    }
+
+
 }

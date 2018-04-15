@@ -76,6 +76,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('locations','LocationsController@index');
             Route::post('locations','LocationsController@store');
 
+            Route::get('drivers', 'DriversController@getDrivers');
+            Route::get('drivers/blocked', 'DriversController@getBlockedDrivers');
+
+
         });
 
 

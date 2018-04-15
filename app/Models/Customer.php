@@ -30,4 +30,9 @@ class Customer extends BaseModel
         return $this->hasMany(Employee::class);
     }
 
+    public function blocked_drivers()
+    {
+        return $this->belongsToMany(Driver::class, 'blocked_drivers');
+    }
+
 }

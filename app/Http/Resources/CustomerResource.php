@@ -30,6 +30,7 @@ class CustomerResource extends Resource
             'employees' => EmployeeResource::collection($this->whenLoaded('employees')),
             'locations' => CustomerLocationResource::collection($this->whenLoaded('locations')),
             'loads' => LoadResource::collection($this->whenLoaded('loads')),
+            'blocked_drivers' => DriverResource::collection($this->whenLoaded('blocked_drivers'))
         ];
     }
 }

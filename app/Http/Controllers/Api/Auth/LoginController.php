@@ -74,9 +74,13 @@ class LoginController extends Controller
 
         }
 
-        return (new UserResource($user))->additional(['meta' => [
-            'api_token' => $user->api_token,
-        ]]);
+//        return response()->json(['success'=>true,''])
+
+        return (new UserResource($user))->additional([
+            'success' => true,
+            'meta'    => [
+                'api_token' => $user->api_token,
+            ]]);
 
     }
 
@@ -86,9 +90,9 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name_en'     => 'required|max:50',
-            'name_ar'     => 'max:50',
-            'name_hi'     => 'max:50',
+            'name_en'  => 'required|max:50',
+            'name_ar'  => 'max:50',
+            'name_hi'  => 'max:50',
             'email'    => 'email|required|unique:users,email',
             'password' => 'required|confirmed|min:6',
             'mobile'   => 'required|unique:users,mobile',
@@ -105,19 +109,19 @@ class LoginController extends Controller
         $password = bcrypt($request->password);
         $mobile = $request->mobile;
         $apiToken = str_random(16);
-        $otp = rand(1000,9999);
+        $otp = rand(1000, 9999);
         $isCustomer = $request->has('isCustomer') ? $request->isCustomer : false;
 
         try {
             $user = $this->userRepo->create([
-                'name_en'      => $nameEn,
-                'name_ar'      => $nameAr,
-                'name_hi'      => $nameHi,
+                'name_en'   => $nameEn,
+                'name_ar'   => $nameAr,
+                'name_hi'   => $nameHi,
                 'email'     => $email,
                 'password'  => $password,
                 'mobile'    => $mobile,
                 'api_token' => $apiToken,
-                'otp' => $otp,
+                'otp'       => $otp,
 
             ]);
 
@@ -160,7 +164,7 @@ class LoginController extends Controller
             }
         }
 
-        return new UserResource($user);
+        return response()->json(['success'=>true,'data'=>new UserResource($user)]);
     }
 
 

@@ -18,22 +18,19 @@ class UserResource extends Resource
     public function toArray($request)
     {
         return [
-            'success' => true,
-            'data'    => [
-                'id'     => $this->id,
-                'name'   => $this->name,
-                'email'  => $this->email,
-                'mobile' => $this->mobile,
-                'image'  => $this->image,
-                'active' => $this->active,
-                'type'   => $this->type,
-                'admin'  => $this->when($this->admin, true),
-                'profile' => $this->when($this->type === 10 || $this->type === 20, function () {
-                    return  $this->type === 10 ?
-                        new DriverResource($this->driver) :
-                        new CustomerResource($this->customer);
-                }),
-            ],
+            'id'      => $this->id,
+            'name'    => $this->name,
+            'email'   => $this->email,
+            'mobile'  => $this->mobile,
+            'image'   => $this->image,
+            'active'  => $this->active,
+            'type'    => $this->type,
+            'admin'   => $this->when($this->admin, true),
+            'profile' => $this->when($this->type === 10 || $this->type === 20, function () {
+                return $this->type === 10 ?
+                    new DriverResource($this->driver) :
+                    new CustomerResource($this->customer);
+            }),
         ];
     }
 }
