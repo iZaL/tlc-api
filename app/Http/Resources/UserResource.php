@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Driver;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -26,10 +27,13 @@ class UserResource extends Resource
             'active'  => $this->active,
             'type'    => $this->type,
             'admin'   => $this->when($this->admin, true),
-            'profile' => $this->when($this->type === 10 || $this->type === 20, function () {
-                return $this->type === 10 ?
-                    new DriverResource($this->driver) :
-                    new CustomerResource($this->customer);
+            'profile' => $this->when(Auth::guard('api')->user() && Auth::guard('api')->user()->id === $this->id || auth()->check() && auth()->user()->id === $this->id, function () {
+                if ($this->type === 10) {
+                    return new DriverResource($this->driver);
+                } elseif ($this->type === 20) {
+                    return new CustomerResource($this->customer);
+                }
+                return null;
             }),
         ];
     }

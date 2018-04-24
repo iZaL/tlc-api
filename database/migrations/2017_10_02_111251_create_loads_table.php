@@ -18,7 +18,7 @@ class CreateLoadsTable extends Migration
             $table->integer('customer_id');
             $table->integer('origin_location_id');
             $table->integer('destination_location_id');
-            $table->integer('trailer_id')->nullable();
+            $table->integer('trailer_type_id')->nullable();
             $table->integer('packaging_id')->nullable();
             $table->string('invoice_id',20)->nullable();
             $table->integer('fleet_count')->default(1);
@@ -37,7 +37,7 @@ class CreateLoadsTable extends Migration
             $table->string('receiver_mobile')->nullable();
             $table->string('receiver_phone')->nullable();
             $table->string('weight')->nullable();
-            $table->string('status',10)->default('pending')->notes(
+            $table->string('status',10)->default(10)->notes(
                 // default pending
                 // approved (approved by tlc)
                 // rejected (the load has been rejected )

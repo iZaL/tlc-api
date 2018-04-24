@@ -146,7 +146,7 @@ class LoadDriversController extends Controller
         $truckDrivers = $driverManager->getDriversForLoadCountry($originCountryID);
 
         // Driver With Valid Trailer
-        $trailerDrivers = $driverManager->getDriversForTrailer($load->trailer_id);
+        $trailerDrivers = $driverManager->getDriversForTrailer($load->trailer_type_id);
 
         // Drivers Who shouldn't be included on the list
         $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten()->unique();
@@ -165,9 +165,17 @@ class LoadDriversController extends Controller
 
         $drivers = $includingDrivers->diff($excludingDrivers);
 
-        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
+//        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
 
-        return response()->json(['success' => true, 'data' => $drivers]);
+        $drivers = $this->driverModel->with(['user'])->get();
+
+        $driversCollection = DriverResource::collection($drivers);
+
+        $loadResource = (new LoadResource($load))->additional(['drivers' => $driversCollection]);
+
+//        dd($loadResource);
+//        return response()->json(['success' => false, 'message' => 'wa']);
+        return response()->json(['success' => true, 'data' => $driversCollection]);
 
     }
 

@@ -46,14 +46,14 @@ class TripsController extends Controller
         $today = Carbon::today()->toDateString();
 
         $trips = $this->tripModel
-            ->with(['booking.trailer','booking.origin','booking.destination'])
+            ->with(['booking.trailer_type','booking.origin','booking.destination'])
             ->whereHas('booking',function($q) use ($today) {
                 $q
                     ->whereDate('load_date','>=',$today)
                     ->orderBy('load_date','desc')
                 ;
             })
-            ->ofStatus('pending')
+            ->ofStatus(Trip::STATUS_PENDING)
             ->get()
         ;
 
@@ -86,7 +86,7 @@ class TripsController extends Controller
 
             $load = $trip->booking;
             $loadManager = new LoadManager($load);
-            $loadManager->updateStatus('confirmed');
+            $loadManager->updateStatus(Load::STATUS_CONFIRMED);
 
             return response()->json(['success'=>true]);
         }

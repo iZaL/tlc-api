@@ -15,7 +15,7 @@ class UserTest extends TestCase
 
     const ADMIN_CODE = 100;
     const DRIVER_CODE = 10;
-    const SHIPPER_CODE = 20;
+    const CUSTOMER_CODE = 20;
     const GUEST_CODE = 0;
 
 
@@ -26,7 +26,7 @@ class UserTest extends TestCase
 
         $customer = factory(User::class)->create();
         $customer->customer()->create();
-        $this->assertEquals($customer->type,self::SHIPPER_CODE);
+        $this->assertEquals($customer->type,self::CUSTOMER_CODE);
         $this->assertNotEquals($customer->type,self::DRIVER_CODE);
         $this->assertNotEquals($customer->type,self::ADMIN_CODE);
         $this->assertNotEquals($customer->type,self::GUEST_CODE);

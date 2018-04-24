@@ -54,35 +54,35 @@ class DriverLoadsTest extends TestCase
         $driver2->customer_id = $customer1->id;
         $driver->update();
 
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW1 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer1->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
             'use_own_truck'           => 0
         ]);
 
-        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW2 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer1->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
             'use_own_truck'           => 1
         ]);
 
-        $loadKWKW3 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW3 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer2->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
             'use_own_truck'           => 1
         ]);
 
-        $loadKWKW4 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW4 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer3->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
             'use_own_truck'           => 1
         ]);
 
-        $loadKWKW5 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW5 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer4->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
@@ -126,31 +126,31 @@ class DriverLoadsTest extends TestCase
         $customer3 = $this->_createCustomer();
         $customer4 = $this->_createCustomer();
 
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW1 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer1->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW2 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer1->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW3 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW3 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer2->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW4 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW4 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer3->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW5 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW5 = factory(Load::class)->states('approved')->create([
             'customer_id'              => $customer4->id,
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
@@ -188,22 +188,22 @@ class DriverLoadsTest extends TestCase
         factory(CustomerLocation::class)->create(['country_id' => $iq->id]);
 
 
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW2 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWSA1 = factory(Load::class)->states('waiting')->create([
+        $loadKWSA1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $sa->id,
         ]);
 
-        $loadKWBH1 = factory(Load::class)->states('waiting')->create([
+        $loadKWBH1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $bh->id,
         ]);
@@ -213,17 +213,17 @@ class DriverLoadsTest extends TestCase
             'destination_location_id' => $bh->id,
         ]);
 
-        $loadSABH1 = factory(Load::class)->states('waiting')->create([
+        $loadSABH1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $sa->id,
             'destination_location_id' => $bh->id,
         ]);
 
-        $loadKWIQ1 = factory(Load::class)->states('waiting')->create([
+        $loadKWIQ1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $iq->id,
         ]);
 
-        $loadBHIQ1 = factory(Load::class)->states('waiting')->create([
+        $loadBHIQ1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $bh->id,
             'destination_location_id' => $iq->id,
         ]);
@@ -289,22 +289,22 @@ class DriverLoadsTest extends TestCase
         factory(CustomerLocation::class)->create(['country_id' => $sa->id]);
         factory(CustomerLocation::class)->create(['country_id' => $bh->id]);
 
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW2 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWSA1 = factory(Load::class)->states('waiting')->create([
+        $loadKWSA1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $sa->id,
         ]);
 
-        $loadKWBH1 = factory(Load::class)->states('waiting')->create([
+        $loadKWBH1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $bh->id,
         ]);
@@ -314,7 +314,7 @@ class DriverLoadsTest extends TestCase
             'destination_location_id' => $bh->id,
         ]);
 
-        $loadSABH1 = factory(Load::class)->states('waiting')->create([
+        $loadSABH1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $sa->id,
             'destination_location_id' => $bh->id,
         ]);
@@ -365,28 +365,28 @@ class DriverLoadsTest extends TestCase
         factory(CustomerLocation::class)->create(['country_id' => $kw->id]);
 
 
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
-            'trailer_id'              => '1'
+            'trailer_type_id'              => '1'
         ]);
 
-        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW2 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
-            'trailer_id'              => '2'
+            'trailer_type_id'              => '2'
         ]);
 
-        $loadKWKW3 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW3 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
-            'trailer_id'              => '1'
+            'trailer_type_id'              => '1'
         ]);
 
-        $loadKWKW4 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW4 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
-            'trailer_id'              => '4'
+            'trailer_type_id'              => '4'
         ]);
 
         $driver = $this->_createDriver();
@@ -397,7 +397,7 @@ class DriverLoadsTest extends TestCase
         $customer1 = $this->_createCustomer();
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-        $response = $this->json('GET', '/api/driver/loads', ['current_country' => 'KW', 'trailer_id' => '1'], $header);
+        $response = $this->json('GET', '/api/driver/loads', ['current_country' => 'KW', 'trailer_type_id' => '1'], $header);
 
         $response->assertJson([
             'data' => [['id' => $loadKWKW1->id], ['id' => $loadKWKW3->id]]
@@ -423,22 +423,22 @@ class DriverLoadsTest extends TestCase
         $kw = $this->_createCountry('KW');
         factory(CustomerLocation::class)->create(['country_id' => $kw->id]);
 
-        $loadKWKW1 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW1 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW2 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW2 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW3 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW3 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);
 
-        $loadKWKW4 = factory(Load::class)->states('waiting')->create([
+        $loadKWKW4 = factory(Load::class)->states('approved')->create([
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
         ]);

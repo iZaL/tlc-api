@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Driver;
 
+use App\Models\Load;
+use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -54,7 +56,7 @@ class DriverTripsTest extends TestCase
 
         $response = $this->json('POST', '/api/driver/trips/'.$validTrip->id.'/confirm', [], $header);
 
-        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'confirmed']);
+        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>Trip::STATUS_CONFIRMED]);
         $this->assertDatabaseHas('driver_blocked_dates',['driver_id'=>$driver->id,'from'=>$loadDate]);
 
     }
@@ -83,7 +85,7 @@ class DriverTripsTest extends TestCase
 
         $response->assertJson(['success'=>false,'message'=>'driver_has_trip']);
 
-        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
+        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>Trip::STATUS_PENDING]);
 
     }
 
@@ -94,7 +96,7 @@ class DriverTripsTest extends TestCase
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
 
         $load = $this->_createLoad([
-            'status' => 'confirmed'
+            'status' => Load::STATUS_CONFIRMED
         ]);
 
         $validTrip = $load->trips()->create(['driver_id' => $driver->id]);
@@ -103,7 +105,7 @@ class DriverTripsTest extends TestCase
 
         $response->assertJson(['success'=>false,'message'=>'load_already_confirmed']);
 
-        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
+        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>Trip::STATUS_PENDING]);
     }
 
     public function test_driver_cannot_book_trip_for_expired_loads()
@@ -124,7 +126,7 @@ class DriverTripsTest extends TestCase
 
         $response->assertJson(['success'=>false,'message'=>'load_expired']);
 
-        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>'pending']);
+        $this->assertDatabaseHas('trips',['id'=>$validTrip->id,'status'=>Trip::STATUS_PENDING]);
     }
 
     public function test_load_status_gets_updated_after_trip_confirmation()
@@ -146,7 +148,7 @@ class DriverTripsTest extends TestCase
 
         $response->assertJson(['success'=>true]);
 
-        $this->assertDatabaseHas('loads',['id'=>$load->id,'status'=>'confirmed']);
+        $this->assertDatabaseHas('loads',['id'=>$load->id,'status'=>Trip::STATUS_CONFIRMED]);
     }
 
     public function test_load_status_gets_updated_after_trip_confirmation_for_fleet_count()
@@ -163,15 +165,15 @@ class DriverTripsTest extends TestCase
         ]);
 
         $validTrip1 = $load->trips()->create(['driver_id' => $driver->id]);
-        $validTrip2 = $load->trips()->create(['driver_id' => 333, 'status' => 'confirmed']);
-        $validTrip2 = $load->trips()->create(['driver_id' => 444, 'status' => 'working']);
-        $validTrip3 = $load->trips()->create(['driver_id' => 555, 'status' => 'rejected']);
+        $validTrip2 = $load->trips()->create(['driver_id' => 333, 'status' => Trip::STATUS_CONFIRMED]);
+        $validTrip2 = $load->trips()->create(['driver_id' => 444, 'status' => Trip::STATUS_ENROUTE]);
+        $validTrip3 = $load->trips()->create(['driver_id' => 555, 'status' => Trip::STATUS_REJECTED]);
 
         $response = $this->json('POST', '/api/driver/trips/'.$validTrip1->id.'/confirm', [], $header);
 
         $response->assertJson(['success'=>true]);
 
-        $this->assertDatabaseHas('loads',['id'=>$load->id,'status'=>'confirmed']);
+        $this->assertDatabaseHas('loads',['id'=>$load->id,'status'=>Load::STATUS_CONFIRMED]);
 
     }
 

@@ -58,7 +58,7 @@ class TripManager
     private function isAllowedToBook()
     {
         $loadStatus = $this->trip->booking->status;
-        if ($loadStatus !== 'pending') {
+        if ($loadStatus > Trip::STATUS_REJECTED) {
             throw new LoadHasAlreadyConfirmed('load_already_confirmed');
         }
         return false;
@@ -104,7 +104,7 @@ class TripManager
         $hasTrips = $driver->trips->contains($this->trip->id);
 
         if ($hasTrips) {
-            $oldTrips = $driver->trips->where('status','!=','pending')->count();
+            $oldTrips = $driver->trips->where('status','!=',Trip::STATUS_PENDING)->count();
 
             if ($oldTrips > 0) {
                 throw new DuplicateTripException('duplicate_trip');
@@ -125,9 +125,9 @@ class TripManager
 
 
         $loadTrips = $load->trips()
-            ->where('status', 'confirmed')
-            ->orWhere('status', 'working')
-            ->orWhere('status', 'completed')
+            ->where('status', Trip::STATUS_CONFIRMED)
+            ->orWhere('status', Trip::STATUS_ENROUTE)
+            ->orWhere('status', Trip::STATUS_COMPLETED)
             ->count()
         ;
 
@@ -184,7 +184,7 @@ class TripManager
     public function confirmTrip()
     {
         $this->updateDriverBlockedDates();
-        $this->updateTripStatus('confirmed');
+        $this->updateTripStatus(Trip::STATUS_CONFIRMED);
         return true;
     }
 

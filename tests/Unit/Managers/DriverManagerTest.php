@@ -5,6 +5,7 @@ namespace Tests\Feature\Driver;
 use App\Managers\DriverManager;
 use App\Managers\TripManager;
 use App\Models\CustomerLocation;
+use App\Models\Driver;
 use App\Models\SecurityPass;
 use App\Models\Trailer;
 use App\Models\Trip;
@@ -297,7 +298,6 @@ class DriverManagerTest extends TestCase
     {
         $customer = $this->_createCustomer();
 
-
         $sa = $this->_createCountry('SA');
         $om = $this->_createCountry('OM');
         $kw = $this->_createCountry('KW');
@@ -316,6 +316,7 @@ class DriverManagerTest extends TestCase
         $trailer2 = factory(Trailer::class)->create();
         $trailer3 = factory(Trailer::class)->create();
 
+        // do not change the order
         $truck3 = factory(Truck::class)->create(['registration_country_id'=>$om->id,'trailer_id'=>$trailer1->id]);
         $truck1 = factory(Truck::class)->create(['registration_country_id'=>$kw->id,'trailer_id'=>$trailer3->id]);
         $truck2 = factory(Truck::class)->create(['registration_country_id'=>$kw->id,'trailer_id'=>$trailer2->id]);
@@ -323,19 +324,18 @@ class DriverManagerTest extends TestCase
         $validDriver1 = $this->_createDriver(['truck_id'=>$truck1->id]);
         $validDriver2 = $this->_createDriver(['truck_id' => $truck1->id]);
 
-
         $load = $this->_createLoad(
             [
                 'customer_id'             => $customer->id,
                 'origin_location_id'      => $origin->id,
                 'destination_location_id' => $destination->id,
-                'trailer_id' => $trailer3->id
+                'trailer_type_id' => $trailer3->id
             ]
         );
 
         $driverManager = new DriverManager();
 
-        $drivers = $driverManager->getDriversForTrailer($load->trailer_id);
+        $drivers = $driverManager->getDriversForTrailer($load->trailer_type_id);
 
         $this->assertContains($validDriver1->id, $drivers);
         $this->assertContains($validDriver2->id, $drivers);

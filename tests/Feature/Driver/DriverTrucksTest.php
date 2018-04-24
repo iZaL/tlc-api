@@ -41,11 +41,19 @@ class DriverTrucksTest extends TestCase
         $truckMake = factory(TruckMake::class)->create();
         $truckModel = factory(TruckModel::class)->create();
 
+
+//        $table->integer('registration_country_id')->nullable();
+//        $table->string('registration_number')->nullable();
+//        $table->date('registration_expiry_date')->nullable();
+//        $table->string('registration_image')->nullable();
+
         $body = [
 //            'make_id'  => $truckMake->id,
             'model_id' => $truckModel->id,
+            'registration_country_id' => 1,
             'registration_number' => '21212',
-            'registration_expiry' => '2017-09-17',
+            'registration_expiry_date' => '2018-09-17',
+//            'registration_image' => '2018-09-17',
             'plate_number' => '22222',
             'max_weight' => '22222',
             'year' => '2010',
@@ -78,7 +86,8 @@ class DriverTrucksTest extends TestCase
 //            'make_id'  => $truckMake->id,
             'model_id' => $truckModel->id,
             'registration_number' => '21212',
-            'registration_expiry' => '2017-09-17',
+            'registration_country_id' => 1,
+            'registration_expiry_date' => '2018-09-17',
             'plate_number' => '22222',
             'max_weight' => '22222',
             'year' => '2010',

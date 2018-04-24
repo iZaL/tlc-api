@@ -43,7 +43,7 @@ class LoadsController extends Controller
             'customer',
             'origin.country',
             'destination.country',
-            'trailer',
+            'trailer_type',
             'packaging',
         ])->where('status', $status)->paginate(10);
         return response()->json(['success' => true, 'data' => LoadResource::collection($loads)]);
@@ -58,7 +58,7 @@ class LoadsController extends Controller
         $driver = Auth::guard('api')->user()->driver;
 
         $currentCountry = $this->countryModel->where('abbr', $request->current_country)->first();
-        $trailerID = $request->trailer_id;
+        $trailerTypeID = $request->trailer_type_id;
 
         $driverValidVisaCountries = $driver->valid_visas->pluck('id');
         $driverValidLicenses = $driver->valid_licenses->pluck('id');
@@ -73,10 +73,10 @@ class LoadsController extends Controller
                 ->join('customers as s', 'loads.customer_id', 's.id')
                 ->leftJoin('load_security_passes as lp', 'loads.id', 'lp.load_id')
                 ->leftJoin('drivers as d', 'd.customer_id', 's.id')
-                ->when($trailerID, function ($q) use ($trailerID) {
-                    $q->where('trailer_id', $trailerID);
+                ->when($trailerTypeID, function ($q) use ($trailerTypeID) {
+                    $q->where('trailer_type_id', $trailerTypeID);
                 })
-                ->where('loads.status', 'waiting')
+                ->where('loads.status', Load::STATUS_APPROVED)
                 ->where(function ($query) use ($driverValidPasses) {
                     $query
                         ->whereIn('lp.security_pass_id', $driverValidPasses)
@@ -87,15 +87,14 @@ class LoadsController extends Controller
                         ->where('d.id', $driver->id)
                         ->orWhere('loads.use_own_truck', 0);
                 })
-                ->where('loads.origin_location_id', $currentCountry->id) //@todo : fix to truck registration country
+                ->where('loads.origin_location_id', $currentCountry->id)//@todo : fix to truck registration country
                 ->whereIn('loads.destination_location_id', $validCountries)
                 ->whereNotIn('loads.customer_id', $blockedCustomers)
                 ->select('loads.*')
-            ->get()
-//                ->paginate(20)
+                ->get()
         ;
 
-        return response()->json(['success'=>true,'data'=>$loads]);
+        return response()->json(['success' => true, 'data' => $loads]);
 //        return new LoadResourceCollection($loads);
     }
 
@@ -108,7 +107,7 @@ class LoadsController extends Controller
             'trailer'
         ])->find($loadID);
 
-        return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
+        return response()->json(['success' => true, 'data' => new LoadResource($load)]);
 
     }
 

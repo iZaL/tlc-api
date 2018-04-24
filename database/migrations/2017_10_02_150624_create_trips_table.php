@@ -22,14 +22,14 @@ class CreateTripsTable extends Migration
             $table->timestamp('ended_at')->nullable();
             $table->float('latitude')->nullable()->notes('last recorded latitude');
             $table->float('longitude')->nullable()->notes('last recorded longitude');
-            $table->string('status')->default('pending')
+            $table->string('status')->default(10)
                 ->notes('// 
                 1- pending
-                2- approved ( before admin confirmation )
+                2- approved ( driver approves, but before admin confirmation )
                 3- rejected
                 
                 4- confirmed // has confirmed but not dispatched
-                5- working // the driver (truck) has dispatched == on progress
+                5- enroute // the driver (truck) has dispatched == on progress
                 6- completed // unloaded
                 ');
             $table->timestamps();

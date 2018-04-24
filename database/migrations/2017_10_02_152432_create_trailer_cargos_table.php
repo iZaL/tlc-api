@@ -16,7 +16,7 @@ class CreateTrailerCargosTable extends Migration
         // Pelletized, Loose, Bulk, Refrigerated
         Schema::create('trailer_cargos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('trailer_id');
+            $table->integer('trailer_type_id');
             $table->integer('cargo_id');
             $table->timestamps();
 //            $table->softDeletes();

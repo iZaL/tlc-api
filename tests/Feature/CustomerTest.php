@@ -57,7 +57,7 @@ class CustomerTest extends TestCase
         $customer = $this->_createCustomer(['book_direct' => 0]);
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
         $loadData = $this->_createLoadPostData();
-        $others = ['status' => 'pending'];
+        $others = ['status' => Load::STATUS_PENDING];
         $postData = array_merge($loadData, $others);
         $this->json('POST', '/api/customer/loads', $loadData, $header);
         $this->assertDatabaseHas('loads', $postData);
@@ -68,7 +68,7 @@ class CustomerTest extends TestCase
         $customer = $this->_createCustomer(['book_direct' => 1]);
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
         $loadData = $this->_createLoadPostData();
-        $others = ['status' => 'approved'];
+        $others = ['status' => Load::STATUS_APPROVED];
         $postData = array_merge($loadData, $others);
         $this->json('POST', '/api/customer/loads', $loadData, $header);
         $this->assertDatabaseHas('loads', $postData);

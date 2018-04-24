@@ -52,6 +52,7 @@ class RoutesController extends Controller
 
         $driver = Auth::guard('api')->user()->driver;
 
+
         if($driver->routes->contains($request->route_id)) {
             $driver->routes()->detach($request->route_id);
         } else {

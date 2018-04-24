@@ -11,7 +11,7 @@ class User extends Authenticatable
 
     const ADMIN_CODE = 100;
     const DRIVER_CODE = 10;
-    const SHIPPER_CODE = 20;
+    const CUSTOMER_CODE = 20;
     const GUEST_CODE = 0;
 
     use Notifiable;
@@ -61,13 +61,12 @@ class User extends Authenticatable
         }
 
         if($this->customer) {
-            return self::SHIPPER_CODE;
+            return self::CUSTOMER_CODE;
         }
 
         return self::GUEST_CODE;
 
     }
-
 
     public function localizeAttribute($attribute)
     {

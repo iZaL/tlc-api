@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
     public function _createLoadPostData($array = [])
     {
         $postData = [
-            'trailer_id'              => 1,
+            'trailer_type_id'              => 1,
             'packaging_id'              => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1,
@@ -139,7 +139,7 @@ abstract class TestCase extends BaseTestCase
     {
         $load = factory(Load::class)->create(array_merge([
             'customer_id'              => 1,
-            'trailer_id'              => 1,
+            'trailer_type_id'              => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1
         ], $array));

@@ -3,18 +3,7 @@
 namespace App\Managers;
 
 
-use App\Exceptions\Driver\BusyOnScheduleException;
-use App\Exceptions\Driver\DuplicateTripException;
-use App\Exceptions\Driver\FleetsBookedException;
-use App\Exceptions\Driver\CustomerBlockedException;
-use App\Exceptions\Driver\TLCBlockedException;
-use App\Exceptions\Load\LoadExpiredException;
-use App\Exceptions\TripConfirmationFailedException;
-use App\Models\Driver;
 use App\Models\Load;
-use App\Models\Trip;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class LoadManager
 {
@@ -42,10 +31,7 @@ class LoadManager
         $fleetCount = $load->fleet_count;
 
         if($fleetCount > 1) {
-            $loadTrips = $load->trips()
-                ->where('status', 'confirmed')
-                ->orWhere('status', 'working')
-                ->orWhere('status', 'completed')
+            $loadTrips = $load->success_trips()
                 ->count()
             ;
         } else {
@@ -56,7 +42,7 @@ class LoadManager
 
             //@todo:  send confirm notifications
 
-            $load->status = 'confirmed';
+            $load->status = Load::STATUS_CONFIRMED;
             $load->save();
         }
 
@@ -69,7 +55,7 @@ class LoadManager
     public function updateStatus($status)
     {
         switch ($status) {
-            case 'confirmed':
+            case Load::STATUS_CONFIRMED:
                 $this->confirm();
                 break;
         }

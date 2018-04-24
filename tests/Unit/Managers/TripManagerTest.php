@@ -73,7 +73,7 @@ class TripManagerTest extends TestCase
     {
         $load = $this->_createLoad();
         $driver = $this->_createDriver();
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver->id,'status' => 'confirmed']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver->id,'status' => Trip::STATUS_CONFIRMED]);
 
         $method = self::getMethod('hasDuplicateTrip');
         $tripManager = new TripManager($trip,$driver);
@@ -87,10 +87,10 @@ class TripManagerTest extends TestCase
     {
         $load = $this->_createLoad(['fleet_count'=>4]);
         $driver = $this->_createDriver();
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'confirmed']);
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>111,'status' => 'confirmed']);
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>122,'status' => 'working']);
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>13311,'status' => 'completed']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => Trip::STATUS_CONFIRMED]);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>111,'status' => Trip::STATUS_CONFIRMED]);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>122,'status' => Trip::STATUS_ENROUTE]);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>13311,'status' => Trip::STATUS_COMPLETED]);
         $method = self::getMethod('isLoadFleetsBooked');
         $tripManager = new TripManager($trip,$driver);
         $method->invokeArgs($tripManager,[]);
@@ -102,13 +102,13 @@ class TripManagerTest extends TestCase
         $load2 = $this->_createLoad(['fleet_count' =>3]);
         $driver = $this->_createDriver();
 
-        $differentTrip = factory(Trip::class)->create(['load_id'=>$load2->id,'driver_id'=>222,'status' => 'confirmed']);
+        $differentTrip = factory(Trip::class)->create(['load_id'=>$load2->id,'driver_id'=>222,'status' => Trip::STATUS_CONFIRMED]);
 
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'confirmed']);
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'working']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => Trip::STATUS_CONFIRMED]);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => Trip::STATUS_ENROUTE]);
 
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'pending']);
-        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => 'pending']);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => Trip::STATUS_PENDING]);
+        $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>222,'status' => Trip::STATUS_PENDING]);
 
         $method = self::getMethod('isLoadFleetsBooked');
         $tripManager = new TripManager($trip,$driver);

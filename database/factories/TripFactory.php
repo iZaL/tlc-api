@@ -2,6 +2,7 @@
 
 use App\Models\Driver;
 use App\Models\Load;
+use App\Models\Trip;
 use Faker\Generator as Faker;
 
 $factory->define(\App\Models\Trip::class, function (Faker $faker) {
@@ -11,7 +12,7 @@ $factory->define(\App\Models\Trip::class, function (Faker $faker) {
         'amount'     => rand(100, 900),
         'started_at' => \Carbon\Carbon::now()->subDays(rand(1, 10))->toDateTimeString(),
         'ended_at' => \Carbon\Carbon::now()->subDays(rand(1, 10))->toDateTimeString(),
-        'status' => 'pending'
+        'status' => Trip::STATUS_PENDING
     ];
 });
 

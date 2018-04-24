@@ -35,7 +35,6 @@ class ProfileController extends Controller
     {
 
         $user = Auth::guard('api')->user();
-//        $user = Auth::loginUsingId(2);
 
         $driver = $user->driver;
 

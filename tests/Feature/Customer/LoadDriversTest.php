@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\CustomerLocation;
 use App\Models\SecurityPass;
 use App\Models\Trailer;
+use App\Models\TrailerType;
 use App\Models\Truck;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -54,7 +55,8 @@ class LoadDriversTest extends TestCase
         $origin = factory(CustomerLocation::class)->create(['country_id' => $kw->id, 'customer_id' => $customer->id]);
         $destination = factory(CustomerLocation::class)->create(['country_id' => $bh->id, 'customer_id' => $customer->id]);
 
-        $trailer = factory(Trailer::class)->create();
+        $trailerType = factory(TrailerType::class)->create();
+        $trailer = factory(Trailer::class)->create(['type_id' => $trailerType->id ]);
 
         // Load
         $load = $this->_createLoad(
@@ -62,7 +64,7 @@ class LoadDriversTest extends TestCase
                 'customer_id'             => $customer->id,
                 'origin_location_id'      => $origin->id,
                 'destination_location_id' => $destination->id,
-                'trailer_id'              => $trailer->id
+                'trailer_type_id'              => $trailerType->id
             ]
         );
 

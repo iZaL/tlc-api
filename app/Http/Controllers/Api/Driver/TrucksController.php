@@ -89,7 +89,7 @@ class TrucksController extends Controller
             $this->truck->create(array_merge($request->all(), $params));
         }
 
-        $driver->load('truck.make', 'truck.trailer', 'truck.model');
+        $driver->load('truck.trailer', 'truck.model');
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 

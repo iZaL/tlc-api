@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\PackagingResource;
@@ -111,7 +112,7 @@ class LoadsController extends Controller
     public function storeLoad(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'trailer_id'              => 'required',
+            'trailer_type_id'              => 'required',
             'packaging_id'            => 'required',
             'origin_location_id'      => 'required',
             'destination_location_id' => 'required',
@@ -151,7 +152,7 @@ class LoadsController extends Controller
         $data['load_date'] = Carbon::parse($request->load_date)->toDateString();
 
         if ($customer->canBookDirect()) {
-            $data['status'] = 'approved';
+            $data['status'] = Load::STATUS_APPROVED;
         }
 
         $loadData = array_merge($data, ['customer_id' => $customer->id]);
@@ -169,4 +170,32 @@ class LoadsController extends Controller
 
     }
 
+    public function getLoadDetails($loadID)
+    {
+        $load = $this->loadModel->with([
+            'origin.country',
+            'destination.country',
+            'trailer_type',
+            'trips.driver'
+        ])->find($loadID);
+
+
+        $loadResource = new LoadResource($load);
+
+        return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
+
+    }
+
+    public function getLoadDrivers($loadID)
+    {
+
+        $load = $this->loadModel->find($loadID);
+
+        $drivers = DriverResource::collection($this->driverModel->all());
+
+        $load->drivers = $drivers;
+
+        return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
+
+    }
 }

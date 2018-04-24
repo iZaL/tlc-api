@@ -5,6 +5,13 @@ namespace App\Models;
 class Trip extends BaseModel
 {
 
+    const STATUS_PENDING = 10;
+    const STATUS_APPROVED = 20;
+    const STATUS_REJECTED = 50;
+    const STATUS_CONFIRMED = 60;
+    const STATUS_ENROUTE = 70;
+    const STATUS_COMPLETED = 100;
+
     protected $table = 'trips';
 
     public function booking()
@@ -33,7 +40,7 @@ class Trip extends BaseModel
 
     public function scopePending($query)
     {
-        return $query->where('status','pending');
+        return $query->where('status',self::STATUS_PENDING);
     }
 
 }

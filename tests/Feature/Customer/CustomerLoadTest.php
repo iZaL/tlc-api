@@ -14,6 +14,7 @@ use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\CustomerLocation;
 use App\Models\Trailer;
+use App\Models\TrailerType;
 use App\Models\Truck;
 use App\Models\User;
 use Carbon\Carbon;
@@ -33,7 +34,7 @@ class CustomerLoadTest extends TestCase
         $customer = $this->_createCustomer();
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
-        $trailer1 = factory(Trailer::class)->create();
+        $trailer1 = factory(TrailerType::class)->create();
         $packaging1 = factory(Packaging::class)->create();
         $originLocation = factory(CustomerLocation::class)->create();
         $destinationLocation = factory(CustomerLocation::class)->create();
@@ -49,7 +50,7 @@ class CustomerLoadTest extends TestCase
         $pass3 = factory(SecurityPass::class)->create();
 
         $loadPostData = [
-            'trailer_id'              => $trailer1->id,
+            'trailer_type_id'              => $trailer1->id,
             'packaging_id'            => $packaging1->id,
             'origin_location_id'      => $originLocation->id,
             'destination_location_id' => $destinationLocation->id,

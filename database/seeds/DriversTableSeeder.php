@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DriversTableSeeder extends Seeder
@@ -65,6 +66,44 @@ class DriversTableSeeder extends Seeder
         ]);
 
         $load->trips()->create(['driver_id'=>$driver->id]);
+
+
+
+        /// drivers
+        ///
+        ///
+        factory(\App\Models\Driver::class,1)->create([
+            'offline' =>1,
+            'user_id' => function () {
+                return factory(User::class)->create(['name_en'=>'Ali','email'=>'ali@test.com'])->id;
+            },
+        ]);
+
+        factory(\App\Models\Driver::class,1)->create([
+            'offline' =>1,
+            'user_id' => function () {
+                return factory(User::class)->create(['name_en'=>'Abbas','email'=>'abbas@test.com'])->id;
+            },
+        ]);
+
+        factory(\App\Models\Driver::class,1)->create([
+            'offline' =>1,
+            'user_id' => function () {
+                return factory(User::class)->create(['name_en'=>'Mohammad','email'=>'mohammad@test.com'])->id;
+            },
+        ]);
+
+        factory(\App\Models\Driver::class,1)->create([
+            'user_id' => function () {
+                return factory(User::class)->create(['name_en'=>'Hussain','email'=>'hussain@test.com'])->id;
+            },
+        ]);
+
+        factory(\App\Models\Driver::class,1)->create([
+            'user_id' => function () {
+                return factory(User::class)->create(['name_en'=>'Nasser','email'=>'nasser@test.com'])->id;
+            },
+        ]);
 
     }
 }
