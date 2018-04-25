@@ -176,9 +176,8 @@ class LoadsController extends Controller
             'origin.country',
             'destination.country',
             'trailer_type',
-            'trips.driver'
+            'trips.driver.user'
         ])->find($loadID);
-
 
         $loadResource = new LoadResource($load);
 

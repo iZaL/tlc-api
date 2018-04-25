@@ -26,12 +26,6 @@ $factory->define(\App\Models\Load::class, function (Faker $faker) {
     return $load;
 });
 
-$factory->state(\App\Models\Load::class, 'waiting', function ($faker) {
-    return [
-        'status' => 'waiting',
-    ];
-});
-
 $factory->state(\App\Models\Load::class, 'approved', function ($faker) {
     return [
         'status' => Load::STATUS_APPROVED,
