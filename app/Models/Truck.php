@@ -10,7 +10,7 @@ class Truck extends BaseModel
 
     public function model()
     {
-        return $this->belongsTo(TruckModel::class);
+        return $this->belongsTo(TruckModel::class,'model_id','id','truck_models');
     }
 
     public function registration_country()

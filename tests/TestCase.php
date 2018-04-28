@@ -9,6 +9,9 @@ use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Customer;
 use App\Models\Route;
+use App\Models\Trailer;
+use App\Models\TrailerType;
+use App\Models\Trip;
 use App\Models\Truck;
 use App\Models\TruckMake;
 use App\Models\TruckModel;
@@ -30,21 +33,21 @@ abstract class TestCase extends BaseTestCase
     public function _createLoadPostData($array = [])
     {
         $postData = [
-            'trailer_type_id'              => 1,
-            'packaging_id'              => 1,
+            'trailer_type_id'         => 1,
+            'packaging_id'            => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1,
             'price'                   => '200.00',
             'request_documents'       => 0,
             'request_pictures'        => 0,
             'fixed_rate'              => 1,
-            'load_date'            => '2017-10-19',
-            'load_time' => '8am',
-            'receiver_name' => 'zal',
-            'receiver_email' => 'z4ls@live.com',
-            'receiver_phone' => '9992192299',
-            'receiver_mobile' => '9992192299',
-            'weight' => 100,
+            'load_date'               => '2017-10-19',
+            'load_time'               => '8am',
+            'receiver_name'           => 'zal',
+            'receiver_email'          => 'z4ls@live.com',
+            'receiver_phone'          => '9992192299',
+            'receiver_mobile'         => '9992192299',
+            'weight'                  => 100,
         ];
 
         return array_merge($postData, $array);
@@ -64,13 +67,13 @@ abstract class TestCase extends BaseTestCase
 
     public function _createRoute($origin, $destination, $array = [])
     {
-        $route = factory(Route::class)->create(['origin_country_id'=>$origin->id,'destination_country_id'=>$destination->id]);
+        $route = factory(Route::class)->create(['origin_country_id' => $origin->id, 'destination_country_id' => $destination->id]);
 
-        if(array_key_exists('transit1',$array)) {
+        if (array_key_exists('transit1', $array)) {
             $route->transits()->syncWithoutDetaching(['country_id' => $array['transit1']]);
         }
 
-        if(array_key_exists('transit2',$array)) {
+        if (array_key_exists('transit2', $array)) {
             $route->transits()->syncWithoutDetaching(['country_id' => $array['transit2']]);
         }
 
@@ -82,7 +85,7 @@ abstract class TestCase extends BaseTestCase
     {
         factory(DriverDocument::class)->create(
             [
-                'type'  => 'visa',
+                'type'        => 'visa',
                 'driver_id'   => $driverID,
                 'country_id'  => $countryID,
                 'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()
@@ -93,18 +96,18 @@ abstract class TestCase extends BaseTestCase
     {
         factory(DriverDocument::class)->create(
             [
-                'type'  => 'license',
+                'type'        => 'license',
                 'driver_id'   => $driverID,
                 'country_id'  => $countryID,
                 'expiry_date' => $valid ? Carbon::now()->addYear(1)->toDateString() : Carbon::now()->subYear(1)->toDateString()
             ]);
     }
 
-    public function _createTruck($countryID,$array = [])
+    public function _createTruck($countryID, $array = [])
     {
 
         $truck = factory(Truck::class)->create(array_merge([
-            'model_id' => function () {
+            'model_id'                => function () {
                 return factory(TruckModel::class)->create()->id;
             },
             'registration_country_id' => $countryID
@@ -124,22 +127,42 @@ abstract class TestCase extends BaseTestCase
         return $customer;
     }
 
-    public function _createDriver($array = [])
+    public function _createDriver($array = [], $relations = [])
     {
         $driver = factory(Driver::class)->create(array_merge([
-            'user_id' => function () {
+            'user_id'  => function () {
                 return factory(User::class)->create()->id;
             },
+            'truck_id' => array_key_exists('truck', $relations) ? function () {
+                return factory(Truck::class)->create([
+                    'trailer_id' => function () {
+                        return factory(Trailer::class)->create([
+                            'type_id' => function () {
+                                return factory(TrailerType::class)->create()->id;
+                            }
+                        ])->id;
+                    },
+                    'model_id' => function() {
+                        return factory(TruckModel::class)->create([
+                            'make_id' => function () {
+                                return factory(TruckMake::class)->create()->id;
+                            }
+                        ])->id;
+                    },
+                ]);
+            } : 1
+
         ], $array));
 
         return $driver;
     }
 
-    public function _createLoad($array = [])
+    public
+    function _createLoad($array = [])
     {
         $load = factory(Load::class)->create(array_merge([
-            'customer_id'              => 1,
-            'trailer_type_id'              => 1,
+            'customer_id'             => 1,
+            'trailer_type_id'         => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1
         ], $array));
@@ -147,11 +170,23 @@ abstract class TestCase extends BaseTestCase
         return $load;
     }
 
-    public function _makeDriverBusy($driver,$array = [])
+    public
+    function _createTrip($array = [])
+    {
+        $load = factory(Trip::class)->create(array_merge([
+            'driver_id' => 1
+        ], $array));
+
+        return $load;
+    }
+
+
+    public
+    function _makeDriverBusy($driver, $array = [])
     {
         $bookedFrom = Carbon::now()->addDays(3)->toDateString();
         $bookedUntil = Carbon::now()->addDays(6)->toDateString();
-        $driver->blocked_dates()->create(['from' => isset($array['from']) ? : $bookedFrom,'to'=>isset($array['to']) ? : $bookedUntil]);
+        $driver->blocked_dates()->create(['from' => isset($array['from']) ?: $bookedFrom, 'to' => isset($array['to']) ?: $bookedUntil]);
     }
 
 }

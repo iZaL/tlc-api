@@ -19,8 +19,8 @@ class TripResource extends Resource
             'amount' => $this->amount,
             'reached_at' => $this->reached_at,
             'status' => $this->status,
+            'load_id' => $this->load_id,
             'driver' => new DriverResource($this->whenLoaded('driver')),
-//            'load' => new LoadResource($this->whenLoaded('booking')),
         ];
     }
 }

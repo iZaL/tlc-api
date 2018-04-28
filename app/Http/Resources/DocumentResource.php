@@ -19,7 +19,8 @@ class DocumentResource extends Resource
             'expiry_date' => $this->expiry_date,
             'image' => $this->image,
             'number' => $this->number,
-            'country' => new CountryResource($this->whenLoaded('country')),
+//            'country' => new CountryResource($this->whenLoaded('country')),
+            'country' => new CountryResource($this->country),
         ];
     }
 }

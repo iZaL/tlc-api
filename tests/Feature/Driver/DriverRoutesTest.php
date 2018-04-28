@@ -69,33 +69,33 @@ class DriverRoutesTestTest extends TestCase
 
     }
 
-    public function test_driver_can_add_route()
-    {
-
-        $driver = factory(Driver::class)->create([
-            'user_id' => function () {
-                return factory(User::class)->create()->id;
-            },
-//            'truck_id' => $truck->id
-        ]);
-
-        $kw = $this->_createCountry('KW');
-
-        $truck = $this->_createTruck($kw->id);
-
-        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
-
-        $body = [
-            'route_id' => 1
-        ];
-
-        $response = $this->json('POST', '/api/driver/routes', $body, $header);
-
-        $response->assertJson(['success'=>true]);
-
-        $this->assertDatabaseHas('driver_routes',array_merge($body,['driver_id'=>$driver->id]));
-
-    }
+//    public function test_driver_can_add_route()
+//    {
+//
+//        $driver = factory(Driver::class)->create([
+//            'user_id' => function () {
+//                return factory(User::class)->create()->id;
+//            },
+////            'truck_id' => $truck->id
+//        ]);
+//
+//        $kw = $this->_createCountry('KW');
+//
+//        $truck = $this->_createTruck($kw->id);
+//
+//        $header = $this->_createHeader(['api_token' => $driver->user->api_token]);
+//
+//        $body = [
+//            'route_id' => 1
+//        ];
+//
+//        $response = $this->json('POST', '/api/driver/routes', $body, $header);
+//
+//        $response->assertJson(['success'=>true]);
+//
+//        $this->assertDatabaseHas('driver_routes',array_merge($body,['driver_id'=>$driver->id]));
+//
+//    }
 
     public function test_driver_gets_routes()
     {
