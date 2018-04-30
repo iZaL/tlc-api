@@ -26,7 +26,7 @@ class DriversController extends Controller
 
     public function getDrivers(Request $request)
     {
-        $drivers = $this->driverModel->paginate(100);
+        $drivers = $this->driverModel->has('user')->with(['user'])->paginate(100);
 
         return response()->json(['success'=>true,'data' => DriverResource::collection($drivers)]);
     }

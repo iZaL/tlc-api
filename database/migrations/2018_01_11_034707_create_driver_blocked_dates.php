@@ -15,6 +15,7 @@ class CreateDriverBlockedDates extends Migration
     {
         Schema::create('driver_blocked_dates', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('trip_id');
             $table->integer('driver_id');
             $table->date('from');
             $table->date('to');

@@ -24,7 +24,7 @@ class LoadResource extends Resource
             'status' => $this->status,
             'fixed_rate' => $this->fixed_rate,
             'distance' => $this->distance,
-            'fleet_count' => $this->fleet_count,
+            'pending_fleets' => $this->pending_fleets, // fleets remaing to get booked
             'request_documents' => $this->request_documents,
             'request_pictures' => $this->request_pictures,
             'customer' => new CustomerResource($this->whenLoaded('customer')),

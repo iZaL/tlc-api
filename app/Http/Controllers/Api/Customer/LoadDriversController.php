@@ -167,15 +167,26 @@ class LoadDriversController extends Controller
 
 //        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
 
-        $drivers = $this->driverModel->with(['user'])->get();
+        $drivers = $this->driverModel->has('user')->with(['user'])->get();
 
         $driversCollection = DriverResource::collection($drivers);
 
         $loadResource = (new LoadResource($load))->additional(['drivers' => $driversCollection]);
 
-//        dd($loadResource);
-//        return response()->json(['success' => false, 'message' => 'wa']);
         return response()->json(['success' => true, 'data' => $driversCollection]);
+
+    }
+
+    public function getBookableDriversForLoad($loadID)
+    {
+
+        $load = $this->loadModel->find($loadID);
+
+        $drivers = $this->driverModel->has('user')->with(['user'])->get();
+
+        $driversCollection = DriverResource::collection($drivers);
+
+        return response()->json(['success' => true, 'load' => new LoadResource($load), 'drivers' => $driversCollection]);
 
     }
 

@@ -90,11 +90,19 @@ class Load extends BaseModel
             ;
     }
 
-    public function getRemainingFleetCountAttribute()
+    /**
+     * @return int
+     * Number of Fleets Remaining for Customers to Book
+     */
+    public function getPendingFleetsAttribute()
     {
         // get fleet count
         // get successfully booked trips
+        return 2;
     }
+
+
+
 
 }
 

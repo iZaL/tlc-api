@@ -13,6 +13,7 @@ use App\Http\Resources\CustomerLocationResource;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\TrailerResource;
 use App\Models\Country;
+use App\Models\Driver;
 use App\Models\Load;
 use App\Models\Packaging;
 use App\Models\SecurityPass;
@@ -50,9 +51,14 @@ class LoadsController extends Controller
      * @var SecurityPass
      */
     private $passModel;
+    /**
+     * @var Driver
+     */
+    private $driverModel;
 
     /**
      * LoadsController constructor.
+     * @param Driver $driverModel
      * @param Customer $customerModel
      * @param Load $loadModel
      * @param Country $countryModel
@@ -60,7 +66,7 @@ class LoadsController extends Controller
      * @param Packaging $packagingModel
      * @param SecurityPass $passModel
      */
-    public function __construct(Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, SecurityPass $passModel)
+    public function __construct(Driver $driverModel, Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, SecurityPass $passModel)
     {
         $this->middleware('customer')->only(['bookLoad']);
         $this->middleware('driver')->only(['getLoads']);
@@ -70,6 +76,7 @@ class LoadsController extends Controller
         $this->trailerModel = $trailerModel;
         $this->packagingModel = $packagingModel;
         $this->passModel = $passModel;
+        $this->driverModel = $driverModel;
     }
 
     public function getLoadsByStatus($status, Request $request)
@@ -178,12 +185,10 @@ class LoadsController extends Controller
             'trailer_type',
             'trips.driver.user',
             'trips.driver.nationalities',
+
         ])->find($loadID);
 
-        $loadResource = new LoadResource($load);
-
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
-
     }
 
     public function getLoadDrivers($loadID)
@@ -191,9 +196,10 @@ class LoadsController extends Controller
 
         $load = $this->loadModel->find($loadID);
 
-        $drivers = DriverResource::collection($this->driverModel->all());
+        $drivers = $this->driverModel->has('user')->with(['user'])->get();
+        $driversCollection = DriverResource::collection($drivers);
 
-        $load->drivers = $drivers;
+        $load->drivers = $driversCollection;
 
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
 

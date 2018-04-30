@@ -60,6 +60,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 //            Route::get('loads/{id}/drivers','LoadsController@getLoadDrivers');//matching drivers
 
             Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
+            Route::get('loads/{id}/drivers/bookable','LoadDriversController@getBookableDriversForLoad');
 
             /**
              * |--------------------------------------------------------------------------
