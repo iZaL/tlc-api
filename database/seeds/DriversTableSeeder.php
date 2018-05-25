@@ -29,7 +29,7 @@ class DriversTableSeeder extends Seeder
         $routeKWSA = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$sa->id)->first();
         $routeKWOM = \App\Models\Route::where('origin_country_id',$kw->id)->where('destination_country_id',$om->id)->first();
 
-        $driver->security_passes()->sync([$pass1->id,$pass2->id]);
+        $driver->security_passes()->sync([$pass1->id=>['image' => 'https://source.unsplash.com/800x400/?files'],$pass2->id=>['image' => 'https://source.unsplash.com/800x400/?files']]);
 
         //[ KW->Sa ],  [ KW->OM = KW->SA->AE->OM ]
         $driver->routes()->sync([$routeKWSA->id,$routeKWOM->id]);
@@ -37,20 +37,16 @@ class DriversTableSeeder extends Seeder
         //licenses
         // KW, SA, AE, OM
 
-        $driver->documents()->create(['type'=>'nationality','country_id'=>$in->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
-
-        $driver->documents()->create(['type'=>'license','country_id'=>$kw->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
-        $driver->documents()->create(['type'=>'license','country_id'=>$sa->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
-        $driver->documents()->create(['type'=>'license','country_id'=>$ae->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
-        $driver->documents()->create(['type'=>'license','country_id'=>$om->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
-
-        //visas
-        $driver->documents()->create(['type'=>'visa','country_id'=>$kw->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
-        $driver->documents()->create(['type'=>'visa','country_id'=>$sa->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
-        $driver->documents()->create(['type'=>'visa','country_id'=>$ae->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
-        $driver->documents()->create(['type'=>'visa','country_id'=>$om->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
-
-        $driver->documents()->create(['type'=>'residency','country_id'=>$kw->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'nationality','country_id'=>$in->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'license','country_id'=>$kw->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'license','country_id'=>$sa->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'license','country_id'=>$ae->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'license','country_id'=>$om->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString(),'number'=>str_random(10)]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'visa','country_id'=>$kw->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'visa','country_id'=>$sa->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'visa','country_id'=>$ae->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'visa','country_id'=>$om->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
+        $driver->documents()->create(['image' => 'https://source.unsplash.com/800x400/?files','type'=>'residency','country_id'=>$kw->id,'expiry_date' => \Carbon\Carbon::now()->addDays(rand(100,1000))->toDateString()]);
 
         // loads
 
@@ -62,48 +58,52 @@ class DriversTableSeeder extends Seeder
         $load = factory(\App\Models\Load::class)->create([
             'customer_id' => $customer->id,
             'origin_location_id' => $customerOrigin->id,
-            'destination_location_id' => $customerDestination->id
+            'destination_location_id' => $customerDestination->id,
+            'status' => \App\Models\Load::STATUS_ENROUTE
         ]);
 
-        $load->trips()->create(['driver_id'=>$driver->id]);
+        $trip = $load->trips()->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_ENROUTE]);
 
+        $document = \App\Models\DocumentType::first();
+
+        factory(\App\Models\TripDocument::class)->create(['trip_id'=>$trip->id,'document_type_id' => $document->id]);
 
 
         /// drivers
         ///
         ///
-        factory(\App\Models\Driver::class,1)->create([
-            'offline' =>1,
-            'user_id' => function () {
-                return factory(User::class)->create(['name_en'=>'Ali','email'=>'ali@test.com'])->id;
-            },
-        ]);
+//        factory(\App\Models\Driver::class,1)->create([
+//            'offline' =>1,
+//            'user_id' => function () {
+//                return factory(User::class)->create(['name_en'=>'Ali','email'=>'ali@test.com'])->id;
+//            },
+//        ]);
 
-        factory(\App\Models\Driver::class,1)->create([
-            'offline' =>1,
-            'user_id' => function () {
-                return factory(User::class)->create(['name_en'=>'Abbas','email'=>'abbas@test.com'])->id;
-            },
-        ]);
-
-        factory(\App\Models\Driver::class,1)->create([
-            'offline' =>1,
-            'user_id' => function () {
-                return factory(User::class)->create(['name_en'=>'Mohammad','email'=>'mohammad@test.com'])->id;
-            },
-        ]);
-
-        factory(\App\Models\Driver::class,1)->create([
-            'user_id' => function () {
-                return factory(User::class)->create(['name_en'=>'Hussain','email'=>'hussain@test.com'])->id;
-            },
-        ]);
-
-        factory(\App\Models\Driver::class,1)->create([
-            'user_id' => function () {
-                return factory(User::class)->create(['name_en'=>'Nasser','email'=>'nasser@test.com'])->id;
-            },
-        ]);
+//        factory(\App\Models\Driver::class,1)->create([
+//            'offline' =>1,
+//            'user_id' => function () {
+//                return factory(User::class)->create(['name_en'=>'Abbas','email'=>'abbas@test.com'])->id;
+//            },
+//        ]);
+//
+//        factory(\App\Models\Driver::class,1)->create([
+//            'offline' =>1,
+//            'user_id' => function () {
+//                return factory(User::class)->create(['name_en'=>'Mohammad','email'=>'mohammad@test.com'])->id;
+//            },
+//        ]);
+//
+//        factory(\App\Models\Driver::class,1)->create([
+//            'user_id' => function () {
+//                return factory(User::class)->create(['name_en'=>'Hussain','email'=>'hussain@test.com'])->id;
+//            },
+//        ]);
+//
+//        factory(\App\Models\Driver::class,1)->create([
+//            'user_id' => function () {
+//                return factory(User::class)->create(['name_en'=>'Nasser','email'=>'nasser@test.com'])->id;
+//            },
+//        ]);
 
     }
 }

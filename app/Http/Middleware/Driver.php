@@ -15,10 +15,9 @@ class Driver
         }
 
         return response()->json(
-            ['success' => false, 'message' => trans('general.invalid_request'), 'type' => 'invalid_request'],
+            ['success' => false, 'message' => !$user->active ? trans('general.user_not_active') : trans('general.invalid_request'), 'type' => 'invalid_request'],
             403
         );
-
 //        return $next($request);
     }
 }

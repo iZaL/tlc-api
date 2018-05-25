@@ -11,7 +11,8 @@ class LoadsTableSeeder extends Seeder
      */
     public function run()
     {
-//        factory(\App\Models\Load::class,5)->create();
+//        factory(\App\Models\Load::class,1)->create();
 //        factory(\App\Models\LoadDriver::class,5)->create();
+
     }
 }

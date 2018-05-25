@@ -4,10 +4,12 @@
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResourceCollection;
 use App\Http\Resources\LoadResource;
 use App\Models\Country;
 use App\Models\Load;
+use App\Models\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,14 +33,12 @@ class LoadsController extends Controller
      */
     public function __construct(Load $loadModel, Country $countryModel)
     {
-
         $this->loadModel = $loadModel;
         $this->countryModel = $countryModel;
     }
 
     public function getLoadsByStatus($status, Request $request)
     {
-        $customer = Auth::guard('api')->user()->customer;
         $loads = $this->loadModel->with([
             'customer',
             'origin.country',
@@ -91,23 +91,68 @@ class LoadsController extends Controller
                 ->whereIn('loads.destination_location_id', $validCountries)
                 ->whereNotIn('loads.customer_id', $blockedCustomers)
                 ->select('loads.*')
-                ->get()
-        ;
+                ->get();
 
         return response()->json(['success' => true, 'data' => $loads]);
-//        return new LoadResourceCollection($loads);
     }
-
 
     public function getLoadDetails($loadID)
     {
         $load = $this->loadModel->with([
             'origin.country',
             'destination.country',
-            'trailer'
+            'trailer_type',
+            'customer.employees',
+            'customer.user',
+            'trip.documents'
         ])->find($loadID);
 
         return response()->json(['success' => true, 'data' => new LoadResource($load)]);
+
+    }
+
+    /**
+     * get working load
+     */
+    public function getCurrentLoad()
+    {
+        $driver = Auth::guard('api')->user()->driver;
+
+        $load = $this->loadModel->whereHas('trips', function ($q) use ($driver) {
+            return $q
+                ->where('driver_id', $driver->id)
+                ->ofStatus(Trip::STATUS_ENROUTE)
+                ;
+        })->with([
+            'trips',
+            'origin.country',
+            'destination.country',
+            'trailer_type'
+        ])
+            ->ofStatus(Trip::STATUS_ENROUTE)
+            ->limit(1)
+            ->first()
+        ;
+
+        return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'load' => new LoadResource($load)]);
+
+    }
+
+    public function getUpcomingLoads()
+    {
+        $driver = auth()->user()->guard('api')->driver;
+        $load = $this->loadModel->whereHas('trips', function ($q) use ($driver) {
+            return $q
+                ->where('driver_id', $driver->id)//                ->where('status',''); //@todo
+                ;
+        })->with([
+            'trips',
+            'origin.country',
+            'destination.country',
+            'trailer_type'
+        ])->paginate(10);
+
+        return response()->json(['success' => true, 'data' => LoadResource::collection($load)]);
 
     }
 

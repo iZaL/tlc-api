@@ -28,14 +28,9 @@ class Trip extends BaseModel
         return $this->belongsToMany(Fine::class,'trip_fines');
     }
 
-    public function documentations()
+    public function documents()
     {
-        return $this->belongsToMany(Documentation::class,'trip_documentations');
-    }
-
-    public function confirmTrip()
-    {
-
+        return $this->belongsToMany(DocumentType::class,'trip_documents','document_type_id')->withPivot(['id','amount','url','extension']);
     }
 
     public function scopePending($query)

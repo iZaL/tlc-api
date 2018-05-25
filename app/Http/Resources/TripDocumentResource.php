@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Driver;
+use App\Models\DocumentType;
 use Illuminate\Http\Resources\Json\Resource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class DriverSecurityPassResource extends Resource
+class TripDocumentResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -18,9 +17,10 @@ class DriverSecurityPassResource extends Resource
     {
         return [
             'id' => $this->pivot->id,
-            'expiry_date' => $this->pivot->expiry_date,
-            'image' => $this->pivot->image,
-            'security_pass' => new SecurityPassResource($this),
+            'amount' => $this->pivot->amount,
+            'url' => $this->pivot->url,
+            'extension' => $this->pivot->extension,
+            'type' => new DocumentTypeResource($this),
         ];
     }
 }

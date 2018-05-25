@@ -21,6 +21,7 @@ class TripResource extends Resource
             'status' => $this->status,
             'load_id' => $this->load_id,
             'driver' => new DriverResource($this->whenLoaded('driver')),
+            'documents' => TripDocumentResource::collection($this->whenLoaded('documents'))
         ];
     }
 }

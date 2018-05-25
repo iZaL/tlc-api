@@ -21,7 +21,7 @@ $factory->define(\App\Models\DriverDocument::class, function (Faker $faker) {
         'country_id'  => \App\Models\Country::first()->id,
         'expiry_date' => \Carbon\Carbon::now()->addYear(1)->toDateTimeString(),
         'number'      => str_random(15),
-        'image'      =>  'https://source.unsplash.com/800x400/?files',
+        'image'      =>  $faker->imageUrl(370,790),
         'type' => 'visa'
     ];
 });

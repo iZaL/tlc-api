@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTripDocumentationsTable extends Migration
+class CreateTripDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateTripDocumentationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('trip_documentations', function (Blueprint $table) {
+        Schema::create('trip_documents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('trip_id');
-            $table->integer('documentation_id');
+            $table->integer('document_type_id');
             $table->integer('country_id')->nullable();
             $table->decimal('amount')->nullable();
-            $table->string('file')->nullable(); // proof
+            $table->string('url')->nullable(); // proof
+            $table->string('extension')->default('image'); // image,pdf etc
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateTripDocumentationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trip_documentations');
+        Schema::dropIfExists('trip_documents');
     }
 }

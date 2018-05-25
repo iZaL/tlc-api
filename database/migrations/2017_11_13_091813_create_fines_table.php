@@ -18,7 +18,7 @@ class CreateFinesTable extends Migration
             $table->string('name_en')->nullable();
             $table->string('name_ar')->nullable();
             $table->string('name_hi')->nullable();
-            $table->string('type')->nullable();
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

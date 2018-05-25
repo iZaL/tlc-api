@@ -32,6 +32,7 @@ class LoadResource extends Resource
             'destination' => new CustomerLocationResource($this->whenLoaded('destination')),
             'trailer_type' => new TrailerTypeResource($this->whenLoaded('trailer_type')),
             'trips' => TripResource::collection($this->whenLoaded('trips')),
+            'trip' => new TripResource($this->whenLoaded('trip')),
             'receiver' => [
                 'name'=>$this->receiver_name,
                 'mobile'=>$this->receiver_mobile,

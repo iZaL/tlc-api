@@ -11,6 +11,7 @@ class CommunicationProvidersTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+
+
     }
 }

@@ -16,7 +16,7 @@ $factory->define(\App\Models\Trip::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(\App\Models\TripDocumentation::class, function (Faker $faker) {
+$factory->define(\App\Models\TripDocument::class, function (Faker $faker) {
     return [
         'load_id'   => \App\Models\Load::all()->random()->first()->id,
         'driver_id' => \App\Models\Driver::all()->random()->first()->id,

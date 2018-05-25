@@ -49,7 +49,7 @@ class TripsController extends Controller
             ->with(['booking.trailer_type','booking.origin','booking.destination'])
             ->whereHas('booking',function($q) use ($today) {
                 $q
-                    ->whereDate('load_date','>=',$today)
+//                    ->whereDate('load_date','>=',$today)
                     ->orderBy('load_date','desc')
                 ;
             })

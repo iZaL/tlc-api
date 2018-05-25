@@ -80,6 +80,16 @@ class Load extends BaseModel
     }
 
     /**
+     * API specific
+     * Auth Driver Trip
+     */
+    public function trip()
+    {
+        $driver = auth()->guard('api')->user()->driver;
+        return $this->hasOne(Trip::class)->where('driver_id',$driver->id);
+    }
+
+    /**
      * @return mixed
      * Trips that are confirmed and beyond
      */

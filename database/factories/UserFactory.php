@@ -24,9 +24,9 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'admin' => 0,
         'image' => $faker->imageUrl(500,500),
         'password' => $password ?: $password = bcrypt('password'),
-        'remember_token' => str_random(10),
+        'remember_token' => str_random(16),
+        'api_token' => str_random(16),
         'otp' => rand(1000,9000),
-        'api_token' => str_random(12),
         'active' => 1
     ];
 });

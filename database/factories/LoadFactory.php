@@ -22,6 +22,10 @@ $factory->define(\App\Models\Load::class, function (Faker $faker) {
         'unload_time' => '1pm - 10pm',
         'use_own_truck' => 0,
         'status' => Load::STATUS_PENDING,
+        'receiver_name' => $faker->name,
+        'receiver_email' => $faker->safeEmail,
+        'receiver_mobile' => $faker->phoneNumber,
+        'receiver_phone' => $faker->phoneNumber,
     ];
     return $load;
 });
