@@ -118,6 +118,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
             Route::get('loads/current', 'LoadsController@getCurrentLoad');
+            Route::get('loads/requests', 'LoadsController@getLoadRequests');
 
             Route::get('documents/types', 'DocumentsController@getTypes');
 

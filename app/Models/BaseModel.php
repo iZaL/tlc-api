@@ -27,4 +27,17 @@ class BaseModel extends Model
     {
         return $this->localizeAttribute('name');
     }
+
+    protected function getUserCurrency()
+    {
+        return 'KWD';
+    }
+
+    protected function getExchangedRate($amount, $formatted=false, $toCurrency='KWD', $fromCurrency='USD' ) {
+        return $formatted ? round($amount).' KWD':round($amount);
+
+//        $rate =  $amount;
+//       return  currency($amount,$fromCurrency,$toCurrency,$formatted);
+    }
+
 }

@@ -160,6 +160,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Swap\Laravel\SwapServiceProvider::class,
+        Torann\Currency\CurrencyServiceProvider::class,
+
     ],
 
     /*
@@ -208,6 +211,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'Swap' => Swap\Laravel\Facades\Swap::class,
+
+        'Currency' => Torann\Currency\Facades\Currency::class,
+
 
     ],
 

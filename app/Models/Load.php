@@ -6,8 +6,9 @@ class Load extends BaseModel
 {
 
     const STATUS_PENDING = 10;
-    const STATUS_APPROVED = 20;
-    const STATUS_REJECTED = 50;
+    const STATUS_REJECTED = 20;
+    const STATUS_CANCELLED = 30;
+    const STATUS_APPROVED = 40;
     const STATUS_CONFIRMED = 60;
     const STATUS_ENROUTE = 70;
     const STATUS_COMPLETED = 100;
@@ -111,8 +112,56 @@ class Load extends BaseModel
         return 2;
     }
 
+    public function getLoadDateFormattedAttribute()
+    {
+        return 'Jan 4';
+    }
 
+    public function getUnloadDateFormattedAttribute()
+    {
+        return 'Jan 8';
+    }
 
+    public function getLoadTimeFormattedAttribute()
+    {
+        return '1am-10pm';
+    }
+
+    public function getUnloadTimeFormattedAttribute()
+    {
+        return '1am-10pm';
+    }
+
+    public function getPriceFormattedAttribute()
+    {
+        return $this->price . $this->getUserCurrency();
+    }
+
+    public function getStatusFormattedAttribute()
+    {
+        $currentStatus = $this->attributes['status'];
+
+        switch ($currentStatus) {
+            case self::STATUS_PENDING :
+                return __('g.pending');
+            case self::STATUS_CANCELLED :
+                return __('g.cancelled');
+            case self::STATUS_APPROVED :
+                return __('g.approved');
+            case self::STATUS_REJECTED :
+                return __('g.rejected');
+            case self::STATUS_CONFIRMED :
+                return __('g.confirmed');
+            case self::STATUS_ENROUTE :
+                return __('g.enroute');
+            case self::STATUS_COMPLETED :
+                return __('g.completed');
+            default :
+                return null;
+
+        }
+    }
 
 }
+
 

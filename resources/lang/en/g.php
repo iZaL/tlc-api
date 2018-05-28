@@ -8,5 +8,12 @@ return [
     'registration_failed' => 'Registration Failed',
     'invalid_otp' => 'Invalid Confirmation Code',
     'account_already_active' => 'Account is already active',
-    'unknown_error' => 'Unknown Error'
+    'unknown_error' => 'Unknown Error',
+    'tons' => 'tons',
+    'pending' => 'Pending',
+    'approved' => 'Approved',
+    'confirmed' => 'Confirmed',
+    'cancelled' => 'Cancelled',
+    'rejected' => 'Rejected',
+    'enroute' => 'On way'
 ];

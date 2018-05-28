@@ -17,11 +17,16 @@ class LoadResource extends Resource
         return [
             'id' => $this->id,
             'price' => $this->price,
-            'invoice_id' => $this->invoice_id,
+            'track_id' => $this->track_id,
             'use_own_truck' => $this->use_own_truck,
-            'date' => $this->load_date,
-            'time' => $this->load_time,
-            'status' => $this->status,
+            'load_date_formatted' => $this->load_date_formatted, // Jan 4
+            'load_time_formatted' => $this->load_time_formatted, // 1-10am
+            'unload_date_formatted' => $this->unload_date_formatted, // Jan 4 (1-10am)
+            'unload_time_formatted' => $this->unload_time_formatted, // Jan 4 (1-10am)
+            'price_formatted' => $this->price_formatted,
+            'weight' => $this->weight,
+            'weight_formatted' => $this->weight .  trans('g.tons'),
+            'status_formatted' => $this->status_formatted,
             'fixed_rate' => $this->fixed_rate,
             'distance' => $this->distance,
             'pending_fleets' => $this->pending_fleets, // fleets remaing to get booked

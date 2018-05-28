@@ -11,6 +11,55 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
 
+    protected $tables = [
+        "bank_accounts",
+        "blocked_drivers",
+        "cargo_types",
+        "commodities",
+        "communication_providers",
+        "countries",
+        "country_documents",
+        "country_fines",
+        "customer_locations",
+        "customer_payments",
+        "customers",
+        "document_types",
+        "driver_blocked_dates",
+        "driver_documents",
+        "driver_languages",
+        "driver_route_locations",
+        "driver_routes",
+        "driver_security_passes",
+        "drivers",
+        "employee_communications",
+        "employee_languages",
+        "employees",
+        "fines",
+        "languages",
+        "load_security_passes",
+        "loads",
+        "locations",
+        "media",
+        "packagings",
+        "password_resets",
+        "push_tokens",
+        "route_transits",
+        "routes",
+        "security_passes",
+        "trailer_cargos",
+        "trailer_makes",
+        "trailer_types",
+        "trailers",
+        "transactions",
+        "trip_documents",
+        "trip_fines",
+        "trip_requests",
+        "trips",
+        "truck_makes",
+        "truck_models",
+        "trucks",
+        "users",
+    ];
 
     public function run()
     {
@@ -35,12 +84,23 @@ class DatabaseSeeder extends Seeder
     public function truncateTables()
     {
 
-        $tables = DB::select('SHOW TABLES');
+//        $tables = DB::select('SHOW TABLES');
+//
+//        $tableNames = '';
+//
+//        foreach ($tables as $table) {
+//
+//            $tableName = $table->Tables_in_tlc;
+//
+//            $tableNames .= '"'.$tableName.'",
+//            DB::table($table->Tables_in_tlc)->truncate();
+//        }
+//
+//        dd($tableNames);
 
-        foreach ($tables as $table) {
-            DB::table($table->Tables_in_tlc)->truncate();
+        foreach ($this->tables as $table) {
+            DB::table($table)->truncate();
         }
-
     }
 
 }

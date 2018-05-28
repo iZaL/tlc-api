@@ -20,9 +20,9 @@ class CreateLoadsTable extends Migration
             $table->integer('destination_location_id');
             $table->integer('trailer_type_id')->nullable();
             $table->integer('packaging_id')->nullable();
-            $table->string('invoice_id',20)->nullable();
+            $table->integer('commodity_id')->nullable();
+            $table->string('track_id',60)->nullable();
             $table->integer('fleet_count')->default(1);
-            $table->decimal('price')->nullable();
             $table->string('distance')->nullable()->notes('in kms');
             $table->boolean('request_documents')->default(0)->notes('request drivers for copies of documents');
             $table->boolean('request_pictures')->default(0)->notes('request drivers for pictures of load');
@@ -30,13 +30,15 @@ class CreateLoadsTable extends Migration
             $table->boolean('use_own_truck')->default(0); //show only companies truck
             $table->date('load_date')->nullable();
             $table->date('unload_date')->nullable();
-            $table->string('load_time',10)->nullable();
-            $table->string('unload_time', 10)->nullable();
+            $table->string('load_time_from',10)->nullable()->notes('24 hour format 00:00:00');
+            $table->string('load_time_to',10)->nullable()->notes('24 hour format 00:00:00');
+            $table->string('unload_time_from', 10)->nullable()->notes('24 hour format 00:00:00');
+            $table->string('unload_time_to', 10)->nullable()->notes('24 hour format 00:00:00');
             $table->string('receiver_name')->nullable();
             $table->string('receiver_email')->nullable();
             $table->string('receiver_mobile')->nullable();
             $table->string('receiver_phone')->nullable();
-            $table->string('weight')->nullable();
+            $table->string('weight')->nullable()->notes('in tons');
             $table->string('status',10)->default(10)->notes(
                 // default pending
                 // approved (approved by tlc)

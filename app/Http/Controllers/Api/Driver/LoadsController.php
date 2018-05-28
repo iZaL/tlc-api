@@ -111,6 +111,29 @@ class LoadsController extends Controller
 
     }
 
+
+    public function getLoadRequests()
+    {
+        $driver = Auth::guard('api')->user()->driver;
+
+        $loads = $this->loadModel->whereHas('trip', function ($q) use ($driver) {
+            return $q
+//                ->where('driver_id', $driver->id)
+                ->where('status','<',Trip::STATUS_CONFIRMED)
+                ;
+        })->with([
+            'trip',
+            'origin.country',
+            'destination.country',
+            'trailer_type'
+        ])
+            ->get()
+        ;
+
+        return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'loads' => LoadResource::collection($loads)]);
+
+    }
+
     /**
      * get working load
      */

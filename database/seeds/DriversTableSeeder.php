@@ -62,11 +62,20 @@ class DriversTableSeeder extends Seeder
             'status' => \App\Models\Load::STATUS_ENROUTE
         ]);
 
-        $trip = $load->trips()->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_ENROUTE]);
+        $load1 = factory(\App\Models\Load::class)->create([
+            'customer_id' => $customer->id,
+            'origin_location_id' => $customerOrigin->id,
+            'destination_location_id' => $customerDestination->id,
+            'status' => \App\Models\Load::STATUS_PENDING
+        ]);
+
+
+        $trip1 = factory(\App\Models\Trip::class)->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_ENROUTE,'load_id'=>$load->id]);
+        $trip2 = factory(\App\Models\Trip::class)->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_PENDING,'load_id'=>$load1->id]);
 
         $document = \App\Models\DocumentType::first();
 
-        factory(\App\Models\TripDocument::class)->create(['trip_id'=>$trip->id,'document_type_id' => $document->id]);
+        factory(\App\Models\TripDocument::class)->create(['trip_id'=>$trip1->id,'document_type_id' => $document->id]);
 
 
         /// drivers

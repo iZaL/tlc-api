@@ -45,7 +45,7 @@ class TripManager
     {
         $bookingDate = $this->trip->booking->load_date;
         $today = Carbon::today()->toDateString();
-        if ($bookingDate <= $today) {
+        if ($bookingDate < $today) {
             throw new LoadExpiredException('load_expired');
         }
         return false;
@@ -93,7 +93,6 @@ class TripManager
     }
 
     /**
-     * @return boolean
      * @throws DuplicateTripException
      * check whether the driver has already booked on this trip, but only allow if he has a booking with
      * status of pending which is the default status.
@@ -101,14 +100,15 @@ class TripManager
     private function hasDuplicateTrip()
     {
         $driver = $this->driver;
-        $hasTrips = $driver->trips->contains($this->trip->id);
+        $trip = $this->trip;
+        $trips = $driver->trips
+            ->where('load_id',$trip->booking->id)
+            ->where('status','>=',$trip::STATUS_APPROVED)
+            ->count()
+        ;
 
-        if ($hasTrips) {
-            $oldTrips = $driver->trips->where('status','!=',Trip::STATUS_PENDING)->count();
-
-            if ($oldTrips > 0) {
-                throw new DuplicateTripException('duplicate_trip');
-            }
+        if ($trips > 0) {
+            throw new DuplicateTripException('duplicate_trip');
         }
 
         return false;
@@ -123,11 +123,8 @@ class TripManager
         $load = $this->trip->booking;
         $fleetCount = $load->fleet_count;
 
-
         $loadTrips = $load->trips()
-            ->where('status', Trip::STATUS_CONFIRMED)
-            ->orWhere('status', Trip::STATUS_ENROUTE)
-            ->orWhere('status', Trip::STATUS_COMPLETED)
+            ->where('status', '>=', Trip::STATUS_CONFIRMED)
             ->count()
         ;
 
@@ -137,7 +134,6 @@ class TripManager
 
         return false;
     }
-
 
     /**
      * @throws BusyOnScheduleException
@@ -209,6 +205,62 @@ class TripManager
         $this->hasDuplicateTrip();
         $this->isLoadFleetsBooked();
         $this->driverHasAnotherTrip();
+    }
+
+    /**
+     * @return bool
+     * Can driver accept the trip
+     */
+    public function canAcceptTrip()
+    {
+        $trip = $this->trip;
+
+        if($trip->status !== $trip::STATUS_PENDING) {
+            return false;
+        }
+
+        try {
+            $this->validateTrip();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @return bool
+     * Can driver cancel the trip
+     */
+    public function canCancelTrip()
+    {
+        $trip = $this->trip;
+
+        if($trip->status >= $trip::STATUS_APPROVED && $trip->status <= $trip::STATUS_CONFIRMED) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @return bool
+     * Can driver accept the trip
+     */
+    public function canConfirmTrip()
+    {
+        $trip = $this->trip;
+
+        if($trip->status <= $trip::STATUS_APPROVED) {
+            return false;
+        }
+
+        try {
+            $this->validateTrip();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
 }
