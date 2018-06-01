@@ -175,16 +175,6 @@ class TripManager
     }
 
     /**
-     * Confirm the booking
-     */
-    public function confirmTrip()
-    {
-        $this->updateDriverBlockedDates();
-        $this->updateTripStatus(Trip::STATUS_CONFIRMED);
-        return true;
-    }
-
-    /**
      * @throws LoadExpiredException
      * @throws LoadHasAlreadyConfirmed
      */
@@ -234,13 +224,10 @@ class TripManager
     public function canCancelTrip()
     {
         $trip = $this->trip;
-
-        if($trip->status >= $trip::STATUS_APPROVED && $trip->status <= $trip::STATUS_CONFIRMED) {
+        if($trip->status >= $trip::STATUS_APPROVED && $trip->status < $trip::STATUS_CONFIRMED) {
             return true;
         }
-
         return false;
-
     }
 
     /**
@@ -251,7 +238,7 @@ class TripManager
     {
         $trip = $this->trip;
 
-        if($trip->status <= $trip::STATUS_APPROVED) {
+        if($trip->status <= $trip::STATUS_APPROVED && $trip->status >= $trip::STATUS_REJECTED ) {
             return false;
         }
 
@@ -262,5 +249,46 @@ class TripManager
             return false;
         }
     }
+
+    /**
+     * Confirm the booking
+     */
+    public function confirmTrip()
+    {
+        $this->updateDriverBlockedDates();
+        $this->updateTripStatus(Trip::STATUS_CONFIRMED);
+        return true;
+    }
+
+    public function cancelTrip()
+    {
+        $this->updateTripStatus(Trip::STATUS_CANCELLED);
+    }
+
+    public function acceptTrip()
+    {
+        $this->updateTripStatus(Trip::STATUS_ACCEPTED);
+    }
+
+    public function approveTrip()
+    {
+        $this->updateTripStatus(Trip::STATUS_APPROVED);
+    }
+
+    public function startTrip()
+    {
+        $this->updateTripStatus(Trip::STATUS_DISPATCHED);
+    }
+
+    public function stopTrip()
+    {
+        $this->updateTripStatus(Trip::STATUS_OFFLOADED);
+    }
+
+    public function completeTrip()
+    {
+        $this->updateTripStatus(Trip::STATUS_COMPLETED);
+    }
+
 
 }

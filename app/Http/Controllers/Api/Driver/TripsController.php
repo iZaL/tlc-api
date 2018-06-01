@@ -31,20 +31,10 @@ class TripsController extends Controller
         $this->tripModel = $tripModel;
     }
 
-    public function getTripDetails($id)
-    {
-        $trip = $this->tripModel->find($id);
-
-        return response()->json(['success'=>true,'data'=>$trip]);
-
-    }
-
     public function getUpcomingTrips()
     {
         $driver = Auth::guard('api')->user()->driver;
-
         $today = Carbon::today()->toDateString();
-
         $trips = $this->tripModel
             ->with(['booking.trailer_type','booking.origin','booking.destination'])
             ->whereHas('booking',function($q) use ($today) {
@@ -56,9 +46,7 @@ class TripsController extends Controller
             ->ofStatus(Trip::STATUS_PENDING)
             ->get()
         ;
-
         $driver->upcoming_trips = TripResource::collection($trips);
-
         return response()->json(['success'=>true,'data'=>$driver]);
     }
 
@@ -141,4 +129,43 @@ class TripsController extends Controller
         event(new DriversLocationUpdated($tripID,$payload));
         return response()->json(['success'=>true,'data'=>$payload]);
     }
+
+    public function updateStatus($tripID, Request $request)
+    {
+        $driver = auth()->guard('api')->user()->driver;
+        $trip = $this->tripModel->with(['booking'])->find($tripID);
+
+        $tripManager = new TripManager($trip,$driver);
+
+        try {
+            switch ($request->status) {
+                case 'accept' :
+                    $tripManager->acceptTrip();
+                    break;
+                case 'cancel' :
+                    $tripManager->cancelTrip();
+                    break;
+                case 'confirm' :
+                    $tripManager->confirmTrip();
+                    break;
+                case 'start' :
+                    $tripManager->startTrip();
+                    break;
+                case 'stop' :
+                    $tripManager->stopTrip();
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['success'=>false,'message'=>$e->getMessage()]);
+        }
+
+        $load = $trip->booking;
+        $load->load('trip');
+
+        return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
+    }
+
 }

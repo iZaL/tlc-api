@@ -110,9 +110,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
             Route::post('routes','RoutesController@saveRoute');
 
-            Route::get('trips/upcoming','TripsController@getUpcomingTrips');
-            Route::get('trips/{id}/details','TripsController@getTripDetails');
-            Route::post('trips/{id}/confirm','TripsController@confirmTrip');
+//            Route::get('trips/upcoming','TripsController@getUpcomingTrips');
+//            Route::get('trips/{id}/details','TripsController@getTripDetails');
+//            Route::post('trips/{id}/confirm','TripsController@confirmTrip');
+            Route::post('trips/{id}/status/update', 'TripsController@updateStatus');
 
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');

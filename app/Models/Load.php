@@ -6,18 +6,19 @@ class Load extends BaseModel
 {
 
     const STATUS_PENDING = 10;
-    const STATUS_REJECTED = 20;
-    const STATUS_CANCELLED = 30;
-    const STATUS_APPROVED = 40;
-    const STATUS_CONFIRMED = 60;
-    const STATUS_ENROUTE = 70;
-    const STATUS_COMPLETED = 100;
+    const STATUS_APPROVED = 20;
+    const STATUS_CONFIRMED = 30;
+    const STATUS_DISPATCHED = 40;
+    const STATUS_COMPLETED = 50;
+
+    const STATUS_REJECTED = 80;
+    const STATUS_CANCELLED = 90;
 
     // default pending
     // approved (approved by tlc)
     // rejected (the load has been rejected )
     // confirmed (all fleets has been confirmed by drivers) once this status is set, after this no more trip booking allowed
-    // enroute (all fleets has dispatched)
+    // dispatched (all fleets has dispatched)
     // completed (all fleets unloaded or reached destination)
 
     protected $fillable = [
@@ -152,8 +153,8 @@ class Load extends BaseModel
                 return __('g.rejected');
             case self::STATUS_CONFIRMED :
                 return __('g.confirmed');
-            case self::STATUS_ENROUTE :
-                return __('g.enroute');
+            case self::STATUS_DISPATCHED :
+                return __('g.dispatched');
             case self::STATUS_COMPLETED :
                 return __('g.completed');
             default :

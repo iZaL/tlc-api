@@ -27,7 +27,7 @@ class CreateTripsTable extends Migration
                 2- approved ( driver approves, but before admin confirmation )
                 3- rejected
                 4- confirmed // has confirmed but not dispatched
-                5- enroute // the driver (truck) has dispatched == on progress
+                5- dispatched // the driver (truck) has dispatched == on progress
                 6- completed // unloaded
                 ');
             $table->timestamp('started_at')->nullable();

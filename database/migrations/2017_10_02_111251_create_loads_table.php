@@ -44,7 +44,7 @@ class CreateLoadsTable extends Migration
                 // approved (approved by tlc)
                 // rejected (the load has been rejected )
                 // confirmed (all fleets has been confirmed by drivers) once this status is set, after this no more trip booking allowed
-                // enroute (all fleets has dispatched)
+                // dispatched (all fleets has dispatched)
                 // completed (all fleets unloaded or reached destination)
             );
             $table->timestamps();

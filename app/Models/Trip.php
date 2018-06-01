@@ -8,12 +8,15 @@ class Trip extends BaseModel
 {
 
     const STATUS_PENDING = 10;
-    const STATUS_REJECTED = 20;
-    const STATUS_CANCELLED = 30;
-    const STATUS_APPROVED = 40;
-    const STATUS_CONFIRMED = 60;
-    const STATUS_ENROUTE = 70;
-    const STATUS_COMPLETED = 100;
+    const STATUS_ACCEPTED = 15;
+    const STATUS_APPROVED = 20;
+    const STATUS_CONFIRMED = 30;
+    const STATUS_DISPATCHED = 40;
+    const STATUS_OFFLOADED = 45;
+    const STATUS_COMPLETED = 70;
+
+    const STATUS_REJECTED = 80;
+    const STATUS_CANCELLED = 90;
 
     protected $casts = ['status' => 'int'];
 
@@ -66,8 +69,8 @@ class Trip extends BaseModel
                 return __('g.rejected');
             case self::STATUS_CONFIRMED :
                 return __('g.confirmed');
-            case self::STATUS_ENROUTE :
-                return __('g.enroute');
+            case self::STATUS_DISPATCHED :
+                return __('g.dispatched');
             case self::STATUS_COMPLETED :
                 return __('g.completed');
             default :

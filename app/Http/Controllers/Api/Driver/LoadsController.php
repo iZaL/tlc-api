@@ -25,28 +25,66 @@ class LoadsController extends Controller
      * @var Country
      */
     private $countryModel;
+    /**
+     * @var Trip
+     */
+    private $trip;
 
     /**
      * LoadsController constructor.
      * @param Load $loadModel
      * @param Country $countryModel
+     * @param Trip $trip
      */
-    public function __construct(Load $loadModel, Country $countryModel)
+    public function __construct(Load $loadModel, Country $countryModel, Trip $trip)
     {
         $this->loadModel = $loadModel;
         $this->countryModel = $countryModel;
+        $this->trip = $trip;
     }
 
     public function getLoadsByStatus($status, Request $request)
     {
-        $loads = $this->loadModel->with([
-            'customer',
-            'origin.country',
-            'destination.country',
-            'trailer_type',
-            'packaging',
-        ])->where('status', $status)->paginate(10);
-        return response()->json(['success' => true, 'data' => LoadResource::collection($loads)]);
+        $statusFormatted = null;
+
+        $driver = auth()->guard('api')->user()->driver;
+
+        if ($status) {
+            $loads = $this->loadModel->whereHas('trip', function ($q) use ($status) {
+
+                switch ($status) {
+                    case 'pending':
+                        $q
+                            ->where('status', $this->trip::STATUS_APPROVED);
+                        break;
+                    case 'confirmed':
+                        $q
+                            ->where('status', $this->trip::STATUS_CONFIRMED);
+                        break;
+                    case 'completed':
+                        $q
+                            ->where('status', $this->trip::STATUS_COMPLETED);
+                        break;
+                };
+            })->with([
+                'customer',
+                'origin.country',
+                'destination.country',
+                'trailer_type',
+                'packaging',
+                'trip'
+            ])
+                ->paginate(10);
+            return response()->json([
+                'success' => true,
+                'loads' => LoadResource::collection($loads),
+                'load_status' => $status,
+                'driver' => new DriverResource($driver)
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'unknown_status']);
+
     }
 
     public function getLoads(Request $request)
@@ -111,28 +149,25 @@ class LoadsController extends Controller
 
     }
 
-
-    public function getLoadRequests()
-    {
-        $driver = Auth::guard('api')->user()->driver;
-
-        $loads = $this->loadModel->whereHas('trip', function ($q) use ($driver) {
-            return $q
-//                ->where('driver_id', $driver->id)
-                ->where('status','<',Trip::STATUS_CONFIRMED)
-                ;
-        })->with([
-            'trip',
-            'origin.country',
-            'destination.country',
-            'trailer_type'
-        ])
-            ->get()
-        ;
-
-        return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'loads' => LoadResource::collection($loads)]);
-
-    }
+//    public function getLoadRequests()
+//    {
+//        $driver = Auth::guard('api')->user()->driver;
+//
+//        $loads = $this->loadModel->whereHas('trip', function ($q) use ($driver) {
+//            return $q
+////                ->where('driver_id', $driver->id)
+//                ->where('status', '<', Trip::STATUS_CONFIRMED);
+//        })->with([
+//            'trip',
+//            'origin.country',
+//            'destination.country',
+//            'trailer_type'
+//        ])
+//            ->get();
+//
+//        return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'loads' => LoadResource::collection($loads)]);
+//
+//    }
 
     /**
      * get working load
@@ -144,18 +179,16 @@ class LoadsController extends Controller
         $load = $this->loadModel->whereHas('trips', function ($q) use ($driver) {
             return $q
                 ->where('driver_id', $driver->id)
-                ->ofStatus(Trip::STATUS_ENROUTE)
-                ;
+                ->ofStatus(Trip::STATUS_DISPATCHED);
         })->with([
             'trips',
             'origin.country',
             'destination.country',
             'trailer_type'
         ])
-            ->ofStatus(Trip::STATUS_ENROUTE)
+            ->ofStatus(Trip::STATUS_DISPATCHED)
             ->limit(1)
-            ->first()
-        ;
+            ->first();
 
         return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'load' => new LoadResource($load)]);
 

@@ -36,12 +36,12 @@ class DriverUpcomingLoadsTest extends TestCase
             'origin_location_id'      => $kw->id,
             'destination_location_id' => $kw->id,
             'use_own_truck'           => 0,
-            'status' => Load::STATUS_ENROUTE
+            'status' => Load::STATUS_DISPATCHED
         ]);
 
         $loadKWKW1->trips()->create([
             'driver_id' => $driver->id,
-            'status' => Trip::STATUS_ENROUTE
+            'status' => Trip::STATUS_DISPATCHED
         ]);
 
         $header = $this->_createHeader(['api_token' => $driver->user->api_token]);

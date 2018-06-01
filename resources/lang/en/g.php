@@ -15,5 +15,5 @@ return [
     'confirmed' => 'Confirmed',
     'cancelled' => 'Cancelled',
     'rejected' => 'Rejected',
-    'enroute' => 'On way'
+    'dispatched' => 'On way'
 ];

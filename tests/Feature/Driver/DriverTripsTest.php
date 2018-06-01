@@ -166,7 +166,7 @@ class DriverTripsTest extends TestCase
 
         $validTrip1 = $load->trips()->create(['driver_id' => $driver->id]);
         $validTrip2 = $load->trips()->create(['driver_id' => 333, 'status' => Trip::STATUS_CONFIRMED]);
-        $validTrip2 = $load->trips()->create(['driver_id' => 444, 'status' => Trip::STATUS_ENROUTE]);
+        $validTrip2 = $load->trips()->create(['driver_id' => 444, 'status' => Trip::STATUS_DISPATCHED]);
         $validTrip3 = $load->trips()->create(['driver_id' => 555, 'status' => Trip::STATUS_REJECTED]);
 
         $response = $this->json('POST', '/api/driver/trips/'.$validTrip1->id.'/confirm', [], $header);

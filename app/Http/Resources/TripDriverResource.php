@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class TripResource extends Resource
+class TripDriverResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -26,6 +26,11 @@ class TripResource extends Resource
             'reached_at' => $this->reached_at,
             'driver' => new DriverResource($this->whenLoaded('driver')),
             'documents' => TripDocumentResource::collection($this->whenLoaded('documents')),
+            'can_accept' => $this->can_accept,
+            'can_cancel' => $this->can_cancel,
+            'can_confirm' => $this->can_confirm,
+            'can_start'   => true,
+            'can_stop'    => false,
         ];
     }
 
