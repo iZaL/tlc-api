@@ -6,13 +6,15 @@ class Load extends BaseModel
 {
 
     const STATUS_PENDING = 10;
-    const STATUS_APPROVED = 20;
+    const STATUS_ACCEPTED = 15;//@remove
+    const STATUS_APPROVED = 20;//@remove
     const STATUS_CONFIRMED = 30;
-    const STATUS_DISPATCHED = 40;
-    const STATUS_COMPLETED = 50;
+    const STATUS_DISPATCHED = 40;//@remove
+    const STATUS_OFFLOADED = 45;//@remove
+    const STATUS_COMPLETED = 70;
 
     const STATUS_REJECTED = 80;
-    const STATUS_CANCELLED = 90;
+    const STATUS_CANCELLED = 90; //@remove
 
     // default pending
     // approved (approved by tlc)
@@ -27,19 +29,25 @@ class Load extends BaseModel
         'packaging_id',
         'origin_location_id',
         'destination_location_id',
-        'price',
         'request_documents',
         'request_pictures',
         'fixed_rate',
         'load_date',
-        'load_time',
+        'unload_date',
+        'load_time_from',
+        'load_time_to',
         'receiver_name',
         'receiver_email',
         'receiver_phone',
         'receiver_mobile',
+        'use_own_truck',
+        'packaging_width',
+        'packaging_height',
+        'packaging_length',
+        'packaging_quantity',
+        'packaging_weight',
         'status',
         'weight',
-        'use_own_truck',
     ];
 
     public function origin()
@@ -140,7 +148,7 @@ class Load extends BaseModel
 
     public function getStatusFormattedAttribute()
     {
-        $currentStatus = $this->attributes['status'];
+        $currentStatus = isset($this->attributes['status']) ? :'pending';
 
         switch ($currentStatus) {
             case self::STATUS_PENDING :
@@ -162,6 +170,32 @@ class Load extends BaseModel
 
         }
     }
+
+//    public function getStatusNameAttribute()
+//    {
+//        $currentStatus = $this->attributes['status'];
+//
+//        switch ($currentStatus) {
+//            case self::STATUS_PENDING :
+//                return __('pending');
+//            case self::STATUS_CANCELLED :
+//                return __('cancelled');
+//            case self::STATUS_APPROVED :
+//                return __('approved');
+//            case self::STATUS_REJECTED :
+//                return __('rejected');
+//            case self::STATUS_CONFIRMED :
+//                return __('confirmed');
+//            case self::STATUS_DISPATCHED :
+//                return __('dispatched');
+//            case self::STATUS_COMPLETED :
+//                return __('completed');
+//            default :
+//                return null;
+//
+//        }
+//    }
+
 
 }
 

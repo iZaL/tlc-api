@@ -50,30 +50,32 @@ class CustomerLoadTest extends TestCase
         $pass3 = factory(SecurityPass::class)->create();
 
         $loadPostData = [
-            'trailer_type_id'              => $trailer1->id,
+            'trailer_type_id'         => $trailer1->id,
             'packaging_id'            => $packaging1->id,
             'origin_location_id'      => $originLocation->id,
             'destination_location_id' => $destinationLocation->id,
             'request_documents'       => 1,
             'use_own_truck'           => 1,
             'load_date'               => $loadDate,
-            'load_time'               => $loadTime,
             'receiver_name'           => $receiverName,
             'receiver_email'          => $receiverEmail,
             'receiver_phone'          => $receiverPhone,
             'receiver_mobile'         => $receiverMobile,
-            'weight' => $weight
+            'weight' => $weight,
+            'package_dimension' => ['length' => 100, 'width'=>100,'height' => 50, 'weight' => 100, 'quantity' => 10 ]
         ];
 
         $loadPasses = [
             'security_passes' => [$pass1->id, $pass2->id, $pass3->id],
         ];
 
+        $loadPostDataDb = collect($loadPostData)->except(['security_passes','package_dimension']);
+
         $loadData = array_merge($loadPostData,$loadPasses);
 
         $response = $this->json('POST', '/api/customer/loads', $loadData, $header);
 
-        $responseData = array_merge(['customer_id'=>$customer->id],$loadPostData);
+        $responseData = array_merge(['customer_id'=>$customer->id],$loadPostDataDb->toArray());
 
         $this->assertDatabaseHas('loads',$responseData);
 

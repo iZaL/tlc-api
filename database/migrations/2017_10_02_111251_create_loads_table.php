@@ -39,6 +39,11 @@ class CreateLoadsTable extends Migration
             $table->string('receiver_mobile')->nullable();
             $table->string('receiver_phone')->nullable();
             $table->string('weight')->nullable()->notes('in tons');
+            $table->string('packaging_width')->nullable()->notes('in metre');
+            $table->string('packaging_height')->nullable()->notes('in metre');
+            $table->string('packaging_length')->nullable()->notes('in metre');
+            $table->string('packaging_weight')->nullable()->notes('in tons');
+            $table->string('packaging_quantity')->nullable()->notes('in tons');
             $table->string('status',10)->default(10)->notes(
                 // default pending
                 // approved (approved by tlc)

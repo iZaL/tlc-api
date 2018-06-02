@@ -57,6 +57,8 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
             Route::get('loads/add/data', 'LoadsController@getLoadAddData');
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
+            Route::get('loads/current', 'LoadsController@getCurrentLoad');
+
 //            Route::get('loads/{id}/drivers','LoadsController@getLoadDrivers');//matching drivers
 
             Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
@@ -111,15 +113,15 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::post('routes','RoutesController@saveRoute');
 
 //            Route::get('trips/upcoming','TripsController@getUpcomingTrips');
-//            Route::get('trips/{id}/details','TripsController@getTripDetails');
 //            Route::post('trips/{id}/confirm','TripsController@confirmTrip');
+            Route::get('trips/{id}/details','TripsController@getTripDetails');
             Route::post('trips/{id}/status/update', 'TripsController@updateStatus');
 
-            Route::get('loads/{id}/details','LoadsController@getLoadDetails');
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
             Route::get('loads/current', 'LoadsController@getCurrentLoad');
             Route::get('loads/requests', 'LoadsController@getLoadRequests');
+            Route::get('loads/{id}/details','LoadsController@getLoadDetails');
 
             Route::get('documents/types', 'DocumentsController@getTypes');
 

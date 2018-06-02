@@ -224,7 +224,7 @@ class TripManager
     public function canCancelTrip()
     {
         $trip = $this->trip;
-        if($trip->status >= $trip::STATUS_APPROVED && $trip->status < $trip::STATUS_CONFIRMED) {
+        if($trip->status >= $trip::STATUS_ACCEPTED && $trip->status < $trip::STATUS_CONFIRMED) {
             return true;
         }
         return false;
@@ -248,6 +248,50 @@ class TripManager
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * @return bool
+     * Can driver accept the trip
+     */
+    public function canStartTrip()
+    {
+        $trip = $this->trip;
+
+        if($trip->status !== $trip::STATUS_CONFIRMED ) {
+            return false;
+        }
+
+        return true;
+
+//        try {
+//            $this->validateTrip();
+//            return true;
+//        } catch (\Exception $e) {
+//            return false;
+//        }
+
+    }
+
+    /**
+     * @return bool
+     * Can driver accept the trip
+     */
+    public function canStopTrip()
+    {
+        $trip = $this->trip;
+
+        if($trip->status !== $trip::STATUS_DISPATCHED) {
+            return false;
+        }
+
+        return true;
+//        try {
+//            $this->validateTrip();
+//            return true;
+//        } catch (\Exception $e) {
+//            return false;
+//        }
     }
 
     /**

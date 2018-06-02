@@ -16,14 +16,14 @@ class TripResource extends Resource
     {
         return [
             'id' => $this->id,
-            'status' => $this->status,
-            'status_formatted' => $this->status_formatted,
             'load_id' => $this->load_id,
             'track_id' => $this->track_id,
             'rate' => $this->rate,
             'rate_formatted' => $this->rate_formatted,
-            'started_at' => $this->started_at,
-            'reached_at' => $this->reached_at,
+//            'started_at' => $this->started_at,
+//            'reached_at' => $this->reached_at,
+            'status' => $this->status,
+            'status_formatted' => $this->status_formatted,
             'driver' => new DriverResource($this->whenLoaded('driver')),
             'documents' => TripDocumentResource::collection($this->whenLoaded('documents')),
         ];

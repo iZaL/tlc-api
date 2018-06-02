@@ -115,4 +115,25 @@ class Trip extends BaseModel
         return false;
     }
 
+    public function getCanStartAttribute()
+    {
+        $driver = optional(auth()->guard('api')->user())->driver;
+        $trip = $this;
+        if($driver) {
+            $tripManager = new TripManager($trip,$driver);
+            return $tripManager->canStartTrip();
+        }
+        return false;
+    }
+
+    public function getCanStopAttribute()
+    {
+        $driver = optional(auth()->guard('api')->user())->driver;
+        $trip = $this;
+        if($driver) {
+            $tripManager = new TripManager($trip,$driver);
+            return $tripManager->canStopTrip();
+        }
+        return false;
+    }
 }

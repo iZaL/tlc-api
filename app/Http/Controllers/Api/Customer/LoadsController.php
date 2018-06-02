@@ -19,6 +19,7 @@ use App\Models\Packaging;
 use App\Models\SecurityPass;
 use App\Models\Customer;
 use App\Models\Trailer;
+use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,10 @@ class LoadsController extends Controller
      * @var Driver
      */
     private $driverModel;
+    /**
+     * @var Trip
+     */
+    private $tripModel;
 
     /**
      * LoadsController constructor.
@@ -65,8 +70,9 @@ class LoadsController extends Controller
      * @param Trailer $trailerModel
      * @param Packaging $packagingModel
      * @param SecurityPass $passModel
+     * @param Trip $tripModel
      */
-    public function __construct(Driver $driverModel, Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, SecurityPass $passModel)
+    public function __construct(Driver $driverModel, Customer $customerModel, Load $loadModel, Country $countryModel, Trailer $trailerModel, Packaging $packagingModel, SecurityPass $passModel,Trip $tripModel)
     {
         $this->middleware('customer')->only(['bookLoad']);
         $this->middleware('driver')->only(['getLoads']);
@@ -77,19 +83,48 @@ class LoadsController extends Controller
         $this->packagingModel = $packagingModel;
         $this->passModel = $passModel;
         $this->driverModel = $driverModel;
+        $this->tripModel = $tripModel;
     }
 
     public function getLoadsByStatus($status, Request $request)
     {
         $customer = Auth::guard('api')->user()->customer;
+
         $loads = $this->loadModel->with([
-            'customer',
+            'trips',
             'origin.country',
             'destination.country',
-            'trailer',
             'packaging',
-        ])->where('status', $status)->paginate(10);
-        return response()->json(['success' => true, 'data' => LoadResource::collection($loads)]);
+            'customer'
+        ]);
+
+        switch ($status) {
+            case 'pending':
+                $s = $this->tripModel::STATUS_APPROVED;
+                break;
+            case 'confirmed':
+                $s = $this->tripModel::STATUS_CONFIRMED;
+                break;
+            case 'completed':
+                $s = $this->tripModel::STATUS_COMPLETED;
+                break;
+            default:
+                $s = $this->tripModel::STATUS_REJECTED;
+        }
+
+        $loads = $loads
+            ->where('customer_id',$customer->id)
+            ->where('status', $s)
+            ->paginate(10)
+        ;
+
+        return response()->json([
+            'success' => true,
+            'loads' => LoadResource::collection($loads),
+            'load_status' => $status,
+            'customer' => new CustomerResource($customer)
+        ]);
+
     }
 
     public function getLoadAddData(Request $request)
@@ -126,13 +161,14 @@ class LoadsController extends Controller
             'request_documents'       => 'boolean',
             'use_own_truck'           => 'boolean',
             'load_date'               => 'required|date',
-            'load_time'               => 'required',
+//            'load_time'               => 'required',
             'receiver_name'           => 'required',
             'receiver_email'          => 'required',
             'receiver_phone'          => 'required',
             'receiver_mobile'         => 'required',
-            'weight'                  => 'required',
-            'security_passes'                  => 'array'
+//            'weight'                  => 'required',
+            'security_passes'         => 'array',
+            'packaging_dimension' => 'array'
         ]);
 
         //        array:10 [
@@ -146,7 +182,6 @@ class LoadsController extends Controller
         //  "fixed_rate" => 1
         //  "load_date" => "2017-10-19"
         //]
-
 
         if ($validation->fails()) {
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
@@ -162,7 +197,20 @@ class LoadsController extends Controller
             $data['status'] = Load::STATUS_APPROVED;
         }
 
+        $data['packaging_width'] =  $request->packaging_dimension['width'];
+        $data['packaging_height'] = $request->packaging_dimension['height'];
+        $data['packaging_length'] = $request->packaging_dimension['length'];
+        $data['packaging_weight'] = $request->packaging_dimension['weight'];
+        $data['packaging_quantity'] = $request->packaging_dimension['quantity'];
+
         $loadData = array_merge($data, ['customer_id' => $customer->id]);
+
+
+//      $data['packaging_width'] = $request->packaging_dimension['width'];
+//        $data['packaging_height'] = $request->packaging_dimension['height'];
+//        $data['packaging_length'] = $request->packaging_dimension['length'];
+//        $data['packaging_weight'] = $request->packaging_dimension['weight'];
+//        $data['packaging_quantity'] = $request->packaging_dimension['quantity'];
 
         $load = $this->loadModel->create($loadData);
 
@@ -173,7 +221,13 @@ class LoadsController extends Controller
 
         $customer->load('loads.security_passes');
 
-        return response()->json(['success' => true, 'data' => new CustomerResource($customer), 'type' => 'created', 'message' => trans('general.load_created')]);
+        return response()->json([
+            'success' => true,
+            'load' => new LoadResource($load),
+            'customer' => new CustomerResource($customer),
+            'load_status' => 'pending'
+        ]);
+//        return response()->json(['success' => true, 'data' => new CustomerResource($customer), 'type' => 'created', 'message' => trans('general.load_created')]);
 
     }
 
@@ -185,7 +239,6 @@ class LoadsController extends Controller
             'trailer_type',
             'trips.driver.user',
             'trips.driver.nationalities',
-
         ])->find($loadID);
 
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
