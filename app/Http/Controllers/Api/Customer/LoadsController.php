@@ -95,26 +95,28 @@ class LoadsController extends Controller
             'origin.country',
             'destination.country',
             'packaging',
-            'customer'
+            'customer.employees'
         ]);
 
         switch ($status) {
             case 'pending':
-                $s = $this->tripModel::STATUS_APPROVED;
+                $loads->where('status', $this->tripModel::STATUS_PENDING);
+                break;
+            case 'dispatched':
+                $loads->where('status', $this->tripModel::STATUS_DISPATCHED);
                 break;
             case 'confirmed':
-                $s = $this->tripModel::STATUS_CONFIRMED;
+                $loads->where('status', $this->tripModel::STATUS_CONFIRMED);
                 break;
             case 'completed':
-                $s = $this->tripModel::STATUS_COMPLETED;
+                $loads->where('status', $this->tripModel::STATUS_COMPLETED);
                 break;
             default:
-                $s = $this->tripModel::STATUS_REJECTED;
+                $loads->where('status', 'notfound');
         }
 
         $loads = $loads
             ->where('customer_id',$customer->id)
-            ->where('status', $s)
             ->paginate(10)
         ;
 
@@ -154,34 +156,25 @@ class LoadsController extends Controller
     public function storeLoad(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'trailer_type_id'              => 'required',
+            'trailer_type_id'         => 'required',
             'packaging_id'            => 'required',
             'origin_location_id'      => 'required',
             'destination_location_id' => 'required',
             'request_documents'       => 'boolean',
             'use_own_truck'           => 'boolean',
             'load_date'               => 'required|date',
-//            'load_time'               => 'required',
+            'unload_date'             => 'required|date',
+            'load_time_from'          => 'required',
+            'load_time_to'            => 'required',
+            'unload_time_from'        => 'required',
+            'unload_time_to'          => 'required',
             'receiver_name'           => 'required',
             'receiver_email'          => 'required',
             'receiver_phone'          => 'required',
             'receiver_mobile'         => 'required',
-//            'weight'                  => 'required',
             'security_passes'         => 'array',
-            'packaging_dimension' => 'array'
+            'packaging_dimension'     => 'array'
         ]);
-
-        //        array:10 [
-        //  "trailer_id" => 1
-        //  "origin_location_id" => 1
-        //  "destination_location_id" => 1
-        //  "price" => "200.00"
-        //  "distance" => "100"
-        //  "request_documents" => 0
-        //  "request_pictures" => 0
-        //  "fixed_rate" => 1
-        //  "load_date" => "2017-10-19"
-        //]
 
         if ($validation->fails()) {
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
@@ -192,6 +185,11 @@ class LoadsController extends Controller
         $data = $request->all();
 
         $data['load_date'] = Carbon::parse($request->load_date)->toDateString();
+        $data['unload_date'] = Carbon::parse($request->unload_date)->toDateString();
+        $data['load_time_from'] = Carbon::parse($request->load_time_from)->toTimeString();
+        $data['load_time_to'] = Carbon::parse($request->load_time_to)->toTimeString();
+        $data['unload_time_from'] = Carbon::parse($request->unload_time_from)->toTimeString();
+        $data['unload_time_to'] = Carbon::parse($request->unload_time_to)->toTimeString();
 
         if ($customer->canBookDirect()) {
             $data['status'] = Load::STATUS_APPROVED;
@@ -202,21 +200,26 @@ class LoadsController extends Controller
         $data['packaging_length'] = $request->packaging_dimension['length'];
         $data['packaging_weight'] = $request->packaging_dimension['weight'];
         $data['packaging_quantity'] = $request->packaging_dimension['quantity'];
+        $data['track_id'] = $this->generateTrackID();
 
         $loadData = array_merge($data, ['customer_id' => $customer->id]);
-
-
-//      $data['packaging_width'] = $request->packaging_dimension['width'];
-//        $data['packaging_height'] = $request->packaging_dimension['height'];
-//        $data['packaging_length'] = $request->packaging_dimension['length'];
-//        $data['packaging_weight'] = $request->packaging_dimension['weight'];
-//        $data['packaging_quantity'] = $request->packaging_dimension['quantity'];
 
         $load = $this->loadModel->create($loadData);
 
         //passes
         if ($request->security_passes) {
             $load->security_passes()->sync($request->security_passes);
+        }
+
+        if($request->packaging_images) {
+
+            $images = [];
+
+            foreach ($request->packaging_images as $image) {
+                $images[] = ['url' => $image,'type' => 'packaging','extension' => 'image'];
+            }
+
+            $load->documents()->createMany($images);
         }
 
         $customer->load('loads.security_passes');
@@ -227,7 +230,6 @@ class LoadsController extends Controller
             'customer' => new CustomerResource($customer),
             'load_status' => 'pending'
         ]);
-//        return response()->json(['success' => true, 'data' => new CustomerResource($customer), 'type' => 'created', 'message' => trans('general.load_created')]);
 
     }
 
@@ -239,6 +241,8 @@ class LoadsController extends Controller
             'trailer_type',
             'trips.driver.user',
             'trips.driver.nationalities',
+            'packaging',
+            'commodity'
         ])->find($loadID);
 
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
@@ -255,6 +259,20 @@ class LoadsController extends Controller
         $load->drivers = $driversCollection;
 
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
+
+    }
+
+    public function generateTrackID()
+    {
+        $randomID = rand(100000,999999);
+
+        $findDuplicate = $this->loadModel->where('track_id',$randomID)->first();
+
+        if($findDuplicate) {
+            return $this->generateTrackID();
+        }
+
+        return $randomID;
 
     }
 }

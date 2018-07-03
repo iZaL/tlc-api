@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 class Load extends BaseModel
 {
 
@@ -23,6 +25,8 @@ class Load extends BaseModel
     // dispatched (all fleets has dispatched)
     // completed (all fleets unloaded or reached destination)
 
+    protected $dates = ['load_date','unload_date'];
+
     protected $fillable = [
         'customer_id',
         'trailer_type_id',
@@ -36,6 +40,8 @@ class Load extends BaseModel
         'unload_date',
         'load_time_from',
         'load_time_to',
+        'unload_time_from',
+        'unload_time_to',
         'receiver_name',
         'receiver_email',
         'receiver_phone',
@@ -48,6 +54,7 @@ class Load extends BaseModel
         'packaging_weight',
         'status',
         'weight',
+        'track_id'
     ];
 
     public function origin()
@@ -70,6 +77,11 @@ class Load extends BaseModel
         return $this->belongsTo(Packaging::class);
     }
 
+    public function commodity()
+    {
+        return $this->belongsTo(Commodity::class,'commodity_id');
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -82,6 +94,11 @@ class Load extends BaseModel
     public function security_passes()
     {
         return $this->belongsToMany(SecurityPass::class,'load_security_passes');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(LoadDocument::class);
     }
 
     public function trips()
@@ -123,22 +140,22 @@ class Load extends BaseModel
 
     public function getLoadDateFormattedAttribute()
     {
-        return 'Jan 4';
+        return $this->load_date->format('M d');
     }
 
     public function getUnloadDateFormattedAttribute()
     {
-        return 'Jan 8';
+        return $this->unload_date->format('M d');
     }
 
     public function getLoadTimeFormattedAttribute()
     {
-        return '1am-10pm';
+        return Carbon::parse($this->load_time_from)->format('ga') . '-' . Carbon::parse($this->load_time_to)->format('ga');
     }
 
     public function getUnloadTimeFormattedAttribute()
     {
-        return '1am-10pm';
+        return Carbon::parse($this->unload_time_from)->format('ga') . '-' . Carbon::parse($this->unload_time_to)->format('ga');
     }
 
     public function getPriceFormattedAttribute()

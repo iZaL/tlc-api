@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-class Packaging extends BaseModel
+class LoadDocument extends BaseModel
 {
-    protected $table = 'packagings';
+    protected $table = 'load_documents';
 
     public function loads() {
         return $this->hasMany(Load::class);

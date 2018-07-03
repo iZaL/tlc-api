@@ -11,6 +11,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
     Route::post('trips/{id}/location/update','\App\Http\Controllers\Api\Driver\TripsController@updateLocation');
 
     Route::get('security_passes','\App\Http\Controllers\Api\RoutesController@getSecurityPasses');
+    Route::post('upload/images','\App\Http\Controllers\Api\UploadsController@uploadImages');
 
     /**
      * |--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
              * |--------------------------------------------------------------------------
              */
             Route::get('locations','LocationsController@index');
-            Route::post('locations','LocationsController@store');
+            Route::post('addresses','LocationsController@store');
 
             Route::get('drivers', 'DriversController@getDrivers');
             Route::get('drivers/blocked', 'DriversController@getBlockedDrivers');

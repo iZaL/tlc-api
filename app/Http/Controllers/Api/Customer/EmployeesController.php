@@ -51,8 +51,8 @@ class EmployeesController extends Controller
             $employee = $this->employee->find($request->id);
 
             $validation = Validator::make($request->all(), [
-                'name_en' => 'required|max:100',
-                'name_ar' => 'required|max:100',
+                'name' => 'required|max:100',
+//                'name_ar' => 'required|max:100',
                 'mobile' => 'required|unique:employees,mobile,'.$employee->id ,
                 'phone' => 'required|unique:employees,phone,'.$employee->id ,
                 'email' => 'required|unique:employees,email,'.$employee->id,
@@ -60,8 +60,8 @@ class EmployeesController extends Controller
             ]);
         } else {
             $validation = Validator::make($request->all(), [
-                'name_en' => 'required|max:100',
-                'name_ar' => 'required|max:100',
+//                'name_en' => 'required|max:100',
+                'name' => 'required|max:100',
                 'mobile' => 'required|unique:employees,mobile' ,
                 'phone' => 'required|unique:employees,phone' ,
                 'email' => 'required|unique:employees,email',
@@ -77,15 +77,16 @@ class EmployeesController extends Controller
             'mobile'             => $request->mobile,
             'phone'              => $request->phone,
             'email'              => $request->email,
-            'name_en'            => $request->name_en,
-            'name_ar'            => $request->name_ar,
+            'name_en'            => $request->name,
+            'name_ar'            => $request->name,
+            'name_hi'            => $request->name,
             'driver_interaction' => $request->has('driver_interaction') ? $request->driver_interaction : false
         ];
 
         if($request->has('id')) {
              $employee->update($data);
         } else {
-            $customer->employees()->create();
+            $customer->employees()->create($data);
         }
 
         $customer->load('employees');

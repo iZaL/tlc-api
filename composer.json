@@ -15,7 +15,10 @@
         "php-http/message": "^1.6",
         "predis/predis": "^1.1",
         "spatie/laravel-medialibrary": "^7.1",
-        "torann/currency": "^1.0"
+        "torann/currency": "^1.0",
+        "intervention/image": "^2.4 ",
+        "intervention/imagecache": "^2.3"
+
     },
     "require-dev": {
         "filp/whoops": "~2.0",

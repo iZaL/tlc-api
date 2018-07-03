@@ -38,6 +38,8 @@ class LoadResource extends Resource
             'trailer_type' => new TrailerTypeResource($this->whenLoaded('trailer_type')),
             'trips' => TripResource::collection($this->whenLoaded('trips')),
             'trip' => new TripDriverResource($this->whenLoaded('trip')),
+            'packaging' => new PackagingResource($this->whenLoaded('packaging')),
+            'commodity' => new CommodityResource($this->whenLoaded('commodity')),
             'receiver' => [
                 'name'=>$this->receiver_name,
                 'mobile'=>$this->receiver_mobile,
