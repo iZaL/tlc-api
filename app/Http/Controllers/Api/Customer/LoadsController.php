@@ -100,16 +100,16 @@ class LoadsController extends Controller
 
         switch ($status) {
             case 'pending':
-                $loads->where('status', $this->tripModel::STATUS_PENDING);
+                $loads->where('status', $this->loadModel::STATUS_PENDING);
                 break;
             case 'dispatched':
-                $loads->where('status', $this->tripModel::STATUS_DISPATCHED);
+                $loads->where('status', $this->loadModel::STATUS_DISPATCHED);
                 break;
             case 'confirmed':
-                $loads->where('status', $this->tripModel::STATUS_CONFIRMED);
+                $loads->where('status', $this->loadModel::STATUS_CONFIRMED);
                 break;
             case 'completed':
-                $loads->where('status', $this->tripModel::STATUS_COMPLETED);
+                $loads->where('status', $this->loadModel::STATUS_COMPLETED);
                 break;
             default:
                 $loads->where('status', 'notfound');
@@ -200,6 +200,7 @@ class LoadsController extends Controller
         $data['packaging_length'] = $request->packaging_dimension['length'];
         $data['packaging_weight'] = $request->packaging_dimension['weight'];
         $data['packaging_quantity'] = $request->packaging_dimension['quantity'];
+        $data['fleet_count'] = $request->trailer_quantity;
         $data['track_id'] = $this->generateTrackID();
 
         $loadData = array_merge($data, ['customer_id' => $customer->id]);
@@ -216,7 +217,7 @@ class LoadsController extends Controller
             $images = [];
 
             foreach ($request->packaging_images as $image) {
-                $images[] = ['url' => $image,'type' => 'packaging','extension' => 'image'];
+                $images[] = ['url' => $image,'type' => 'Packaging','extension' => 'image'];
             }
 
             $load->documents()->createMany($images);
@@ -242,6 +243,7 @@ class LoadsController extends Controller
             'trips.driver.user',
             'trips.driver.nationalities',
             'packaging',
+            'packaging_images',
             'commodity'
         ])->find($loadID);
 
@@ -264,7 +266,7 @@ class LoadsController extends Controller
 
     public function generateTrackID()
     {
-        $randomID = rand(100000,999999);
+        $randomID = strtoupper(str_random(7));
 
         $findDuplicate = $this->loadModel->where('track_id',$randomID)->first();
 

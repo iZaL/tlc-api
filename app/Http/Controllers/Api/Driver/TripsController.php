@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Auth;
 class TripsController extends Controller
 {
 
-
     private $tripModel;
     private $loadModel;
 
@@ -140,13 +139,14 @@ class TripsController extends Controller
         try {
             switch ($request->status) {
                 case 'accept' :
-                    $tripManager->acceptTrip();
+                    if($driver->is_legit) {
+                        $tripManager->approveTrip();
+                    } else {
+                        $tripManager->acceptTrip();
+                    }
                     break;
                 case 'cancel' :
                     $tripManager->cancelTrip();
-                    break;
-                case 'confirm' :
-                    $tripManager->confirmTrip();
                     break;
                 case 'start' :
                     $tripManager->startTrip();

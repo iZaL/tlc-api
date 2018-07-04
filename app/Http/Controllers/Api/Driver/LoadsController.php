@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Http\Controllers\Api\Driver;
 
 use App\Http\Controllers\Controller;
@@ -186,29 +184,17 @@ class LoadsController extends Controller
             'destination.country',
             'trailer_type'
         ])
-            ->limit(1)
-            ->first();
+//            ->groupBy('trips.id')
+            ->first()
+        ;
+
+        if(!$load) {
+            return response()->json(['success' => false, 'message' => 'no load found']);
+        }
 
         return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'load' => new LoadResource($load)]);
 
     }
 
-//    public function getUpcomingLoads()
-//    {
-//        $driver = auth()->user()->guard('api')->driver;
-//        $load = $this->loadModel->whereHas('trips', function ($q) use ($driver) {
-//            return $q
-//                ->where('driver_id', $driver->id)//                ->where('status',''); //@todo
-//                ;
-//        })->with([
-//            'trips',
-//            'origin.country',
-//            'destination.country',
-//            'trailer_type'
-//        ])->paginate(10);
-//
-//        return response()->json(['success' => true, 'data' => LoadResource::collection($load)]);
-//
-//    }
 
 }

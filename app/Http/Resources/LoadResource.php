@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\LoadDocument;
 use Illuminate\Http\Resources\Json\Resource;
 
 class LoadResource extends Resource
@@ -38,7 +39,15 @@ class LoadResource extends Resource
             'trailer_type' => new TrailerTypeResource($this->whenLoaded('trailer_type')),
             'trips' => TripResource::collection($this->whenLoaded('trips')),
             'trip' => new TripDriverResource($this->whenLoaded('trip')),
-            'packaging' => new PackagingResource($this->whenLoaded('packaging')),
+            'packaging' => (new PackagingResource($this->whenLoaded('packaging')))->additional(['length' => $this->packaging_length]),
+            'packaging_dimensions' => [
+                'length_formatted' => $this->packaging_length_formatted,
+                'width_formatted' => $this->packaging_width_formatted,
+                'height_formatted' => $this->packaging_height_formatted,
+                'weight' => $this->packaging_weight,
+                'quantity' => $this->packaging_quantity,
+            ],
+            'packaging_images' => LoadDocumentResource::collection($this->whenLoaded('packaging_images')),
             'commodity' => new CommodityResource($this->whenLoaded('commodity')),
             'receiver' => [
                 'name'=>$this->receiver_name,

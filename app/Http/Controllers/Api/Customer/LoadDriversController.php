@@ -183,6 +183,7 @@ class LoadDriversController extends Controller
         $load = $this->loadModel->find($loadID);
 
         $drivers = $this->driverModel->has('user')->with(['user'])->get();
+//        $drivers = $this->driverModel->has('user')->with(['user','nationalities','truck.model','truck.registration_country','truck.trailer.type'])->get();
 
         $driversCollection = DriverResource::collection($drivers);
 
@@ -190,4 +191,19 @@ class LoadDriversController extends Controller
 
     }
 
+    public function selectDriver($loadID, Request $request)
+    {
+        $load = $this->loadModel->find($loadID);
+        $driver = $this->driverModel->find($request->driver_id);
+
+        try {
+            $loadManager = new LoadManager($load);
+            $loadManager->createTrip($driver);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+        return response()->json(['success' => true, 'load' => new LoadResource($load)]);
+
+    }
 }

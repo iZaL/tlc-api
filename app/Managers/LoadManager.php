@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 
+use App\Models\Driver;
 use App\Models\Load;
 
 class LoadManager
@@ -31,7 +32,7 @@ class LoadManager
         $fleetCount = $load->fleet_count;
 
         if($fleetCount > 1) {
-            $loadTrips = $load->success_trips()
+            $loadTrips = $load->confirmed_trips()
                 ->count()
             ;
         } else {
@@ -62,6 +63,18 @@ class LoadManager
 
         return $this;
 
+    }
+
+    /**
+     * @param Driver $driver
+     * @todo: Update Rate
+     */
+    public function createTrip(Driver $driver)
+    {
+        //@todo : Validate Driver
+
+        $load = $this->load;
+        $load->trips()->create(['driver_id' => $driver->id]);
     }
 
 

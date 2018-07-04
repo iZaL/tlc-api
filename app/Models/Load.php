@@ -54,7 +54,8 @@ class Load extends BaseModel
         'packaging_weight',
         'status',
         'weight',
-        'track_id'
+        'track_id',
+        'fleet_count'
     ];
 
     public function origin()
@@ -101,6 +102,12 @@ class Load extends BaseModel
         return $this->hasMany(LoadDocument::class);
     }
 
+    public function packaging_images()
+    {
+        $model = new \ReflectionClass(Packaging::class);
+        return $this->documents()->where('type',$model->getShortName());
+    }
+
     public function trips()
     {
         return $this->hasMany(Trip::class);
@@ -120,22 +127,27 @@ class Load extends BaseModel
      * @return mixed
      * Trips that are confirmed and beyond
      */
-    public function success_trips()
+    public function confirmed_trips()
     {
         return $this->trips()
-            ->where('status','>',self::STATUS_REJECTED)
+            ->where('status','>=',self::STATUS_CONFIRMED)
+            ->where('status','<', self::STATUS_REJECTED)
             ;
     }
 
     /**
-     * @return int
      * Number of Fleets Remaining for Customers to Book
      */
     public function getPendingFleetsAttribute()
     {
         // get fleet count
         // get successfully booked trips
-        return 2;
+
+        $fleetCount = $this->fleet_count;
+        $trips = $this->confirmed_trips()->count();
+
+        return $fleetCount - $trips;
+
     }
 
     public function getLoadDateFormattedAttribute()
@@ -161,6 +173,25 @@ class Load extends BaseModel
     public function getPriceFormattedAttribute()
     {
         return $this->price . $this->getUserCurrency();
+    }
+
+    public function getPackagingLengthFormattedAttribute()
+    {
+        return $this->packaging_length . 'm';
+    }
+
+    public function getPackagingHeightFormattedAttribute()
+    {
+        return $this->packaging_height . 'm';
+    }
+    public function getPackagingWidthFormattedAttribute()
+    {
+        return $this->packaging_width . 'm';
+    }
+
+    public function getPackagingWeightFormattedAttribute()
+    {
+        return $this->packaging_weight . 'tons';
     }
 
     public function getStatusFormattedAttribute()

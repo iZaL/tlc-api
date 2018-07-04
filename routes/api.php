@@ -64,6 +64,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 
             Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
             Route::get('loads/{id}/drivers/bookable','LoadDriversController@getBookableDriversForLoad');
+            Route::post('loads/{id}/drivers/select','LoadDriversController@selectDriver');
 
             /**
              * |--------------------------------------------------------------------------
@@ -90,10 +91,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::post('addresses','LocationsController@store');
 
             Route::get('drivers', 'DriversController@getDrivers');
+            Route::get('drivers/{id}/details', 'DriversController@getDetails');
             Route::get('drivers/blocked', 'DriversController@getBlockedDrivers');
 
         });
-
 
         /**
          * |--------------------------------------------------------------------------

@@ -97,4 +97,8 @@ class Driver extends BaseModel
         return $this->hasMany(DriverBlockedDate::class);
     }
 
+    public function getIsLegitAttribute()
+    {
+        return $this->book_direct;
+    }
 }

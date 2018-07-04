@@ -24,6 +24,14 @@ class DriversController extends Controller
         $this->driverModel = $driverModel;
     }
 
+    public function getDetails($id,Request $request)
+    {
+
+        $driver = $this->driverModel->has('user')->with(['user','nationalities','truck.model','truck.registration_country','truck.trailer.type'])->find($id);
+
+        return response()->json(['success'=>true,'data' => new DriverResource($driver)]);
+    }
+
     public function getDrivers(Request $request)
     {
         $drivers = $this->driverModel->has('user')->with(['user'])->paginate(100);

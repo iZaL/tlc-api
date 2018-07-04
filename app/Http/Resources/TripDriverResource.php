@@ -22,7 +22,6 @@ class TripDriverResource extends Resource
             'rate_formatted' => $this->rate_formatted,
             'can_accept' => $this->can_accept,
             'can_cancel' => $this->can_cancel,
-            'can_confirm' => $this->can_confirm,
             'can_start'   => $this->can_start,
             'can_stop'    => $this->can_stop,
             'status' => $this->status,

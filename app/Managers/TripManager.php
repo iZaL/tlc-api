@@ -164,7 +164,7 @@ class TripManager
         $driver = $this->driver;
         $loadDate = $this->trip->booking->load_date;
         $returnDate = Carbon::parse($loadDate)->addDays(3)->toDateString();
-        $driver->blocked_dates()->create(['from' => $loadDate, 'to' => $returnDate]);
+        $driver->blocked_dates()->create(['from' => $loadDate, 'to' => $returnDate,'trip_id'=>$this->trip->id]);
     }
 
     private function updateTripStatus($status)
@@ -316,7 +316,8 @@ class TripManager
 
     public function approveTrip()
     {
-        $this->updateTripStatus(Trip::STATUS_APPROVED);
+        $this->confirmTrip();
+//        $this->updateTripStatus(Trip::STATUS_APPROVED);
     }
 
     public function startTrip()
