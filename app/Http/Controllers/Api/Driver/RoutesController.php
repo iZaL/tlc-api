@@ -52,18 +52,48 @@ class RoutesController extends Controller
 
         $driver = Auth::guard('api')->user()->driver;
 
-        if($driver->routes->contains($request->route_id)) {
-            $driver->routes()->detach($request->route_id);
-        } else {
-            $driver->routes()->syncWithoutDetaching([$request->route_id]);
-        }
+        $route = $this->routeModel->find($request->route_id);
+
+        $route->active = !$route->active;
+        $route->save();
+
+//        if($driver->routes->contains($request->route_id)) {
+//            $driver->routes()->detach($request->route_id);
+//        } else {
+//            $driver->routes()->syncWithoutDetaching([$request->route_id]);
+//        }
 
         //@todo:
-        $driver->load(['truck.registration_country.loading_routes']);
+        $driver->load(['truck.registration_country.loading_routes','routes']);
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 
     }
+
+//    public function saveRoute(Request $request)
+//    {
+//        $validation = Validator::make($request->all(), [
+//            'route_id'  => 'required',
+//        ]);
+//
+//        if ($validation->fails()) {
+//            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+//        }
+//
+//        $driver = Auth::guard('api')->user()->driver;
+//
+//        if($driver->routes->contains($request->route_id)) {
+//            $driver->routes()->detach($request->route_id);
+//        } else {
+//            $driver->routes()->syncWithoutDetaching([$request->route_id]);
+//        }
+//
+//        //@todo:
+//        $driver->load(['truck.registration_country.loading_routes']);
+//
+//        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+//
+//    }
 
     public function getRouteTransits($routeID)
     {

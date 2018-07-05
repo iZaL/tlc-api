@@ -66,7 +66,7 @@ class Driver extends BaseModel
     {
 //        return $this->hasMany(DriverSecurityPass::class,'driver_id');
         return $this->belongsToMany(SecurityPass::class,'driver_security_passes')->withPivot([
-            'id','image','expiry_date'
+            'id','image','expiry_date','security_pass_id'
         ]);
     }
 

@@ -132,4 +132,33 @@ class ProfileController extends Controller
 
     }
 
+    public function saveSecurityPass(Request $request)
+    {
+
+        $user = Auth::guard('api')->user();
+        $driver = $user->driver;
+
+        $validation = Validator::make($request->all(), [
+            'image' => 'required',
+            'expiry_date' => 'required',
+            'security_pass_id' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+        }
+
+        $image = $request->image;
+        $securityPassID = $request->security_pass_id;
+        $expiryDate = Carbon::parse($request->expiry_date)->toDateString();
+        $driver->security_passes()->syncWithoutDetaching([$securityPassID => [
+            'image' => $request->image,
+            'expiry_date' => $expiryDate,
+        ]]);
+
+        $driver->load('security_passes');
+
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+
+    }
 }

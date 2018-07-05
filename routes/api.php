@@ -117,6 +117,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('routes','RoutesController@getRoutes');
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
             Route::post('routes','RoutesController@saveRoute');
+            Route::post('passes','ProfileController@saveSecurityPass');
 
 //            Route::get('trips/upcoming','TripsController@getUpcomingTrips');
 //            Route::post('trips/{id}/confirm','TripsController@confirmTrip');
