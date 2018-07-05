@@ -55,6 +55,12 @@ class LoadsController extends Controller
                             ->where('status', $this->trip::STATUS_PENDING)
                             ->orWhere('status', $this->trip::STATUS_APPROVED);
                         break;
+                    case 'dispatched':
+                        $q
+                            ->where('status', '>=',$this->trip::STATUS_DISPATCHED)
+                            ->where('status', '<',$this->trip::STATUS_COMPLETED)
+                        ;
+                        break;
                     case 'confirmed':
                         $q
                             ->where('status', $this->trip::STATUS_CONFIRMED);
@@ -73,6 +79,7 @@ class LoadsController extends Controller
                 'customer.employees'
             ])
                 ->paginate(10);
+
             return response()->json([
                 'success' => true,
                 'loads' => LoadResource::collection($loads),
@@ -172,27 +179,27 @@ class LoadsController extends Controller
      */
     public function getCurrentLoad()
     {
-        $driver = Auth::guard('api')->user()->driver;
-
-        $load = $this->loadModel->whereHas('trips', function ($q) use ($driver) {
-            return $q
-                ->where('driver_id', $driver->id)
-                ->ofStatus(Trip::STATUS_DISPATCHED);
-        })->with([
-            'trips',
-            'origin.country',
-            'destination.country',
-            'trailer_type'
-        ])
-//            ->groupBy('trips.id')
-            ->first()
-        ;
-
-        if(!$load) {
-            return response()->json(['success' => false, 'message' => 'no load found']);
-        }
-
-        return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'load' => new LoadResource($load)]);
+//        $driver = Auth::guard('api')->user()->driver;
+//
+//        $load = $this->loadModel->whereHas('trips', function ($q) use ($driver) {
+//            return $q
+//                ->where('driver_id', $driver->id)
+//                ->ofStatus(Trip::STATUS_DISPATCHED);
+//        })->with([
+//            'trips',
+//            'origin.country',
+//            'destination.country',
+//            'trailer_type'
+//        ])
+////            ->groupBy('trips.id')
+//            ->first()
+//        ;
+//
+//        if(!$load) {
+//            return response()->json(['success' => false, 'message' => 'no load found']);
+//        }
+//
+//        return response()->json(['success' => true, 'driver' => new DriverResource($driver), 'load' => new LoadResource($load)]);
 
     }
 

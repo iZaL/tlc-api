@@ -106,7 +106,10 @@ class LoadsController extends Controller
                 $loads->where('status', $this->loadModel::STATUS_DISPATCHED);
                 break;
             case 'confirmed':
-                $loads->where('status', $this->loadModel::STATUS_CONFIRMED);
+                $loads
+//                    ->where('status', '>',$this->loadModel::STATUS_COMPLETED)
+                    ->where('status', '<',$this->loadModel::STATUS_COMPLETED)
+                ;
                 break;
             case 'completed':
                 $loads->where('status', $this->loadModel::STATUS_COMPLETED);

@@ -71,6 +71,8 @@ class Trip extends BaseModel
                 return __('g.confirmed');
             case self::STATUS_DISPATCHED :
                 return __('g.dispatched');
+            case self::STATUS_OFFLOADED :
+                return __('g.offloaded');
             case self::STATUS_COMPLETED :
                 return __('g.completed');
             default :

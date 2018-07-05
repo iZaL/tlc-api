@@ -55,27 +55,27 @@ class DriversTableSeeder extends Seeder
         $customerOrigin= $customer->locations()->create(['country_id' => $kw->id,'type' => 'pick', 'latitude' => '29.3759', 'longitude' => '47.9774','city_en' => 'Jahra']);
         $customerDestination = $customer->locations()->create(['country_id' => $sa->id,'type' => 'drop', 'latitude' => '23.8859', 'longitude' => '45.0792','city_en' => 'Jeddah']);
 
-        $load = factory(\App\Models\Load::class)->create([
-            'customer_id' => $customer->id,
-            'origin_location_id' => $customerOrigin->id,
-            'destination_location_id' => $customerDestination->id,
-            'status' => \App\Models\Load::STATUS_DISPATCHED
-        ]);
-
-        $load1 = factory(\App\Models\Load::class)->create([
-            'customer_id' => $customer->id,
-            'origin_location_id' => $customerOrigin->id,
-            'destination_location_id' => $customerDestination->id,
-            'status' => \App\Models\Load::STATUS_PENDING
-        ]);
-
-
-        $trip1 = factory(\App\Models\Trip::class)->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_DISPATCHED,'load_id'=>$load->id]);
-        $trip2 = factory(\App\Models\Trip::class)->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_PENDING,'load_id'=>$load1->id]);
-
-        $document = \App\Models\DocumentType::first();
-
-        factory(\App\Models\TripDocument::class)->create(['trip_id'=>$trip1->id,'document_type_id' => $document->id]);
+//        $load = factory(\App\Models\Load::class)->create([
+//            'customer_id' => $customer->id,
+//            'origin_location_id' => $customerOrigin->id,
+//            'destination_location_id' => $customerDestination->id,
+//            'status' => \App\Models\Load::STATUS_DISPATCHED
+//        ]);
+//
+//        $load1 = factory(\App\Models\Load::class)->create([
+//            'customer_id' => $customer->id,
+//            'origin_location_id' => $customerOrigin->id,
+//            'destination_location_id' => $customerDestination->id,
+//            'status' => \App\Models\Load::STATUS_PENDING
+//        ]);
+//
+//
+//        $trip1 = factory(\App\Models\Trip::class)->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_DISPATCHED,'load_id'=>$load->id]);
+//        $trip2 = factory(\App\Models\Trip::class)->create(['driver_id'=>$driver->id,'status' => \App\Models\Trip::STATUS_PENDING,'load_id'=>$load1->id]);
+//
+//        $document = \App\Models\DocumentType::first();
+//
+//        factory(\App\Models\TripDocument::class)->create(['trip_id'=>$trip1->id,'document_type_id' => $document->id]);
 
 
         /// drivers
