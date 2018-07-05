@@ -109,7 +109,7 @@ class LoadDriversController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * After Posting a Load, Hit this method to fetch Drivers Who are ready to load
      */
-    public function searchDriversForLoad($loadID)
+    public function getBookableDriversForLoad($loadID)
     {
         $load = $this->loadModel->with(['customer','origin','destination'])->find($loadID);
         $originCountryID = $load->origin->country->id;
@@ -176,21 +176,97 @@ class LoadDriversController extends Controller
         return response()->json(['success' => true, 'data' => $driversCollection]);
 
     }
+//    public function searchDriversForLoad($loadID)
+//    {
+//        $load = $this->loadModel->with(['customer','origin','destination'])->find($loadID);
+//        $originCountryID = $load->origin->country->id;
+//        $destinationCountryCountryID = $load->destination->country->id;
+//        $loadDate = $load->load_date;
+//
+//        $driverManager = new DriverManager();
+//        $routeManager = new RouteManager();
+//
+//        // Drivers Who Are Online, Active, and Not on Blocked List
+//        $availableDrivers = $driverManager->getValidDrivers();
+//
+//        // Drivers Who Has Trip on Load Date
+//        $driversWhoHasTrips = $driverManager->getDriversWhoHasTrips($loadDate);
+//
+//        // Drivers Who are Blocked By The Customer
+//        $driversWhoAreBlockedByCustomer = $driverManager->getDriversWhoAreBlockedByCustomer($load->customer->id);
+//
+//        // Get Countries Involved in the Trip
+//        $routeTransitCountries = $routeManager->getRouteCountries($originCountryID,$destinationCountryCountryID);
+//
+//        // Drivers Who Prefers Driving Through the Trip Route
+//        $driversWhoHasValidRoute = $routeManager->getRouteDrivers($originCountryID,$destinationCountryCountryID);
+//
+//        // Drivers Who Has Valid Visa
+//        //@todo: take into account the GCC countries and Border Visas .. Is it really necessary to do that here ?
+//
+//        $driversWhoHasValidVisas = $driverManager->getDriversWhoHasValidVisas($routeTransitCountries,$loadDate);
+//
+//        // Drivers Who has Valid Licenses
+//        $driversWhoHasValidLicenses = $driverManager->getDriversWhoHasValidLicenses($routeTransitCountries,$loadDate);
+//
+//        // Drivers Who has their Truck Registered on same country as load origin
+//        $truckDrivers = $driverManager->getDriversForLoadCountry($originCountryID);
+//
+//        // Driver With Valid Trailer
+//        $trailerDrivers = $driverManager->getDriversForTrailer($load->trailer_type_id);
+//
+//        // Drivers Who shouldn't be included on the list
+//        $excludingDrivers = collect([$driversWhoHasTrips,$driversWhoAreBlockedByCustomer])->flatten()->unique();
+//
+//        // Drivers Who should be included on the list
+//        $includingDrivers = $availableDrivers->intersect($driversWhoHasValidRoute);
+//        $includingDrivers = $includingDrivers->intersect($driversWhoHasValidVisas);
+//        $includingDrivers = $includingDrivers->intersect($driversWhoHasValidLicenses);
+//        $includingDrivers = $includingDrivers->intersect($truckDrivers);
+//        $includingDrivers = $includingDrivers->intersect($trailerDrivers);
+//
+//        if($load->security_passes->count()) {
+//            $driversWhoHasValidPasses = $driverManager->getDriversWhoHasValidPasses($load->security_passes->pluck('id'));
+//            $includingDrivers = $includingDrivers->intersect($driversWhoHasValidPasses);
+//        }
+//
+//        $drivers = $includingDrivers->diff($excludingDrivers);
+//
+////        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
+//
+//        $drivers = $this->driverModel->has('user')->with(['user'])->get();
+//
+//        $driversCollection = DriverResource::collection($drivers);
+//
+//        $loadResource = (new LoadResource($load))->additional(['drivers' => $driversCollection]);
+//
+//        return response()->json(['success' => true, 'data' => $driversCollection]);
+//
+//    }
 
-    public function getBookableDriversForLoad($loadID)
-    {
+    /**
+     * @param $loadID
+     * @return \Illuminate\Http\JsonResponse
+     */
+//    public function getBookableDriversForLoad($loadID)
+//    {
+//
+//        $load = $this->loadModel->find($loadID);
+//
+//        $drivers = $this->driverModel->has('user')->with(['user'])->get();
+////        $drivers = $this->driverModel->has('user')->with(['user','nationalities','truck.model','truck.registration_country','truck.trailer.type'])->get();
+//
+//        $driversCollection = DriverResource::collection($drivers);
+//
+//        return response()->json(['success' => true, 'load' => new LoadResource($load), 'drivers' => $driversCollection]);
+//
+//    }
 
-        $load = $this->loadModel->find($loadID);
-
-        $drivers = $this->driverModel->has('user')->with(['user'])->get();
-//        $drivers = $this->driverModel->has('user')->with(['user','nationalities','truck.model','truck.registration_country','truck.trailer.type'])->get();
-
-        $driversCollection = DriverResource::collection($drivers);
-
-        return response()->json(['success' => true, 'load' => new LoadResource($load), 'drivers' => $driversCollection]);
-
-    }
-
+    /**
+     * @param $loadID
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function selectDriver($loadID, Request $request)
     {
         $load = $this->loadModel->find($loadID);

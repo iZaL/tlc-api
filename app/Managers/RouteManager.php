@@ -35,13 +35,13 @@ class RouteManager
     /**
      * @param $originCountryID
      * @param $destinationCountryID
-     * @return array|null
+     * @return array
      */
     public function getRouteCountries($originCountryID, $destinationCountryID): array
     {
         $route = $this->getRoute($originCountryID, $destinationCountryID);
         if (!$route) {
-            return null;
+            return [];
         }
         $transits = $route->transits->pluck('id')->toArray();
         return $transitRoutes = array_merge([$originCountryID, $destinationCountryID], $transits);

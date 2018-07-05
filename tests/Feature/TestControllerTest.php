@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-
 class TestControllerTest extends TestCase
 {
 
@@ -18,14 +17,12 @@ class TestControllerTest extends TestCase
     const CUSTOMER_CODE = 20;
     const GUEST_CODE = 0;
 
-
-    public function test_get_correct_user_types()
-    {
-        $response = $this->json('GET', '/test');
-
-        dd($response);
-
-    }
+//
+//    public function test_get_correct_user_types()
+//    {
+//        $response = $this->json('GET', '/test');
+//
+//    }
 
 
 }
