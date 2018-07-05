@@ -5,12 +5,10 @@ namespace App\Models;
 class Driver extends BaseModel
 {
 
-    protected $fillable = ['mobile', 'user_id', 'customer_id'];
-
     protected $hidden = ['customer_id', 'user_id'];
 
-//    protected $with = ['user'];
-    
+    protected $guarded = ['id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

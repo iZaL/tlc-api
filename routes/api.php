@@ -11,7 +11,8 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
     Route::post('trips/{id}/location/update','\App\Http\Controllers\Api\Driver\TripsController@updateLocation');
 
     Route::get('security_passes','\App\Http\Controllers\Api\RoutesController@getSecurityPasses');
-    Route::post('upload/images','\App\Http\Controllers\Api\UploadsController@uploadImages');
+    Route::post('uploads/images','\App\Http\Controllers\Api\UploadsController@uploadImages');
+    Route::post('uploads/sync','\App\Http\Controllers\Api\UploadsController@syncUploads');
 
     /**
      * |--------------------------------------------------------------------------
@@ -93,6 +94,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('drivers', 'DriversController@getDrivers');
             Route::get('drivers/{id}/details', 'DriversController@getDetails');
             Route::get('drivers/blocked', 'DriversController@getBlockedDrivers');
+            Route::post('drivers/block', 'DriversController@blockDriver');
 
         });
 
@@ -107,8 +109,10 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('security_passes', 'ProfileController@getSecurityPasses');
             Route::get('profile','ProfileController@getProfile');
             Route::post('profile/update','ProfileController@update');
+            Route::post('document/update','ProfileController@updateDocument');
 
-            Route::post('trucks','TrucksController@saveTruck');
+            Route::post('truck','TrucksController@saveTruck');
+            Route::post('trailer','TrucksController@saveTrailer');
 
             Route::get('routes','RoutesController@getRoutes');
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');

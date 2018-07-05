@@ -35,7 +35,6 @@ class BaseModel extends Model
 
     protected function getExchangedRate($amount, $formatted=false, $toCurrency='KWD', $fromCurrency='USD' ) {
         return $formatted ? round($amount).' KWD':round($amount);
-
 //        $rate =  $amount;
 //       return  currency($amount,$fromCurrency,$toCurrency,$formatted);
     }

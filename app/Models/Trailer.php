@@ -5,9 +5,9 @@ namespace App\Models;
 class Trailer extends BaseModel
 {
 
-    protected $appends = ['name'];
+    protected $guarded = ['id'];
 
-    protected $hidden = ['make_id','name_en','name_ar','name_hi'];
+    protected $casts = ['length'=>'string','width'=>'string','height'=>'string','max_weight'=>'string'];
 
     public function type()
     {

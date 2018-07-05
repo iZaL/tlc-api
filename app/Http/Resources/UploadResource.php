@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class DocumentResource extends Resource
+class UploadResource extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -16,11 +16,8 @@ class DocumentResource extends Resource
     {
         return [
             'id' => $this->id,
-            'expiry_date' => $this->expiry_date,
-            'image' => $this->image,
-            'number' => $this->number,
-            'type' => $this->type,
-            'country' => new CountryResource($this->country),
+            'url' => $this->url,
+            'type' => $this->type
         ];
     }
 }

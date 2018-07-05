@@ -17,9 +17,6 @@ class CreateTrailersTable extends Migration
             $table->increments('id');
             $table->integer('type_id');
             $table->integer('make_id');
-            $table->string('name_en')->nullable();
-            $table->string('name_ar')->nullable();
-            $table->string('name_hi')->nullable();
             $table->float('max_weight')->nullable()->notes('kg');
             $table->float('length')->nullable()->notes('cm');
             $table->float('width')->nullable()->notes('cm');

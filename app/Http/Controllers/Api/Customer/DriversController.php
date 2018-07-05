@@ -46,8 +46,17 @@ class DriversController extends Controller
         $customer->load('blocked_drivers.user');
 
         return response()->json(['success'=>true,'data'=> new CustomerResource($customer)]);
+    }
 
+    public function blockDriver(Request $request)
+    {
+        $customer = auth()->guard('api')->user()->customer;
 
+        $customer->blocked_drivers()->syncWithoutDetaching([$request->driver_id]);
+
+        $customer->load('blocked_drivers.user');
+
+        return response()->json(['success'=>true,'data'=> new CustomerResource($customer)]);
     }
 
 }

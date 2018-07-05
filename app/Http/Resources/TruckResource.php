@@ -30,6 +30,7 @@ class TruckResource extends Resource
             'image'                    => $this->image,
             'latitude'                 => $this->latitude,
             'longitude'                => $this->longitude,
+            'images' => UploadResource::collection($this->images)
         ];
     }
 }

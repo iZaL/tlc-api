@@ -67,6 +67,7 @@ class TrucksController extends Controller
         $driver = $user->driver;
 
         $validation = Validator::make($request->all(), [
+//            'model_id' => 'required'
 //            'make_id'  => 'required',
 //            'model_id' => 'required',
 //            'plate_number' => 'required',
@@ -82,14 +83,61 @@ class TrucksController extends Controller
 
         $params = [];
 
-        if ($truck = $driver->truck) {
-            $driver->truck->update(array_merge($request->all(), $params));
-        } else {
-            $params['driver_id'] = $driver->id;
-            $this->truck->create(array_merge($request->all(), $params));
+        if($request->registration_expiry_date) {
+            $params['registration_expiry_date'] = Carbon::parse($request->registration_expiry_date)->toDateString();
         }
 
-        $driver->load('truck.trailer', 'truck.model');
+        $keys = [
+            'model_id',
+            'registration_country_id','registration_number','registration_image',
+            'plate_number','max_weight','image','year'
+        ];
+
+        if ($truck = $driver->truck) {
+            $driver->truck->update(array_merge($request->only($keys), $params));
+        } else {
+            $params['driver_id'] = $driver->id;
+            $this->truck->create(array_merge($request->only($keys), $params));
+        }
+
+        $driver->load('truck.trailer', 'truck.model','truck.registration_country');
+
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+
+    }
+
+    public function saveTrailer(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+        $driver = $user->driver;
+
+        $validation = Validator::make($request->all(), [
+            'truck_id' => 'required',
+            'make_id'  => 'required',
+            'type_id' => 'required',
+//            'max_weight' => 'required',
+//            'length' => 'required',
+//            'width' => 'required',
+//            'height' => 'required',
+////            'ground_height' => 'required',
+//            'image' => 'required',
+//            'year' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+        }
+
+        $params = [];
+
+        $truck = $this->truck->find($request->truck_id);
+
+        $truck->trailer->update($request->only(
+            'make_id','type_id','max_weight','length','width','height',
+            'ground_height','image','year'
+        ));
+
+        $driver->load('truck.trailer.type','truck.trailer.make');
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 

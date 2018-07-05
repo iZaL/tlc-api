@@ -16,11 +16,12 @@ use Faker\Generator as Faker;
 $factory->define(App\Models\User::class, function (Faker $faker) {
     static $password;
     return [
-        'name_en' => $faker->name,
-        'name_ar' => $faker->name,
-        'name_hi' => $faker->name,
+//        'name_en' => $faker->name,
+//        'name_ar' => $faker->name,
+//        'name_hi' => $faker->name,
+        'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'mobile' => $faker->phoneNumber,
+        'mobile' => rand(9000000,9999999),
         'admin' => 0,
         'image' => $faker->imageUrl(500,500),
         'password' => $password ?: $password = bcrypt('password'),

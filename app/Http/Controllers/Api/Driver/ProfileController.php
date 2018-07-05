@@ -7,6 +7,8 @@ use App\Http\Middleware\Driver;
 use App\Http\Resources\DriverResource;
 use App\Http\Resources\UserResource;
 use App\Models\Country;
+use App\Models\DriverDocument;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -21,14 +23,20 @@ class ProfileController extends Controller
      * @var Driver
      */
     private $driverModel;
+    /**
+     * @var DriverDocument
+     */
+    private $driverDocumentModel;
 
     /**
      * CountriesController constructor.
      * @param Driver $driverModel
+     * @param DriverDocument $driverDocumentModel
      */
-    public function __construct(Driver $driverModel)
+    public function __construct(Driver $driverModel,DriverDocument $driverDocumentModel)
     {
         $this->driverModel = $driverModel;
+        $this->driverDocumentModel = $driverDocumentModel;
     }
 
     public function getProfile()
@@ -58,19 +66,25 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $driver = Auth::guard('api')->user()->driver;
+
+        $user = Auth::guard('api')->user();
+        $driver = $user->driver;
 
         $validation = Validator::make($request->all(), [
-            'mobile'                 => 'required|unique:drivers,mobile,' . $driver->id,
+            'email' => 'required|unique:users,email,' . $user->id,
+            'mobile' => 'required|unique:users,mobile,' . $user->id,
+            'name' => 'required',
         ]);
 
         if ($validation->fails()) {
             return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
         }
 
-        $driver->update($request->all());
+        $user->update($request->only(['name','email','mobile']));
 
-        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+        $driver->update(['mobile' => $request->profile['mobile'], 'phone' => $request->profile['phone']]);
+
+        return response()->json(['success'=>true,'data'=>new UserResource($user)]);
 
     }
 
@@ -82,4 +96,40 @@ class ProfileController extends Controller
 
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
     }
+
+    public function updateDocument(Request $request)
+    {
+
+        $user = Auth::guard('api')->user();
+        $driver = $user->driver;
+
+        $validation = Validator::make($request->all(), [
+            'expiry_date' => 'required',
+            'number' => 'required',
+            'country_id' => 'required',
+            'type' => 'required',
+            'image' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+        }
+
+        $payload = $request->only(['id','number','country_id','type','image']);
+        $payload['expiry_date'] = Carbon::parse($request->expiry_date)->toDateString();
+        $payload['driver_id'] = $driver->id;
+
+        if($request->filled('id')) {
+            $document = $this->driverDocumentModel->find($request->id);
+            $document->update($payload);
+        } else {
+            $document = $this->driverDocumentModel->create($payload);
+        }
+
+        $driver->load('nationalities','visas','residencies','licenses');
+
+        return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
+
+    }
+
 }
