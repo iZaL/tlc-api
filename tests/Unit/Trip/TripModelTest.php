@@ -21,7 +21,6 @@ class TripModelTest extends TestCase
         $driver = $this->_createDriver();
         $trip = factory(Trip::class)->create(['load_id'=>$load->id,'driver_id'=>$driver->id,'rate' => 300]);
 
-        dd($trip->rate_formatted);
         $rate = round(currency(300,'USD', 'KWD'));
         $this->assertEquals($rate,round($trip->rate));
 

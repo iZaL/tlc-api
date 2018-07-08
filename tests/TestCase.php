@@ -165,8 +165,7 @@ abstract class TestCase extends BaseTestCase
         return $driver;
     }
 
-    public
-    function _createLoad($array = [])
+    public function _createLoad($array = [])
     {
         $load = factory(Load::class)->create(array_merge([
             'customer_id'             => 1,
@@ -178,8 +177,7 @@ abstract class TestCase extends BaseTestCase
         return $load;
     }
 
-    public
-    function _createTrip($array = [])
+    public function _createTrip($array = [])
     {
         $load = factory(Trip::class)->create(array_merge([
             'driver_id' => 1
@@ -189,12 +187,15 @@ abstract class TestCase extends BaseTestCase
     }
 
 
-    public
-    function _makeDriverBusy($driver, $array = [])
+    public function _makeDriverBusy($driver, $array = [])
     {
         $bookedFrom = Carbon::now()->addDays(3)->toDateString();
         $bookedUntil = Carbon::now()->addDays(6)->toDateString();
-        $driver->blocked_dates()->create(['from' => isset($array['from']) ?: $bookedFrom, 'to' => isset($array['to']) ?: $bookedUntil]);
+        $driver->blocked_dates()->create([
+            'trip_id' => 1,
+            'from' => isset($array['from']) ? $array['from']: $bookedFrom,
+            'to' => isset($array['to']) ? $array['to']: $bookedUntil
+        ]);
     }
 
 }
