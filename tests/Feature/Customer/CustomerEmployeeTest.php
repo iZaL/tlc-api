@@ -44,8 +44,7 @@ class CustomerEmployeeTest extends TestCase
 
         $data = [
             'id' => $employee->id,
-            'name_en' => 'wa',
-            'name_ar' => 'wss',
+            'name' => 'wa',
             'mobile' => 99999999,
             'phone' => 99999999,
             'email' => 'z4ls@a.com',

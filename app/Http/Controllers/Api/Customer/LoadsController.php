@@ -176,7 +176,8 @@ class LoadsController extends Controller
             'receiver_phone'          => 'required',
             'receiver_mobile'         => 'required',
             'security_passes'         => 'array',
-            'packaging_dimension'     => 'array'
+            'packaging_dimension'     => 'array',
+            'trailer_quantity' => 'required'
         ]);
 
         if ($validation->fails()) {
@@ -196,6 +197,8 @@ class LoadsController extends Controller
 
         if ($customer->canBookDirect()) {
             $data['status'] = Load::STATUS_APPROVED;
+        } else {
+            $data['status'] = Load::STATUS_PENDING;
         }
 
         $data['packaging_width'] =  $request->packaging_dimension['width'];
@@ -211,14 +214,12 @@ class LoadsController extends Controller
         $load = $this->loadModel->create($loadData);
 
         //passes
-        if ($request->security_passes) {
+        if ($request->filled('security_passes')) {
             $load->security_passes()->sync($request->security_passes);
         }
 
-        if($request->packaging_images) {
-
+        if ($request->filled('packaging_images')) {
             $images = [];
-
             foreach ($request->packaging_images as $image) {
                 $images[] = ['url' => $image,'type' => 'Packaging','extension' => 'image'];
             }
@@ -232,7 +233,7 @@ class LoadsController extends Controller
             'success' => true,
             'load' => new LoadResource($load),
             'customer' => new CustomerResource($customer),
-            'load_status' => 'pending'
+            'load_status' => strtolower($load->status_formatted)
         ]);
 
     }

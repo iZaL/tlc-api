@@ -37,17 +37,22 @@ abstract class TestCase extends BaseTestCase
             'packaging_id'            => 1,
             'origin_location_id'      => 1,
             'destination_location_id' => 1,
-            'price'                   => '200.00',
             'request_documents'       => 0,
             'request_pictures'        => 0,
             'fixed_rate'              => 1,
             'load_date'               => '2017-10-19',
-            'load_time'               => '8am',
+            'unload_date'               => '2017-10-22',
+            'load_time_from'               => '2017-10-19 10:00:00',
+            'unload_time_from'               => '2017-10-19 10:00:00',
+            'load_time_to'               => '2017-10-19 10:00:00',
+            'unload_time_to'               => '2017-10-19 10:00:00',
             'receiver_name'           => 'zal',
             'receiver_email'          => 'z4ls@live.com',
             'receiver_phone'          => '9992192299',
             'receiver_mobile'         => '9992192299',
             'weight'                  => 100,
+            'security_passes' => [1,2],
+            'trailer_quantity' => 1
         ];
 
         return array_merge($postData, $array);
@@ -148,6 +153,9 @@ abstract class TestCase extends BaseTestCase
                                 return factory(TruckMake::class)->create()->id;
                             }
                         ])->id;
+                    },
+                    'registration_country_id' => function() {
+                        return factory(Country::class)->create()->id;
                     },
                 ]);
             } : 1

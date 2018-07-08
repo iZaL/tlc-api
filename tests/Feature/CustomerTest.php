@@ -2,20 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Country;
-use App\Models\Driver;
-use App\Models\DriverDocument;
-use App\Models\Load;
-use App\Models\Location;
 use App\Models\Customer;
-use App\Models\Trailer;
+use App\Models\Load;
+use App\Models\SecurityPass;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Route;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
@@ -38,17 +31,34 @@ class CustomerTest extends TestCase
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $loadData = $this->_createLoadPostData();
-        $others = [];
-        $postData = array_merge($loadData, $others);
+        $pass1 = factory(SecurityPass::class)->create();
+        $pass2 = factory(SecurityPass::class)->create();
+        $loadPasses = [
+            'security_passes' => [$pass1->id, $pass2->id],
+        ];
 
-        $response = $this->json('POST', '/api/customer/loads', $postData, $header);
+        $loadData = array_merge($loadData,$loadPasses);
+
+        $this->assertDatabaseHas('security_passes',['id'=>$pass1->id]);
+        $this->assertDatabaseHas('security_passes',['id'=>$pass2->id]);
+
+        $response = $this->json('POST', '/api/customer/loads/', $loadData, $header);
         $response
             ->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'type'    => 'created'
+//                'load_status'    => 'pending'
             ]);
-        $this->assertDatabaseHas('loads', $loadData);
+
+        $this->assertDatabaseHas('loads', array_merge(collect($loadData)->only(
+            'id','trailer_type_id','packaging_id','origin_location_id','destination_location_id'
+        )->toArray(),
+            [
+                'load_date' => Carbon::parse($loadData['load_date'])->toDateTimeString(),
+                'unload_date' => Carbon::parse($loadData['unload_date'])->toDateTimeString(),
+                'load_time_from' => Carbon::parse($loadData['load_time_from'])->toTimeString(),
+                'load_time_to' => Carbon::parse($loadData['load_time_to'])->toTimeString(),
+            ]));
 
     }
 
@@ -59,8 +69,15 @@ class CustomerTest extends TestCase
         $loadData = $this->_createLoadPostData();
         $others = ['status' => Load::STATUS_PENDING];
         $postData = array_merge($loadData, $others);
-        $this->json('POST', '/api/customer/loads', $loadData, $header);
-        $this->assertDatabaseHas('loads', $postData);
+        $response = $this->json('POST', '/api/customer/loads', $loadData, $header);
+        $this->assertDatabaseHas('loads', array_merge(collect($loadData)->only(
+            'id','trailer_type_id','packaging_id','origin_location_id','destination_location_id'
+        )->toArray(),
+            [
+                'status' => Load::STATUS_PENDING
+            ]));
+
+        $response->assertJson(['load_status' => 'pending']);
     }
 
     public function test_load_has_status_approved_if_customer_can_book_direct()
@@ -68,12 +85,18 @@ class CustomerTest extends TestCase
         $customer = $this->_createCustomer(['book_direct' => 1]);
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
         $loadData = $this->_createLoadPostData();
-        $others = ['status' => Load::STATUS_APPROVED];
-        $postData = array_merge($loadData, $others);
-        $this->json('POST', '/api/customer/loads', $loadData, $header);
-        $this->assertDatabaseHas('loads', $postData);
-    }
+        $response = $this->json('POST', '/api/customer/loads', $loadData, $header);
 
+        $this->assertDatabaseHas('loads', array_merge(collect($loadData)->only(
+            'id','trailer_type_id','packaging_id','origin_location_id','destination_location_id'
+        )->toArray(),
+            [
+                'status' => Load::STATUS_APPROVED
+            ]));
+
+        $response->assertJson(['load_status' => 'approved']);
+
+    }
 
     /**
      * Status of Loads

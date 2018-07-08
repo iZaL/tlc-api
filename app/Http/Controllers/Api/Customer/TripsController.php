@@ -33,12 +33,12 @@ class TripsController extends Controller
 
     public function getTripDetails($id)
     {
+
         $trip = $this->tripModel
             ->has('driver.truck.model')
             ->has('driver.truck.trailer.type')
             ->has('driver.truck.registration_country')
             ->with([
-            'booking',
             'driver.user',
             'driver.truck.trailer.type',
             'driver.truck.model',

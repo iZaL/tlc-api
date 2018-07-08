@@ -60,7 +60,7 @@ class LocationsController extends Controller
             'address' => 'required|max:100',
             'city' => 'required|max:100',
             'state' => 'required|max:100' ,
-            'country' => 'required|max:100' ,
+            'country' => 'required|max:10' ,
             'latitude' => 'required',
             'longitude' => 'required',
             'type' => 'required'

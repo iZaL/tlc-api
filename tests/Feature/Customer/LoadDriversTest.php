@@ -126,7 +126,7 @@ class LoadDriversTest extends TestCase
 
         // Request
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
-        $response = $this->json('GET', '/api/customer/loads/' . $load->id . '/drivers/search', [], $header);
+        $response = $this->json('GET', '/api/customer/loads/' . $load->id . '/drivers/bookable', [], $header);
 
         // Response
         $response->assertJson(

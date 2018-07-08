@@ -53,18 +53,16 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
              * |--------------------------------------------------------------------------
              */
 
-            Route::get('loads/create', 'LoadsController@createLoad');
-            Route::post('loads', 'LoadsController@storeLoad');
-            Route::get('loads', 'LoadsController@getLoads');
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');
+            Route::get('loads/create', 'LoadsController@createLoad');
             Route::get('loads/add/data', 'LoadsController@getLoadAddData');
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
-            Route::get('loads/current', 'LoadsController@getCurrentLoad');
-
 //            Route::get('loads/{id}/drivers','LoadsController@getLoadDrivers');//matching drivers
 
-            Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
+//            Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
             Route::get('loads/{id}/drivers/bookable','LoadDriversController@getBookableDriversForLoad');
+
+            Route::post('loads', 'LoadsController@storeLoad');
             Route::post('loads/{id}/drivers/select','LoadDriversController@selectDriver');
 
             /**
@@ -91,6 +89,11 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('locations','LocationsController@index');
             Route::post('addresses','LocationsController@store');
 
+            /**
+             * |--------------------------------------------------------------------------
+             * | Company Drivers
+             * |--------------------------------------------------------------------------
+             */
             Route::get('drivers', 'DriversController@getDrivers');
             Route::get('drivers/{id}/details', 'DriversController@getDetails');
             Route::get('drivers/blocked', 'DriversController@getBlockedDrivers');

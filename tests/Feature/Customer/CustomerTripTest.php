@@ -29,41 +29,41 @@ class CustomerTripTest extends TestCase
 
     use RefreshDatabase;
 
+
     public function test_customer_gets_trip_details_by_id()
     {
+
         $customer = $this->_createCustomer();
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
         $driver = $this->_createDriver([],['truck'=>1]);
+
         $load = $this->_createLoad();
         $trip = $this->_createTrip(['load_id'=>$load->id,'driver_id'=>$driver->id]);
 
-
         $response = $this->json('GET', '/api/customer/trips/'.$trip->id.'/details', [], $header);
 
-        $response->assertJson(['success' => true]);
-//        $response->assertJson(['data' => ['trailers' => [['id' => $trailer1->id], ['id' => $trailer2->id]]]]);
-//        $response->assertJson(['data' => ['packaging' => [['id' => $packaging1->id], ['id' => $packaging2->id]]]]);
+        $response->assertJson([
+            'success' => true,
+            'load' => ['id' =>$load->id],
+            'trip' => [
+                'id' => $trip->id,
+                'driver'=>[
+                    'id'=>$trip->driver->id,
+                    'truck' => [
+                        'id' => $driver->truck->id,
+                        'trailer' => [
+                            'id' => $driver->truck->trailer->id,
+                            'type' => ['id' => $driver->truck->trailer->type->id],
+                        ],
+                        'model' => ['id'=>$driver->truck->model->id],
+                        'registration_country' => ['id'=>$driver->truck->registration_country->id],
+                    ],
+                    'nationalities' => []
+                ]
+            ]
+        ]);
 
     }
-
-//
-//    /**
-//     * @todo
-//     */
-//
-//    public function test_customer_needs_enough_credits_to_post_a_load()
-//    {
-//
-//    }
-//
-//
-//    public function test_trailer_selected_by_customer_can_load_the_cargo()
-//    {
-//        // does it violate the rules of destination and transit countries
-//        // RULES : Dimensions, Load Capacity
-//    }
-
-
 
 }

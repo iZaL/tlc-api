@@ -2,27 +2,14 @@
 
 namespace Tests\Feature\Driver;
 
-use App\Models\Country;
-use App\Models\Driver;
-use App\Models\DriverLicense;
-use App\Models\DriverDocument;
-use App\Models\Employee;
-use App\Models\Load;
-use App\Models\Location;
+use App\Models\CustomerLocation;
 use App\Models\Packaging;
 use App\Models\SecurityPass;
-use App\Models\Customer;
-use App\Models\CustomerLocation;
 use App\Models\Trailer;
 use App\Models\TrailerType;
-use App\Models\Truck;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Route;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CustomerLoadTest extends TestCase
 {
@@ -57,12 +44,18 @@ class CustomerLoadTest extends TestCase
             'request_documents'       => 1,
             'use_own_truck'           => 1,
             'load_date'               => $loadDate,
+            'unload_date'               => $loadDate,
+            'load_time_from'               => '10:00:00',
+            'load_time_to'               => '13:00:00',
+            'unload_time_from'               => '10:00:00',
+            'unload_time_to'               => '12:00:00',
             'receiver_name'           => $receiverName,
             'receiver_email'          => $receiverEmail,
             'receiver_phone'          => $receiverPhone,
             'receiver_mobile'         => $receiverMobile,
             'weight' => $weight,
-            'package_dimension' => ['length' => 100, 'width'=>100,'height' => 50, 'weight' => 100, 'quantity' => 10 ]
+            'package_dimension' => ['length' => 100, 'width'=>100,'height' => 50, 'weight' => 100, 'quantity' => 10 ],
+            'trailer_quantity' => 1,
         ];
 
         $loadPasses = [
@@ -76,8 +69,6 @@ class CustomerLoadTest extends TestCase
         $response = $this->json('POST', '/api/customer/loads', $loadData, $header);
 
         $responseData = array_merge(['customer_id'=>$customer->id],$loadPostDataDb->toArray());
-
-        $this->assertDatabaseHas('loads',$responseData);
 
         $this->assertDatabaseHas('security_passes',['id'=>$pass1->id]);
         $this->assertDatabaseHas('security_passes',['id'=>$pass2->id]);

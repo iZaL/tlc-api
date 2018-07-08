@@ -196,8 +196,7 @@ class Load extends BaseModel
 
     public function getStatusFormattedAttribute()
     {
-        $currentStatus = isset($this->attributes['status']) ? :'pending';
-
+        $currentStatus = isset($this->attributes['status']) ? $this->attributes['status'] :'pending';
         switch ($currentStatus) {
             case self::STATUS_PENDING :
                 return __('g.pending');
@@ -243,6 +242,7 @@ class Load extends BaseModel
 //
 //        }
 //    }
+
 
 
 }

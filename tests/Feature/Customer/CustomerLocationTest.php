@@ -42,18 +42,29 @@ class CustomerLocationTest extends TestCase
         $customer = $this->_createCustomer();
         $header = $this->_createHeader(['api_token' => $customer->user->api_token]);
 
-        $employee = factory(Employee::class)->create();
+        $country = factory(Country::class)->create();
+
         $data = [
-            'id' => $employee->id,
-            'name_en' => 'wa',
-            'name_ar' => 'wss',
-            'mobile' => 99999999,
-            'phone' => 99999999,
-            'email' => 'z4ls@a.com',
+            'customer_id' => $customer->id,
+            'country' => $country->abbr,
+            'latitude' => 27.9,
+            'longitude' => 23.1,
+            'city' => 'city name',
+            'state' => 'state name',
+            'address' => 'address address',
+            'type' => 'origin',
         ];
 
-        $response = $this->json('POST', '/api/customer/employees', $data, $header);
+        $response = $this->json('POST', '/api/customer/addresses', $data, $header);
         $response->assertJson(['success'=>true]);
+        $this->assertDatabaseHas('customer_locations',[
+            'customer_id' => $customer->id,
+            'country_id' => $country->id,
+            'latitude' => 27.9,
+            'longitude' => 23.1,
+            'city_en' => 'city name',
+
+        ]);
     }
 
 
