@@ -11,9 +11,9 @@ class TrucksTableSeeder extends Seeder
      */
     public function run()
     {
+
         factory(\App\Models\TruckMake::class,5)->create();
         factory(\App\Models\TruckModel::class,10)->create();
-
 
         factory(\App\Models\TrailerMake::class,2)->create();
         factory(\App\Models\TrailerType::class)->create(['name_en'=>'Flatbed']);

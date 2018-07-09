@@ -26,6 +26,4 @@ class TripModelTest extends TestCase
 
     }
 
-
-
 }

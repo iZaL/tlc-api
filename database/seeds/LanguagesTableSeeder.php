@@ -11,6 +11,6 @@ class LanguagesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Language::class,5)->create();
+        factory(\App\Models\Language::class,3)->create();
     }
 }

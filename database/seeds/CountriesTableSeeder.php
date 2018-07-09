@@ -40,7 +40,6 @@ class CountriesTableSeeder extends Seeder
 
         $routeKWOM->transits()->sync([['country_id'=>$sa->id],['country_id'=>$ae->id,'order' => 2]]);
 
-
         $countries = \App\Models\Country::all();
 
         foreach($countries as $country) {
