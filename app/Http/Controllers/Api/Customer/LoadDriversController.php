@@ -4,31 +4,20 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DriverResource;
+use App\Http\Resources\LoadResource;
 use App\Managers\DriverManager;
 use App\Managers\LoadManager;
 use App\Managers\RouteManager;
-use App\Http\Resources\DriverResource;
-use App\Http\Resources\LoadResource;
-use App\Http\Resources\LoadResourceCollection;
-use App\Http\Resources\PackagingResource;
-use App\Http\Resources\SecurityPassResource;
-use App\Http\Resources\CustomerLocationResource;
-use App\Http\Resources\CustomerResource;
-use App\Http\Resources\TrailerResource;
 use App\Models\Country;
+use App\Models\Customer;
 use App\Models\Driver;
-use App\Models\DriverDocument;
 use App\Models\Load;
 use App\Models\Packaging;
-use App\Models\SecurityPass;
-use App\Models\Customer;
 use App\Models\Route;
+use App\Models\SecurityPass;
 use App\Models\Trailer;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class LoadDriversController extends Controller
 {
@@ -125,6 +114,7 @@ class LoadDriversController extends Controller
         $destinationCountryCountryID = $load->destination->country->id;
         $loadDate = $load->load_date;
 
+
         $driverManager = new DriverManager();
         $routeManager = new RouteManager();
 
@@ -174,9 +164,7 @@ class LoadDriversController extends Controller
 
         $drivers = $includingDrivers->diff($excludingDrivers);
 
-//        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
-
-        $drivers = $this->driverModel->has('user')->with(['user'])->get();
+        $drivers = $this->driverModel->whereIn('id',$drivers)->get();
 
         $driversCollection = DriverResource::collection($drivers);
 

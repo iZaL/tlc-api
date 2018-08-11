@@ -17,6 +17,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class TripsController extends Controller
 {
@@ -164,6 +165,42 @@ class TripsController extends Controller
 
         $load = $trip->booking;
         $load->load('trip');
+
+        return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
+    }
+
+    public function saveDocuments($tripID, Request $request)
+    {
+
+        $validation = Validator::make($request->all(), [
+            'document_type_id' => 'required',
+            'uploads' => 'required|array',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+        }
+
+        $driver = auth()->guard('api')->user()->driver;
+
+        $trip = $this->tripModel->with(['booking'])->find($tripID);
+
+        $uploads = $request->uploads;
+
+        $amount = $request->amount;
+        $documentTypeID = $request->document_type_id;
+
+        foreach ($uploads as $upload) {
+            $trip->documents()->attach($documentTypeID,[
+                'trip_id' => $trip->id,
+                'amount' => $amount,
+                'url' => $upload,
+                'extension' => 'image',
+            ]);
+        }
+
+        $load = $trip->booking;
+        $load->load('trip.documents');
 
         return response()->json(['success'=>true,'data'=>new LoadResource($load)]);
     }

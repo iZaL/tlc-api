@@ -161,4 +161,39 @@ class ProfileController extends Controller
         return response()->json(['success'=>true,'data'=>new DriverResource($driver)]);
 
     }
+
+    public function getBankAccounts()
+    {
+        $user = Auth::guard('api')->user();
+
+        $user->load('bank_accounts');
+
+        return response()->json(['success'=>true,'data'=>new UserResource($user)]);
+    }
+
+    public function saveBankAccounts(Request $request)
+    {
+
+        $user = Auth::guard('api')->user();
+        $driver = $user->driver;
+
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'address' => 'required',
+            'iban' => 'required',
+            'beneficiary_name' => 'required',
+            'account_number' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['success' => false, 'message' => $validation->errors()->first()], 422);
+        }
+
+        if($user) {
+            $user->bank_accounts()->create($request->only(['name','address','iban','beneficiary_name','beneficiary_address','account_number']));
+        }
+
+        return response()->json(['success'=>true,'data'=>new UserResource($user)]);
+
+    }
 }

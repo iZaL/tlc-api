@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CalculateCordinateDistance;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -16,9 +17,9 @@ class TestController extends BaseController
 
     public function index()
     {
+        $coordinates = ['48.8234055', '2.3072664'];
 
-        $rate = currency(12.00, 'USD', 'KWD',false);
+        CalculateCordinateDistance::dispatch($coordinates);
 
-        dd($rate);
     }
 }

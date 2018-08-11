@@ -34,6 +34,8 @@ class CreateLoadsTable extends Migration
             $table->string('load_time_to',10)->nullable()->notes('24 hour format 00:00:00');
             $table->string('unload_time_from', 10)->nullable()->notes('24 hour format 00:00:00');
             $table->string('unload_time_to', 10)->nullable()->notes('24 hour format 00:00:00');
+            $table->integer('trip_distance')->nullable()->notes('in km');
+            $table->integer('trip_duration')->nullable()->notes('in minutes');
             $table->string('receiver_name')->nullable();
             $table->string('receiver_email')->nullable();
             $table->string('receiver_mobile')->nullable();

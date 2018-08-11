@@ -117,6 +117,9 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::post('truck','TrucksController@saveTruck');
             Route::post('trailer','TrucksController@saveTrailer');
 
+            Route::get('bank-accounts','ProfileController@getBankAccounts');
+            Route::post('bank-accounts','ProfileController@saveBankAccounts');
+
             Route::get('routes','RoutesController@getRoutes');
             Route::get('routes/{id}/transits','RoutesController@getRouteTransits');
             Route::post('routes','RoutesController@saveRoute');
@@ -126,6 +129,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
 //            Route::post('trips/{id}/confirm','TripsController@confirmTrip');
             Route::get('trips/{id}/details','TripsController@getTripDetails');
             Route::post('trips/{id}/status/update', 'TripsController@updateStatus');
+            Route::post('trips/{id}/documents/save', 'TripsController@saveDocuments');
 
             Route::get('loads', 'LoadsController@getLoads')->name('loads.index');
             Route::get('loads/status/{status}', 'LoadsController@getLoadsByStatus');

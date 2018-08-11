@@ -35,6 +35,7 @@ class UserResource extends Resource
                 }
                 return null;
             }),
+            'bank_accounts' => BankAccountResource::collection($this->whenLoaded('bank_accounts'))
         ];
     }
 }

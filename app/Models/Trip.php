@@ -38,7 +38,10 @@ class Trip extends BaseModel
 
     public function documents()
     {
-        return $this->belongsToMany(DocumentType::class,'trip_documents','document_type_id')->withPivot(['id','amount','url','extension']);
+        return $this->belongsToMany(DocumentType::class,'trip_documents','document_type_id')
+            ->withPivot(['id','amount','url','extension'])
+//            ->groupBy('document_type_id')
+            ;
     }
 
     public function scopePending($query)

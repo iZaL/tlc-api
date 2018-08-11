@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasOne(Driver::class);
     }
 
+    public function bank_accounts()
+    {
+        return $this->hasMany(BankAccount::class,'user_id');
+    }
+
     public function isActive()
     {
         return $this->active;
