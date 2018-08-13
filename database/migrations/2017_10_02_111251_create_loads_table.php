@@ -23,7 +23,6 @@ class CreateLoadsTable extends Migration
             $table->integer('commodity_id')->nullable();
             $table->string('track_id',60)->nullable();
             $table->integer('fleet_count')->default(1);
-            $table->string('distance')->nullable()->notes('in kms');
             $table->boolean('request_documents')->default(0)->notes('request drivers for copies of documents');
             $table->boolean('request_pictures')->default(0)->notes('request drivers for pictures of load');
             $table->boolean('fixed_rate')->default(0)->notes('fixed or variable rates. If fixed to be entered by TLC as agreed with customer');
@@ -35,7 +34,7 @@ class CreateLoadsTable extends Migration
             $table->string('unload_time_from', 10)->nullable()->notes('24 hour format 00:00:00');
             $table->string('unload_time_to', 10)->nullable()->notes('24 hour format 00:00:00');
             $table->integer('trip_distance')->nullable()->notes('in km');
-            $table->integer('trip_duration')->nullable()->notes('in minutes');
+            $table->integer('trip_duration')->nullable()->notes('in seconds');
             $table->string('receiver_name')->nullable();
             $table->string('receiver_email')->nullable();
             $table->string('receiver_mobile')->nullable();

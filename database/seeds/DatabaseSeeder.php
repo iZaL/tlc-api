@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(PassesTableSeeder::class);
         $this->call(PackagingTableSeeder::class);
         $this->call(DriversTableSeeder::class);
-//        $this->call(LoadsTableSeeder::class);
+        $this->call(LoadsTableSeeder::class);
     }
 
     public function truncateTables()

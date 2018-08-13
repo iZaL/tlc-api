@@ -11,6 +11,7 @@ class CustomerLocationsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\CustomerLocation::class,5)->create();
+        factory(\App\Models\CustomerLocation::class,1)->create(['latitude'=>48.8234055,'longitude' => 2.3072664,'type'=>'origin']);
+        factory(\App\Models\CustomerLocation::class,1)->create(['latitude'=>43.296482,'longitude' =>  5.36978,'type' => 'destination']);
     }
 }

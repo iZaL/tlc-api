@@ -218,6 +218,16 @@ class Load extends BaseModel
         }
     }
 
+    public function getTripDistanceFormattedAttribute()
+    {
+        return $this->trip_distance . 'km';
+    }
+
+    public function getTripDurationFormattedAttribute()
+    {
+        return secondsToTime($this->trip_duration);
+    }
+
 //    public function getStatusNameAttribute()
 //    {
 //        $currentStatus = $this->attributes['status'];

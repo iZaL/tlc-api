@@ -7,10 +7,10 @@ $factory->define(\App\Models\Load::class, function (Faker $faker) {
     $load = [
         'customer_id' => \App\Models\Customer::all()->count() > 0 ? \App\Models\Customer::all()->random()->first()->id : 1,
         'trailer_type_id' =>  \App\Models\TrailerType::all()->count() > 0 ? \App\Models\TrailerType::all()->random()->first()->id : 1,
-        'origin_location_id' => \App\Models\CustomerLocation::all()->count() > 0 ? \App\Models\CustomerLocation::all()->random()->first()->id : 1,
-        'destination_location_id' => \App\Models\CustomerLocation::all()->count() > 0 ? \App\Models\CustomerLocation::all()->random()->first()->id : 1,
+        'origin_location_id' => 1,
+        'destination_location_id' => 2,
         'fleet_count' => rand(1,4),
-        'distance' => rand(100,1000),
+//        'distance' => rand(100,1000),
         'weight' => 100,
         'track_id' => strtoupper(str_random(8)),
         'request_documents' => $faker->boolean(50),

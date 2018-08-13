@@ -29,7 +29,8 @@ class LoadResource extends Resource
             'weight_formatted' => $this->weight .  trans('g.tons'),
             'status_formatted' => $this->status_formatted,
             'fixed_rate' => $this->fixed_rate,
-            'distance' => $this->distance,
+            'trip_distance' => $this->trip_distance_formatted,
+            'trip_duration' => $this->trip_duration_formatted,
             'pending_fleets' => $this->pending_fleets, // fleets remaing to get booked
             'request_documents' => $this->request_documents,
             'request_pictures' => $this->request_pictures,

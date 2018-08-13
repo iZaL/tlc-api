@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
+use App\Events\LoadCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DriverResource;
 use App\Http\Resources\LoadResource;
@@ -228,6 +229,8 @@ class LoadsController extends Controller
         }
 
         $customer->load('loads.security_passes');
+
+        event(new LoadCreated($load));
 
         return response()->json([
             'success' => true,

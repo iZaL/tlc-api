@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\CalculateCordinateDistance;
+use App\Models\Load;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -17,9 +18,11 @@ class TestController extends BaseController
 
     public function index()
     {
-        $coordinates = ['48.8234055', '2.3072664'];
+        $coordinates = [[48.8234055, 2.3072664],[43.296482, 5.36978]];
 
-        CalculateCordinateDistance::dispatch($coordinates);
+        $load = Load::find(1);
+
+        $distance = CalculateCordinateDistance::dispatch($load);
 
     }
 }
