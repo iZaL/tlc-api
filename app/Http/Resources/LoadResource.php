@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\LoadDocument;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\Resource;
 
 class LoadResource extends Resource
@@ -41,7 +42,7 @@ class LoadResource extends Resource
             'trips' => TripResource::collection($this->whenLoaded('trips')),
             'trip' => new TripDriverResource($this->whenLoaded('trip')),
             'packaging' => (new PackagingResource($this->whenLoaded('packaging')))->additional(['length' => $this->packaging_length]),
-            'packaging_dimensions' => [
+            'packaging_dimension' => [
                 'length_formatted' => $this->packaging_length_formatted,
                 'width_formatted' => $this->packaging_width_formatted,
                 'height_formatted' => $this->packaging_height_formatted,
@@ -56,7 +57,39 @@ class LoadResource extends Resource
                 'phone'=>$this->receiver_phone,
                 'email'=>$this->receiver_email,
             ],
+            'can_edit' => $this->can_edit,
 
+            'edit_data' => [
+                'load_date' => $this->load_date_formatted,
+                'unload_date' => $this->unload_date_formatted,
+                'load_time_from' => Carbon::parse($this->load_time_from)->toDateTimeString(),
+                'load_time_to' => Carbon::parse($this->load_time_to)->toDateTimeString(),
+                'unload_time_from' => Carbon::parse($this->unload_time_from)->toDateTimeString(),
+                'unload_time_to' => Carbon::parse($this->unload_time_to)->toDateTimeString(),
+                'trailer_type_id' => $this->trailer_type_id,
+                'trailer_quantity' => $this->fleet_count,
+                'packaging_id' => $this->packaging_id,
+                'packaging_dimension' => [
+                    'length' => $this->packaging_length,
+                    'width' => $this->packaging_width,
+                    'height' => $this->packaging_height,
+                    'weight' => $this->packaging_weight,
+                    'quantity' => $this->packaging_quantity
+                ],
+                'origin_location_id' => $this->origin_location_id,
+                'destination_location_id' => $this->destination_location_id,
+                'receiver_name' => $this->receiver_name,
+                'receiver_email' => $this->receiver_email,
+                'receiver_mobile' => $this->receiver_mobile,
+                'receiver_phone' => $this->receiver_phone,
+                'security_passes' => [],
+                'weight' => $this->weight,
+                'request_documents' => $this->request_documents,
+                'use_own_truck' => $this->use_own_truck,
+                'packaging_images' => $this->packaging_images->pluck('url'),
+
+            ]
         ];
+
     }
 }

@@ -57,9 +57,7 @@ Route::group(['namespace' => 'Api','middleware' => 'locale'], function () {
             Route::get('loads/create', 'LoadsController@createLoad');
             Route::get('loads/add/data', 'LoadsController@getLoadAddData');
             Route::get('loads/{id}/details','LoadsController@getLoadDetails');
-//            Route::get('loads/{id}/drivers','LoadsController@getLoadDrivers');//matching drivers
 
-//            Route::get('loads/{id}/drivers/search','LoadDriversController@searchDriversForLoad');
             Route::get('loads/{id}/drivers/bookable','LoadDriversController@getBookableDriversForLoad');
 
             Route::post('loads', 'LoadsController@storeLoad');

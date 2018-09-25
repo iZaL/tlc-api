@@ -27,6 +27,8 @@ class Load extends BaseModel
 
     protected $dates = ['load_date','unload_date'];
 
+    protected $casts = ['request_documents' => 'bool','use_own_truck' => 'bool'];
+
     protected $fillable = [
         'customer_id',
         'trailer_type_id',
@@ -253,7 +255,28 @@ class Load extends BaseModel
 //        }
 //    }
 
+    public function getHasExpiredAttribute()
+    {
+        if($this->load_date->gt(Carbon::now()->addDay(1)->toDateString())){
+            return true;
+        }
 
+        return false;
+    }
+
+    public function getIsOwnerAttribute()
+    {
+        $customer = auth()->guard('api')->user()->customer;
+        if($customer) {
+            return $this->customer_id === $customer->id;
+        }
+        return false;
+    }
+
+    public function getCanEditAttribute()
+    {
+        return !$this->has_expired && $this->is_owner;
+    }
 
 }
 

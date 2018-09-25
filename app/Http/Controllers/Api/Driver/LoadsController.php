@@ -80,6 +80,7 @@ class LoadsController extends Controller
             ])
                 ->paginate(10);
 
+
             return response()->json([
                 'success' => true,
                 'loads' => LoadResource::collection($loads),
@@ -94,6 +95,7 @@ class LoadsController extends Controller
 
     public function getLoads(Request $request)
     {
+
         $validation = Validator::make($request->all(), [
             'current_country' => 'required',
         ]);

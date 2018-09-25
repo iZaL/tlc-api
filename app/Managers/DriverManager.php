@@ -184,6 +184,10 @@ class DriverManager
         return $drivers;
     }
 
+//    public function getDriverWithValidTruckDimensions()
+//    {
+//
+//    }
 
     public function getDriversForLoadCountry($originCountryID)
     {
