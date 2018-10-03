@@ -6,7 +6,10 @@
         <span class="m-nav__link-icon m-topbar__usericon  m--hide">
 													<span class="m-nav__link-icon-wrapper"><i class="flaticon-user-ok"></i></span>
 												</span>
-        <span class="m-topbar__username">Welcome, ZaL</span>
+
+        <span class="m-topbar__username">
+           Welcome, ZaL
+        </span>
     </a>
     <div class="m-dropdown__wrapper">
         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
