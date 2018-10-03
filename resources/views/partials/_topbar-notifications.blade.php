@@ -1,9 +1,9 @@
 <li class="m-nav__item m-topbar__notifications m-dropdown m-dropdown--skin-light m-dropdown--large m-dropdown--arrow m-dropdown--align-right 	m-dropdown--mobile-full-width" m-dropdown-toggle="click" m-dropdown-persistent="1">
     <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon">
-												<span class="m-nav__link-icon">
-													<span class="m-nav__link-icon-wrapper"><i class="flaticon-alarm"></i></span>
-													<span class="m-nav__link-badge m-badge m-badge--danger">3</span>
-												</span>
+        <span class="m-nav__link-icon">
+            <span class="m-nav__link-icon-wrapper"><i class="flaticon-alarm"></i></span>
+            <span class="m-nav__link-badge m-badge m-badge--danger">3</span>
+        </span>
     </a>
     <div class="m-dropdown__wrapper">
         <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
