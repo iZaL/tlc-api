@@ -10,4 +10,10 @@ Route::get('loads/{id}/drivers','Api\Customer\LoadDriversController@getDriversFo
 
 Auth::routes();
 
+
+//Route::resource('customers','C');
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+});
+
+
 Route::get('/', 'HomeController@index')->name('home');

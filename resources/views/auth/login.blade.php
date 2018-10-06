@@ -107,7 +107,7 @@
 
 
                         <div class="m-login__action">
-                            <button type="submit" id="m_login_signin_submit" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary">Sign In</button>
+                            <button type="submit" id="m_login_signin_submit" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary" dusk="submit">Login</button>
                         </div>
 
                     </form>
