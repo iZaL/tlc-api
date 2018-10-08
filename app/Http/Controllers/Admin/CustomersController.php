@@ -29,11 +29,11 @@ class CustomersController extends Controller
     public function index(Request $request)
     {
         $customers = $this->customerModel->all();
-
         $customerIDs = range(1,$customers->count());
 
         $title = 'Customers';
-        return view('admin.customers.index', compact('customers','title','customers','customerIDs'));
+
+        return view('customers.index', compact('customers','title','customers','customerIDs','breadcrumbs'));
     }
 
     public function show($id)

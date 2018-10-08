@@ -12,7 +12,8 @@ Auth::routes();
 
 
 //Route::resource('customers','C');
-Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+Route::group(['namespace' => 'Admin',  'middleware' => ['auth']], function () {
+    Route::resource('customers','CustomersController');
 });
 
 

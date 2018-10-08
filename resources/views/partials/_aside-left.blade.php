@@ -20,7 +20,7 @@
             </li>
 
             <li class="m-menu__item " aria-haspopup="true">
-                <a href="{{ route('home') }}" class="m-menu__link ">
+                <a href="{{ route('customers.index') }}" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon flaticon-line-graph"></i>
                     <span class="m-menu__link-text">Customers</span>

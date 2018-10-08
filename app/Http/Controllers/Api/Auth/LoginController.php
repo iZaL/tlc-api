@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Models\Pushtoken;
+use App\Models\PushToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +21,7 @@ class LoginController extends Controller
     /**
      * LoginController constructor.
      * @param User $userRepo
-     * @param Pushtoken $pushTokenModel
+     * @param PushToken $pushTokenModel
      */
     public function __construct(User $userRepo, PushToken $pushTokenModel)
     {
